@@ -41,22 +41,12 @@ def singleplayer_setup():
         difficulty = request.form.get('submit_button')
         session['difficulty'] = difficulty
         session['player1'] = player_one
-        if difficulty != None:
-            return redirect(url_for('submit'))
+        if request.form.get('play') == 'Play': #once the "play" button is pressed, call chess()
+            return redirect(url_for('chess'))
         
     return render_template('singleplayer.html', error=error)
 
-
-@app.route('/submit', methods=['GET', 'POST'])
-def submit():
-    """handle submit button for singleplayer page."""
-    if request.method == 'POST':
-        if request.form.get('play') == 'Play':
-                return redirect(url_for('chess'))
-    return render_template('singleplayer.html')
-   
-
-        
+      
        
 @app.route('/playchess', methods=['GET', 'POST'])
 def chess():

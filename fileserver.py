@@ -13,9 +13,9 @@ def index():
     """navigate to the single player page or multiplayer page"""
     if request.method == 'POST':
         if request.form['submit_button'] == 'Single Player':
-                return redirect(url_for('singleplayer_setup'))
+                return redirect(url_for('singleplayer_setup')) #if the clicked on singleplayer mode
         elif request.form['submit_button'] == 'MultiPlayer':
-                return redirect(url_for('multiplayer_setup'))
+                return redirect(url_for('multiplayer_setup')) #if the clicked on multiplayer mode
     return render_template('homepage.html')
 
 @app.route('/multiplayer', methods=['GET', 'POST'])
@@ -27,6 +27,7 @@ def multiplayer_setup():
         player_two = request.form['secondname']
         session['player1'] = player_one #Use sessions to store data between calls 
         session['player2'] = player_two
+        return redirect(url_for('chess')) #call chess()
 
 
     return render_template('multiplayer.html', error=error)
@@ -59,6 +60,9 @@ def submit():
        
 @app.route('/playchess', methods=['GET', 'POST'])
 def chess():
+    """handle the page where game play occurs
+    Future implementation should get the space each player is on and pass it to the backend.
+    """
     return render_template('chess.html', player = str(session['player1']))
 
 

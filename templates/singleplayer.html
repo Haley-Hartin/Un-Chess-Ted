@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<!-- 		<meta http-equiv="content-type" content="text/php; charset=utf-8" /> -->
+		
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='singleplayer.css') }}" />
+        <title>Un-Chess-Ted</title>
+        
+
+		<div class = 'title'>
+            <h1>Single Player</h1>
+        </div>
+     
+        
+    </head>
+
+    <body>
+       <form action="" class = 'players' method = "POST">
+          <label for="firstname">Player one name:</label>
+          <input type="text" id="firstname" name="firstname" value = "{{
+              request.form.firstname }}"><br><br>
+          <label for="fname">Difficulty:</label>
+          <div class="btn-group">
+              <input type = 'submit' name="submit_button" value="easy" id="submit_button">
+              <input type = 'submit' name="submit_button" value="normal" id="submit_button">
+<!--               <button name="submit_button" value="Normal" >Normal</button>
+              <button name="submit_button" value="Difficult" >Difficult</button> -->
+         </div>
+          <br>
+          <br>
+        <input class="btn btn-default" type="submit" name = "play" value="Play">
+        </form>
+    
+    </body>
+
+
+</html>

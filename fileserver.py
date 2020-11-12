@@ -43,6 +43,9 @@ def singleplayer_setup():
         session['player1'] = player_one
         if request.form.get('play') == 'Play': #once the "play" button is pressed, call chess()
             return redirect(url_for('chess'))
+        session['num_clicks'] = 0
+        session['end space'] = 'nan'
+        session['start space'] = 'nan'
         
     return render_template('singleplayer.html', error=error)
 
@@ -53,7 +56,23 @@ def chess():
     """handle the page where game play occurs
     Future implementation should get the space each player is on and pass it to the backend.
     """
-    return render_template('chess.html', player = str(session['player1']))
+    
+
+    if request.method == 'POST':
+        
+        if int(session['num_clicks']) > 2: #reset the start and end space for the next turn
+            session['num_clicks'] = 0
+            session['end space'] = 'nan'
+            session['start space'] = 'nan'
+
+        if int(session['num_clicks']) == 0: #get the space from first click - the space of the piece to move
+            session['start space'] = request.form['space']
+        elif int(session['num_clicks']) == 1: #get the space from second click - the space to move to
+            session['end space'] = request.form['space']
+        session['num_clicks'] += 1
+    #only the first two chess spaces work for now
+    #the img passed in will have to be changed each time, the img now is just for testing 
+    return render_template('chess.html', player = str(session['player1']), img = "https://i.ibb.co/fYDhhJf/chesspawn.png", new_space = session['end space'], old_space = session['start space']  )
 
 
 

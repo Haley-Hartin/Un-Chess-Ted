@@ -8,8 +8,9 @@
 
 		
         <title>Un-Chess-Ted</title>
-        <h1> It is {{ player }}'s turn</h1>
         
+        <h1> It is {{ player }}'s turn</h1>
+
     </head>
 
     <body>
@@ -19,11 +20,13 @@
 
 
             <div class="contentPane">
-				
+               <form action="" method = "POST">
 				<table id="chess_board" cellpadding="0" cellspacing="0">
 					<tr>
-						<td id="A8"></td>
-						<td id="B8"></td>
+                        <td > <input id = 'A8' type="image" src="https://i.ibb.co/fYDhhJf/chesspawn.png" height = "80px" name = 'space' value ="A8" class="btTxt submit"/>
+                        </td>
+						<td > <input id = "B8" type="image" src='' height = "80px" name = 'space' value ="B8" class="btTxt submit"/>
+                        </td>
 						<td id="C8"></td>
 						<td id="D8"></td>
 						<td id="E8"></td>
@@ -102,11 +105,20 @@
 						<td id="H1"></td>
 					</tr>
 				</table>
+                </form>
             </div>
         </div>
+        <script>
+            //moving the pieces around is very buggy
+            var old = {{old_space|tojson}}; //change tthe old space to have no image
+            var new_ = {{new_space|tojson}}; //update the new space with the image of the new pawn 
+            var new_img = {{img|tojson}}; 
 
+            document.getElementById(old).src = '';
+            document.getElementById(new_).src = String(new_img);       
+        </script>
     </body>
-
+    
 
 </html> 
     

@@ -3,6 +3,9 @@ from flask import Flask
 from flask import Flask, render_template, redirect, url_for, request
 from flask import session
 from os import environ
+import json
+import board
+import player as p
 
 app = Flask(__name__)
 app.secret_key = 'some secret key' #can be changes later
@@ -11,6 +14,8 @@ app.secret_key = 'some secret key' #can be changes later
 @app.route('/', methods=['GET', 'POST'])
 def index():
     """navigate to the single player page or multiplayer page"""
+    session['image_dict'] = board.board #get the board dictionary from board.py file
+    session['num_clicks'] = 0
     if request.method == 'POST':
         if request.form['submit_button'] == 'Single Player':
                 return redirect(url_for('singleplayer_setup')) #if the clicked on singleplayer mode
@@ -23,10 +28,12 @@ def multiplayer_setup():
     """get and save the players names for multiplayer mode."""
     error = None
     if request.method == 'POST':
-        player_one = request.form['firstname']
+        player_one = request.form['firstname']  
         player_two = request.form['secondname']
         session['player1'] = player_one #Use sessions to store data between calls 
         session['player2'] = player_two
+        session['player_turn'] = session['player1']
+        
         return redirect(url_for('chess')) #call chess()
 
 
@@ -40,12 +47,15 @@ def singleplayer_setup():
         player_one = request.form['firstname'] #use request.form[] to get the data from html pages
         difficulty = request.form.get('submit_button')
         session['difficulty'] = difficulty
-        session['player1'] = player_one
+        
+        session['player1'] = player_one #save player names
+        session['player2'] = "Computer"
+        session['player_turn'] = session['player1']
+        
         if request.form.get('play') == 'Play': #once the "play" button is pressed, call chess()
             return redirect(url_for('chess'))
-        session['num_clicks'] = 0
-        session['end space'] = 'nan'
-        session['start space'] = 'nan'
+
+
         
     return render_template('singleplayer.html', error=error)
 
@@ -54,28 +64,48 @@ def singleplayer_setup():
 @app.route('/playchess', methods=['GET', 'POST'])
 def chess():
     """handle the page where game play occurs
-    Future implementation should get the space each player is on and pass it to the backend.
+    Future implementation should pass the space selected to the back end to evaluate possible moves. 
+    Future implememntation should also pass in the space the piece was moved to in order to evaluate a checkmate or tie. 
     """
-    
+
 
     if request.method == 'POST':
         
-        if int(session['num_clicks']) > 2: #reset the start and end space for the next turn
-            session['num_clicks'] = 0
-            session['end space'] = 'nan'
-            session['start space'] = 'nan'
-
-        if int(session['num_clicks']) == 0: #get the space from first click - the space of the piece to move
-            session['start space'] = request.form['space']
-        elif int(session['num_clicks']) == 1: #get the space from second click - the space to move to
-            session['end space'] = request.form['space']
         session['num_clicks'] += 1
-    #only the first two chess spaces work for now
-    #the img passed in will have to be changed each time, the img now is just for testing 
-    return render_template('chess.html', player = str(session['player1']), img = "https://i.ibb.co/fYDhhJf/chesspawn.png", new_space = session['end space'], old_space = session['start space']  )
+        if int(session['num_clicks']) == 1: #get the space from first click - the space of the piece to move  
+            session['start space'] = request.form['space'] #get the space selected
+            
+            #save the image url from that space
+            if session['start space'] in session['image_dict']:
+                session['img url'] =  session['image_dict'][session['start space']]
+            else:
+                session['image_dict'][session['start space']] = ''
+                session['img url'] =  ''      
+
+        elif int(session['num_clicks']) == 2: #get the space from second click - the space to move to
+            
+            session['end space'] = request.form['space'] #get the space to move the piece to
+            
+            #set the img url on the end space to the img url from the start space
+            session['image_dict'][session['end space']] = session['img url']
+            session['image_dict'][session['start space']] = "" #remove the img url from the start space
+            session['num_clicks']  = 0
+            change_turns()
+            
+            
 
 
+    json_converted_dict = json.dumps(session['image_dict'])
+    return render_template('chess.html', player = session['player_turn'], image_dict = json_converted_dict)
 
+def change_turns():
+    """function to handle switching turns. 
+    Note: class objects can't be stored within the 'session' dictionary which is why I didn't make a players class.
+    """
+    if session['player_turn'] == session['player1']:
+        session['player_turn'] = session['player2']
+    else:
+        session['player_turn'] = session['player1']
 
 if __name__ == '__main__':
     app.run(debug=True)

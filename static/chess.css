@@ -7,9 +7,10 @@
 	position:relative;
 	text-decoration:none;
 	text-shadow:0 1px #fff;
-	width:80px;
+	width:90px;
+
 }
-#chess_board { border:5px solid #333; }
+#chess_board { border:1px solid #333; }
 #chess_board td {
 	background:#fff;
 	background:-moz-linear-gradient(top, #fff, #eee);
@@ -21,6 +22,7 @@
 	text-align:center;
 	vertical-align:middle;
 	width:80px;
+
 }
 #chess_board tr:nth-child(odd) td:nth-child(even),
 #chess_board tr:nth-child(even) td:nth-child(odd) {

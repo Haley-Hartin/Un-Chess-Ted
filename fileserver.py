@@ -5,7 +5,6 @@ from flask import session
 from os import environ
 import json
 import board
-import player as p
 
 app = Flask(__name__)
 app.secret_key = 'some secret key' #can be changes later
@@ -70,17 +69,18 @@ def chess():
 
 
     if request.method == 'POST':
-        
+        session['moves'] = []
         session['num_clicks'] += 1
         if int(session['num_clicks']) == 1: #get the space from first click - the space of the piece to move  
-            session['start space'] = request.form['space'] #get the space selected
+            session['start space'] = request.form.get('space') #get the space selected
             
             #save the image url from that space
             if session['start space'] in session['image_dict']:
                 session['img url'] =  session['image_dict'][session['start space']]
             else:
                 session['image_dict'][session['start space']] = ''
-                session['img url'] =  ''      
+                session['img url'] =  ''
+            session['moves'] = ['A1', 'B1', 'C2'] #this is just for testing, should be a function call to get the availiable moves
 
         elif int(session['num_clicks']) == 2: #get the space from second click - the space to move to
             
@@ -90,13 +90,17 @@ def chess():
             session['image_dict'][session['end space']] = session['img url']
             session['image_dict'][session['start space']] = "" #remove the img url from the start space
             session['num_clicks']  = 0
+            session['moves'] = []
             change_turns()
             
             
 
-
+    json_converted_moves= json.dumps(session['moves'])
     json_converted_dict = json.dumps(session['image_dict'])
-    return render_template('chess.html', player = session['player_turn'], image_dict = json_converted_dict)
+    return render_template('chess.html',
+                           player = session['player_turn'], 
+                           image_dict = json_converted_dict, 
+                           availiable_moves = json_converted_moves)
 
 def change_turns():
     """function to handle switching turns. 

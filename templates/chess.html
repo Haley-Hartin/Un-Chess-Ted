@@ -14,10 +14,26 @@
             color:rgba(0,0,0,0);
           }
 
-          #container1, #container2, #container3{
+          #container1, #container2, #container3, #container4{
               display:inline-block;
               margin-right: 5px;
+              height: 23px;
           }
+          .file {
+            height:5px;
+            width: 80px;
+            text-align:center;
+            border: .5px hidden;
+            color: black;
+          }
+          .rank {
+            height:80px;
+            width: 5px;
+            text-align:center;
+            border: .5px hidden;
+            color: black;
+          }
+
 
         </style>
 
@@ -26,12 +42,17 @@
         </div>
         <div id="container2">
           <form action="http://127.0.0.1:5000/">
-            <input type="submit" id="quitButton" name="quit" value="Quit" />
+            <input type="submit"  name="quit" value="Quit" />
           </form>
         </div>
         <div id="container3">
           <form action="http://127.0.0.1:5000/">
-            <input type="submit" id="quitButton" name="Restart" value="Restart" />
+            <input type="submit" name="Restart" value="Restart" />
+          </form>
+        </div>
+        <div id="container4">
+          <form action="http://www.chesscoachonline.com/chess-articles/chess-rules">
+            <input type="submit"  name="Rules" value="Rules" />
           </form>
         </div>
 
@@ -42,15 +63,14 @@
 
     <body>
 
-        <div class="container">
 
 
+        <div class="container" id="container">
 
-
-        <div class="contentPane">
-          <form action="" method = "POST">
+        <form action="" method = "POST">
 				<table id="chess_board" cellpadding="0" cellspacing="0">
 					<tr>
+            <td class="rank"> 8 </td>
             <td > <input id = 'A8' type="submit"  name = 'space' value ="A8" class="btTxt submit"/>
                         </td>
 						<td > <input id = "B8" type="submit"   name = 'space' value ="B8" class="btTxt submit"/>
@@ -69,6 +89,7 @@
                         </td>
 					</tr>
 					<tr>
+            <td class="rank"> 7 </td>
 						<td > <input id = "A7" type="submit"   name = 'space' value ="A7" class="btTxt submit"/>
                         </td>
 						<td > <input id = "B7" type="submit"   name = 'space' value ="B7" class="btTxt submit"/>
@@ -87,6 +108,7 @@
                         </td>
 					</tr>
 					<tr>
+            <td class="rank"> 6 </td>
 						<td > <input id = "A6" type="submit"  name = 'space' value ="A6" class="btTxt submit"/>
                         </td>
 						<td > <input id = "B6" type="submit"   name = 'space' value ="B6" class="btTxt submit"/>
@@ -105,6 +127,7 @@
                         </td>
 					</tr>
 					<tr>
+            <td class="rank"> 5 </td>
 						<td > <input id = "A5" type="submit"   name = 'space' value ="A5" class="btTxt submit"/>
                         </td>
 						<td > <input id = "B5" type="submit"   name = 'space' value ="B5" class="btTxt submit"/>
@@ -123,6 +146,7 @@
                         </td>
 					</tr>
 					<tr>
+            <td class="rank"> 4 </td>
 						<td > <input id = "A4" type="submit"   name = 'space' value ="A4" class="btTxt submit"/>
                         </td>
 						<td > <input id = "B4" type="submit"   name = 'space' value ="B4" class="btTxt submit"/>
@@ -141,6 +165,7 @@
                         </td>
 					</tr>
 					<tr>
+            <td name="rank"> 3 </td>
 						<td > <input id = "A3" type="submit"   name = 'space' value ="A3" class="btTxt submit"/>
                         </td>
 						<td > <input id = "B3" type="submit"   name = 'space' value ="B3" class="btTxt submit"/>
@@ -159,6 +184,7 @@
                         </td>
 					</tr>
 					<tr>
+            <td class="rank">2 </td>
 						<td > <input id = "A2" type="submit"   name = 'space' value ="A2" class="btTxt submit"/>
                         </td>
 						<td > <input id = "B2" type="submit"   name = 'space' value ="B2" class="btTxt submit"/>
@@ -177,6 +203,7 @@
                         </td>
 					</tr>
 					<tr>
+            <td class="rank"> 1 </td>
 						<td > <input id = "A1" type="submit"   name = 'space' value ="A1" class="btTxt submit"/>
                         </td>
 						<td > <input id = "B1" type="submit"   name = 'space' value ="B1" class="btTxt submit"/>
@@ -194,10 +221,26 @@
 						<td > <input id = "H1" type="submit"   name = 'space' value ="H1" class="btTxt submit"/>
                         </td>
 					</tr>
+
 				</table>
-                </form>
-            </div>
-        </div>
+        </form>
+      </div>
+
+
+    <table>
+      <tr>
+        <td class="file"> </td>
+        <td class="file"> A </td>
+        <td class="file"> B </td>
+        <td class="file"> C </td>
+        <td class="file"> D </td>
+        <td class="file"> E </td>
+        <td class="file"> F </td>
+        <td class="file"> G </td>
+        <td class="file"> H </td>
+
+      </tr>
+    </table>
 
 
 
@@ -211,7 +254,8 @@
             for (let space in board_images) {
                  //document.getElementById(space).style = "background-image:url('" + String(board_images[space]) + "')";
                  document.getElementById(space).style = "background:url(" + String(board_images[space]) + ");" +  " background-size:  80px 80px;";
-                 //document.getElementById(space).src = String(board_images[space]);
+                 //document.getElementById(space).style = "background:-webkit-gradient(linear,0 0, 0 100%, from(#fff), to(#eee));"
+                 //document.getElementById(space).src = String(board_images[space]); //https://stackoverflow.com/questions/7312553/change-image-source-with-javascript
 
             }
 

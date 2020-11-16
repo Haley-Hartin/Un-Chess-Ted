@@ -19,6 +19,8 @@ def index():
     """navigate to the single player page or multiplayer page"""
     session['image_dict'] = board.board #get the board dictionary from board.py file
     session['num_clicks'] = 0
+    session['moves'] = []
+    session["piece_selected"] = False
     if request.method == 'POST':
         if request.form['submit_button'] == 'Single Player':
                 return redirect(url_for('singleplayer_setup')) #if the clicked on singleplayer mode
@@ -72,15 +74,16 @@ def chess():
     Future implememntation should also pass in the space the piece was moved to in order to evaluate a checkmate or tie.
     """
 
-    if request.method == "GET":
-        session['moves'] = []
+
     if request.method == 'POST':
         session['moves'] = []
         session['num_clicks'] += 1
-        if int(session['num_clicks']) == 1: #get the space from first click - the space of the piece to move
+        #if int(session['num_clicks']) == 1: #get the space from first click - the space of the piece to move
+        print(session["image_dict"][request.form['space']], file=sys.stderr)
+        print(session["piece_selected"], file=sys.stderr)
+        if(session["piece_selected"] == False and len(session["image_dict"][request.form['space']]) > 0):
             print(request.form, file=sys.stderr)
             session['start space'] = request.form['space'] #get the space selected
-
 
             #save the image url from that space
             if session['start space'] in session['image_dict']:
@@ -89,17 +92,22 @@ def chess():
                 session['image_dict'][session['start space']] = ''
                 session['img url'] =  ''
             session['moves'] = ['A1', 'B1', 'C2'] #this is just for testing, should be a function call to get the availiable moves
+            session["piece_selected"] = True
+            print(session["piece_selected"], file=sys.stderr)
 
-        elif int(session['num_clicks']) == 2: #get the space from second click - the space to move to
+        #elif int(session['num_clicks']) == 2: #get the space from second click - the space to move to
+
+        elif(session["piece_selected"] == True):
 
             session['end space'] = request.form['space'] #get the space to move the piece to
-            print(session['start space'])
-
-            #set the img url on the end space to the img url from the start space
-            session['image_dict'][session['end space']] = session['img url']
-            session['image_dict'][session['start space']] = "" #remove the img url from the start space
+            if(session["end space"] != session["start space"]):
+                #set the img url on the end space to the img url from the start space
+                session['image_dict'][session['end space']] = session['img url']
+                session['image_dict'][session['start space']] = "" #remove the img url from the start space
             session['num_clicks']  = 0
             session['moves'] = []
+            session["piece_selected"] = False
+            print("piece moved", file=sys.stderr)
             change_turns()
 
 

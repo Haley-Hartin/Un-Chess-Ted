@@ -5,6 +5,10 @@ from flask import session
 from os import environ
 import json
 import board
+import sys
+import logging
+#logging.basicConfig(level=logging.DEBUG)
+
 
 app = Flask(__name__)
 app.secret_key = 'some secret key' #can be changes later
@@ -26,13 +30,14 @@ def index():
 def multiplayer_setup():
     """get and save the players names for multiplayer mode."""
     error = None
+
     if request.method == 'POST':
-        player_one = request.form['firstname']  
+        player_one = request.form['firstname']
         player_two = request.form['secondname']
-        session['player1'] = player_one #Use sessions to store data between calls 
+        session['player1'] = player_one #Use sessions to store data between calls
         session['player2'] = player_two
         session['player_turn'] = session['player1']
-        
+
         return redirect(url_for('chess')) #call chess()
 
 
@@ -46,34 +51,37 @@ def singleplayer_setup():
         player_one = request.form['firstname'] #use request.form[] to get the data from html pages
         difficulty = request.form.get('submit_button')
         session['difficulty'] = difficulty
-        
+
         session['player1'] = player_one #save player names
         session['player2'] = "Computer"
         session['player_turn'] = session['player1']
-        
+
         if request.form.get('play') == 'Play': #once the "play" button is pressed, call chess()
             return redirect(url_for('chess'))
 
 
-        
+
     return render_template('singleplayer.html', error=error)
 
-      
-       
+
+
 @app.route('/playchess', methods=['GET', 'POST'])
 def chess():
     """handle the page where game play occurs
-    Future implementation should pass the space selected to the back end to evaluate possible moves. 
-    Future implememntation should also pass in the space the piece was moved to in order to evaluate a checkmate or tie. 
+    Future implementation should pass the space selected to the back end to evaluate possible moves.
+    Future implememntation should also pass in the space the piece was moved to in order to evaluate a checkmate or tie.
     """
 
-
+    if request.method == "GET":
+        session['moves'] = []
     if request.method == 'POST':
         session['moves'] = []
         session['num_clicks'] += 1
-        if int(session['num_clicks']) == 1: #get the space from first click - the space of the piece to move  
-            session['start space'] = request.form.get('space') #get the space selected
-            
+        if int(session['num_clicks']) == 1: #get the space from first click - the space of the piece to move
+            print(request.form, file=sys.stderr)
+            session['start space'] = request.form['space'] #get the space selected
+
+
             #save the image url from that space
             if session['start space'] in session['image_dict']:
                 session['img url'] =  session['image_dict'][session['start space']]
@@ -83,27 +91,27 @@ def chess():
             session['moves'] = ['A1', 'B1', 'C2'] #this is just for testing, should be a function call to get the availiable moves
 
         elif int(session['num_clicks']) == 2: #get the space from second click - the space to move to
-            
+
             session['end space'] = request.form['space'] #get the space to move the piece to
-            
+            print(session['start space'])
+
             #set the img url on the end space to the img url from the start space
             session['image_dict'][session['end space']] = session['img url']
             session['image_dict'][session['start space']] = "" #remove the img url from the start space
             session['num_clicks']  = 0
             session['moves'] = []
             change_turns()
-            
-            
+
 
     json_converted_moves= json.dumps(session['moves'])
     json_converted_dict = json.dumps(session['image_dict'])
     return render_template('chess.html',
-                           player = session['player_turn'], 
-                           image_dict = json_converted_dict, 
+                           player = session['player_turn'],
+                           image_dict = json_converted_dict,
                            availiable_moves = json_converted_moves)
 
 def change_turns():
-    """function to handle switching turns. 
+    """function to handle switching turns.
     Note: class objects can't be stored within the 'session' dictionary which is why I didn't make a players class.
     """
     if session['player_turn'] == session['player1']:

@@ -14,9 +14,10 @@
             color:rgba(0,0,0,0);
           }
 
-          #container1, #container2, #container3{
+          .buttonRow{
               display:inline-block;
               margin-right: 5px;
+              height: 23px;
           }
 
         </style>
@@ -24,14 +25,18 @@
         <div id="container1">
           <h1> It is {{ player }}'s turn</h1>
         </div>
-        <form action="" method = "POST"> 
-            <div id="container2">
+        <form action="" method = "POST">
+            <div class="buttonRow">
                 <input type="submit" id="quitButton" name="Quit" value="Quit" />
             </div>
-            <div id="container3">
-                <input type="submit" id="quitButton" name="Restart" value="Restart" />
+            <div class="buttonRow">
+                <input type="submit" id="restartButton" name="Restart" value="Restart" />
+            </div>
+            <div class="buttonRow">
+              <input type="submit" id="rulesButton" name="Rules" value="Rules">
             </div>
         </form>
+
 
 
 
@@ -48,7 +53,7 @@
           <form action="" method = "POST">
 				<table id="chess_board" cellpadding="0" cellspacing="0">
 					<tr>
-						<td > <input id = "A8" type="submit"   name = 'space' value ="A8" class="btTxt submit"/>
+						<td > <input id = "A8" type="submit"   name = 'space' value ="A8" class="btTxt submit"/> <!-- https://www.onenaught.com/posts/382/firefox-4-change-input-type-image-only-submits-x-and-y-not-name#toc-workarounds-->
                         </td>
 						<td > <input id = "B8" type="submit"   name = 'space' value ="B8" class="btTxt submit"/>
                         </td>
@@ -208,7 +213,7 @@
             for (let space in board_images) {
                  //document.getElementById(space).style = "background-image:url('" + String(board_images[space]) + "')";
                  document.getElementById(space).style = "background:url(" + String(board_images[space]) + ");" +  " background-size:  80px 80px;";
-//                  document.getElementById(space).style.src = String(board_images[space]);
+                 //document.getElementById(space).style.src = String(board_images[space]);
 
             }
 

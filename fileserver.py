@@ -19,6 +19,8 @@ def index():
     """navigate to the single player page or multiplayer page"""
     session['image_dict'] = board.board #get the board dictionary from board.py file
     session['num_clicks'] = 0
+    session['moves'] = []
+
     if request.method == 'POST':
         if request.form['submit_button'] == 'Single Player':
                 return redirect(url_for('singleplayer_setup')) #if the clicked on singleplayer mode
@@ -71,10 +73,9 @@ def chess():
     Future implementation should pass the space selected to the back end to evaluate possible moves.
     Future implememntation should also pass in the space the piece was moved to in order to evaluate a checkmate or tie.
     """
-    
-    
-    if request.method == "GET":
-        session['moves'] = []
+
+
+
     if request.method == 'POST':
         session['moves'] = []
         session['num_clicks'] += 1
@@ -83,10 +84,13 @@ def chess():
             session['image_dict'] = board.board #get the board dictionary from board.py file
             session['player_turn'] = session['player1']
             session['num_clicks']  = 0
-        
+
         elif 'Quit' in request.form: #handle the requests to restart to quit
-            return redirect(url_for('index')) #call homepage function 
-       
+            return redirect(url_for('index')) #call homepage function
+
+        elif 'Rules' in request.form:
+            return redirect("https://en.wikipedia.org/wiki/Rules_of_chess")
+
         elif int(session['num_clicks']) == 1: #get the space from first click - the space of the piece to move
             session['start space'] = request.form['space'] #get the space selected
             #save the image url from that space

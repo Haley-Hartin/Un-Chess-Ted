@@ -71,20 +71,28 @@ def chess():
     Future implementation should pass the space selected to the back end to evaluate possible moves.
     Future implememntation should also pass in the space the piece was moved to in order to evaluate a checkmate or tie.
     """
-
+    
+    
     if request.method == "GET":
         session['moves'] = []
     if request.method == 'POST':
         session['moves'] = []
         session['num_clicks'] += 1
-        if int(session['num_clicks']) == 1: #get the space from first click - the space of the piece to move
-            print(request.form, file=sys.stderr)
+
+        if 'Restart' in request.form: #handle the requests to restart the game
+            session['image_dict'] = board.board #get the board dictionary from board.py file
+            session['player_turn'] = session['player1']
+            session['num_clicks']  = 0
+        
+        elif 'Quit' in request.form: #handle the requests to restart to quit
+            return redirect(url_for('index')) #call homepage function 
+       
+        elif int(session['num_clicks']) == 1: #get the space from first click - the space of the piece to move
             session['start space'] = request.form['space'] #get the space selected
-
-
             #save the image url from that space
             if session['start space'] in session['image_dict']:
                 session['img url'] =  session['image_dict'][session['start space']]
+
             else:
                 session['image_dict'][session['start space']] = ''
                 session['img url'] =  ''
@@ -93,7 +101,6 @@ def chess():
         elif int(session['num_clicks']) == 2: #get the space from second click - the space to move to
 
             session['end space'] = request.form['space'] #get the space to move the piece to
-            print(session['start space'])
 
             #set the img url on the end space to the img url from the start space
             session['image_dict'][session['end space']] = session['img url']

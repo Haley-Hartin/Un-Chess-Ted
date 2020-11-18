@@ -9,7 +9,7 @@ class Bishop(Piece):
         self.isCaptured = False
         #print("Creating " + self.color + " " + self.type)
 
-    def move(self):
+    def giveMoveList(self, position, ):
         print("I move like a Bishop")
 
     def capture(self):

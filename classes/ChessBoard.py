@@ -1,7 +1,10 @@
-import numpy as np
+from __future__ import annotations
 from classes.PieceFactory import PieceFactory
+from classes.Observer import Observer
+from classes.Player import Player
+from abc import ABC, abstractmethod
 
-class ChessBoard:
+class ChessBoard(Observer):
     def __init__(self):
         self.board = {}
         self.populate_chess_board()
@@ -51,6 +54,7 @@ class ChessBoard:
         self.board[(0, 4)] = piece_factory.createPiece("wK1", "King", "white", [0, 4])
         self.board[(7, 4)] = piece_factory.createPiece("bK2", "King", "black", [7, 4])
 
+        # This is just to print the current board set up to the console
         for x in range(7,-1,-1):
             for y in range(8):
                 if(self.board[(x, y)] == None):
@@ -60,3 +64,17 @@ class ChessBoard:
             print()
 
         print()
+
+    def getBoard(self):
+        return self.board
+
+    def getPieceColor(self,location):
+        print("I am the board and I am going to determine what color is at location " + str(location))
+        # For now I am just going to return white as a default
+        return "white"
+
+    def update(self, player: Player) -> None:
+        print()
+        print("Board: I was just notified that the player would like to move the piece that is at location " + str(player.locationSelected) + " to location " + str(player.finalLocation))
+        print("Board: I am going to update my board to reflect the players move.")
+

@@ -9,7 +9,7 @@ class King(Piece):
         self.isCaptured = False
         #print("Creating " + self.color + " " + self.type)
 
-    def move(self):
+    def giveMoveList(self, position, ):
         print("I move like a King")
 
     def capture(self):

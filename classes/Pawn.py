@@ -9,7 +9,7 @@ class Pawn(Piece):
         self.isCaptured = False
         #print("Creating " + self.color + " " + self.type)
 
-    def move(self):
+    def giveMoveList(self):
         print("I move like a Pawn")
 
     def capture(self):

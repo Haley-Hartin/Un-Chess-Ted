@@ -9,7 +9,7 @@ class Rook(Piece):
         self.isCaptured = False
         #print("Creating " + self.color + " " + self.type)
 
-    def move(Piece):
+    def giveMoveList(self, position, ):
         print("I move like a Rook")
 
     def capture(Piece):

@@ -102,6 +102,7 @@ class ChessGame(Subject):
             print("The game is over I can't return a move list")
 
     def player_wants_to_make_move(self, initalLocation, finalLocation):
+        
         self.locationSelected = initalLocation
         self.finalLocation = finalLocation
         print("A player wants to make a move")

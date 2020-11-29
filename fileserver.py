@@ -36,6 +36,8 @@ def multiplayer_setup():
     error = None
 
     if request.method == 'POST':
+        if 'Back' in request.form: #handle the requests to restart the game
+            return redirect(url_for('index')) #call homepage function
         player_one = request.form['firstname']
         player_two = request.form['secondname']
         session['player1'] = player_one #Use sessions to store data between calls
@@ -55,7 +57,10 @@ def multiplayer_setup():
 def singleplayer_setup():
     """get and save the players name and difficulty"""
     error = None
+    
     if request.method == 'POST':
+        if 'Back' in request.form: #handle the requests to restart the game
+            return redirect(url_for('index')) #call homepage function
         player_one = request.form['firstname'] #use request.form[] to get the data from html pages
         difficulty = request.form.get('submit_button')
         session['difficulty'] = difficulty
@@ -103,38 +108,15 @@ def chess():
             return redirect("https://en.wikipedia.org/wiki/Rules_of_chess")
 
         elif int(session['num_clicks']) == 1: #get the space from first click - the space of the piece to move
-            session['start space'] = request.form['space'] #get the space selected
-            #save the image url from that space
-            if session['start space'] in session['image_dict']:
-                session['img url'] =  session['image_dict'][session['start space']]
-
-            else:
-                session['image_dict'][session['start space']] = ''
-                session['img url'] =  ''
-            session['moves'] = ['A1', 'B1', 'C2'] #this is just for testing, should be a function call to get the availiable moves
-
-            gameJSON = jsonpickle.decode(session['game']) #deocde JSON game object
-            gameJSON.player_wants_move_list(session['start space']) #call class method 
             
-            gameEncoded = jsonpickle.encode(gameJSON, unpicklable=True) #re encode it to JSON
-            session['game'] = gameEncoded #store it back in session data
-
+            session['start space'] = request.form['space'] #get the space selected
+            pass_move()
 
         elif int(session['num_clicks']) == 2: #get the space from second click - the space to move to
 
             session['end space'] = request.form['space'] #get the space to move the piece to
-
-            gameJSON = jsonpickle.decode(session['game']) #deocde JSON game object
-            gameJSON.player_wants_to_make_move(session['start space'], session['end space'])  #call class method 
             
-            gameEncoded = jsonpickle.encode(gameJSON, unpicklable=True)#re encode it to JSON
-            session['game'] = gameEncoded #store it back in session data
-
-            #set the img url on the end space to the img url from the start space
-            session['image_dict'][session['end space']] = session['img url']
-            session['image_dict'][session['start space']] = "" #remove the img url from the start space
-            session['num_clicks']  = 0
-            session['moves'] = []
+            check_move()
             change_turns()
 
 
@@ -153,6 +135,38 @@ def change_turns():
         session['player_turn'] = session['player2']
     else:
         session['player_turn'] = session['player1']
+
+def pass_move():
+    #save the image url from that space
+    if session['start space'] in session['image_dict']:
+        session['img url'] =  session['image_dict'][session['start space']]
+
+    else:
+        session['image_dict'][session['start space']] = ''
+        session['img url'] =  ''
+    
+    session['moves'] = ['A1', 'B1', 'C2'] #this is just for testing, should be a function call to get the availiable moves
+
+    gameJSON = jsonpickle.decode(session['game']) #deocde JSON game object
+    gameJSON.player_wants_move_list(session['start space']) #call class method 
+            
+    gameEncoded = jsonpickle.encode(gameJSON, unpicklable=True) #re encode it to JSON
+    session['game'] = gameEncoded #store it back in session data
+
+def check_move():
+    #set the img url on the end space to the img url from the start space
+    session['image_dict'][session['end space']] = session['img url']
+    session['image_dict'][session['start space']] = "" #remove the img url from the start space
+    session['num_clicks']  = 0
+    session['moves'] = []
+    
+    gameJSON = jsonpickle.decode(session['game']) #deocde JSON game object
+    gameJSON.player_wants_to_make_move(session['start space'], session['end space'])  #call class method 
+            
+    gameEncoded = jsonpickle.encode(gameJSON, unpicklable=True)#re encode it to JSON
+    session['game'] = gameEncoded #store it back in session data
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

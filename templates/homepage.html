@@ -3,8 +3,70 @@
     <head>
 <!-- 		<meta http-equiv="content-type" content="text/php; charset=utf-8" /> -->
 		
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='singleplayer.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='homepage.css') }}" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <title>Un-Chess-Ted</title>
+        <script>  //This script just adds functionality to navigate and select spaces using only the keyboard
+            buttonOrder = ["single", "multi"];
+            selected = null
+
+            function selectItem(name) {
+                console.log(name);
+                selected = name;
+                if(selected == 'single'){
+                    document.getElementById('single').style.border = "4px solid black";
+                    document.getElementById('multi').style.border = "none"
+                }
+                else{
+                    document.getElementById('multi').style.border = "4px solid black";
+                    document.getElementById('single').style.border = "none"
+                } 
+                
+            }
+
+
+            function selectUp() {
+                if (selected == null) {
+                    selectItem(buttonOrder[0]);
+                } else {
+                    index = buttonOrder.indexOf(selected);
+                    index = (index - 1);
+                    if (index < 0) index = 0
+                    console.log(index)
+                    selectItem(buttonOrder[index])
+                }
+            }
+
+            function selectDown() {
+                if (selected == null) {
+                    selectItem(buttonOrder[0]);
+                } else {
+                    index = buttonOrder.indexOf(selected);
+                    index = (index + 1) % buttonOrder.length;
+                    console.log(index)
+                    selectItem(buttonOrder[index])
+                }
+            }
+
+            function clickSelectedItem() {
+                if (selected != null) {
+                    $('#' + selected).click();
+                }
+            }
+
+            $(document).keydown(function(event) {
+ 
+                if (event.keyCode == 38) {
+                    selectUp()	
+                } 
+                else if (event.keyCode == 40) {
+                    selectDown()	
+                }
+                else if (event.keyCode == 13) {
+                    clickSelectedItem()
+                }
+            })
+        </script> 
         
 
 		<div class = 'title'>
@@ -17,9 +79,9 @@
     <body>
        <form action="" class = 'players' method = "post">
            <div id = 'buttons'>
-               <input type="submit" name="submit_button" value="Single Player">
+               <input type="submit" name="submit_button" value="Single Player" id = 'single'>
                 <br>
-               <input type="submit" name="submit_button" value="MultiPlayer">
+               <input type="submit" name="submit_button" value="MultiPlayer" id = 'multi'>
             </div>
         </form>
        <!-- Include the ChessBoard Api -->

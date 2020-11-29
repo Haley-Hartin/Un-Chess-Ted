@@ -1,26 +1,42 @@
 body {background-color: #BCD5D8;}
-.button {
-  background-color: white; /* Green */
+.players {
   border: none;
   color: black;
   padding: 60px 32px;
   text-align: center;
   text-decoration: none;
   display: block;
-  font-size: 30px;
-  width: 50%;
+  font-size: 50px;
+  width: 60%;
+
   justify-content: center;
   align-items: center;
-  margin-left: 400px;
-  margin-top: 100px;
+    margin: 0 auto;
   
 }
-#buttons{
-  
-  justify-content: center;
-  align-items: center;
-}
+
 div.title {
   text-align: center;
     font-size: 60px;
+}
+
+form {
+    margin: 0 auto;
+}
+
+input[type=submit]{
+  background-color: white;
+  border: none;
+  color: black;
+  padding: 16px 32px;
+      height: 150px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  width: 50%;
+  font-size: 50px;
+  align-items: center;
+  justify-content: center;
+    display: block;
+    margin: 0 auto;
 }

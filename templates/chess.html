@@ -4,50 +4,131 @@
 		<meta http-equiv="content-type" content="text/php; charset=utf-8" />
 
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chess.css') }}" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+        
+        <script>  //This script just adds functionality to navigate and select spaces using only the keyboard
+            buttonOrder = ["A8","B8","C8","D8","E8","F8","G8","H8", 
+                          "A7","B7","C7","D7","E7","F7","G7","H7",
+                          "A6","B6","C6","D6","E6","F6","G6","H6",
+                          "A5","B5","C5","D5","E5","F5","G5","H5",
+                          "A4","B4","C4","D4","E4","F4","G4","H4",
+                          "A3","B3","C3","D3","E3","F3","G3","H3",
+                          "A2","B2","C2","D2","E2","F2","G2","H2",
+                          "A1","B1","C1","D1","E1","F1","G1","H1",];
+            selected = null
+
+            function selectItem(name) {
+                var moves = JSON.parse('{{ availiable_moves|safe }}');
+                selected = name;
+                var x = document.getElementsByName("space"); // plural
+                
+                for(var i = 0; i < x.length; i++) {
+                    var id = x[i].id;
+                    console.log(id + moves)
+                    if(id == selected){
+                         x[i].style.border = "2px solid black";
+                    }
+                    else if( moves.includes(id) ){
+                        document.getElementById(id).style.border = "4px solid rgb(250, 255, 55)"
+                    }
+                    else{
+                        x[i].style.border = '4px outset';
+                    }
+               }
+            }
+
+            function selectNext() {
+                if (selected == null) {
+                    selectItem(buttonOrder[0]);
+                } else {
+                    index = buttonOrder.indexOf(selected);
+                    index = (index + 1) % buttonOrder.length;
+                    selectItem(buttonOrder[index])
+                }
+            }
+
+            function selectPrevious() {
+                if (selected == null) {
+                    selectItem(buttonOrder[0]);
+                } else {
+                    index = buttonOrder.indexOf(selected);
+                    index = (index - 1);
+                    if (index < 0) index = buttonOrder.length + index
+                    selectItem(buttonOrder[index])
+                }	
+            }
+
+            function selectUp() {
+                if (selected == null) {
+                    selectItem(buttonOrder[0]);
+                } else {
+                    index = buttonOrder.indexOf(selected);
+                    index = (index - 8);
+                    if (index < 0) index = buttonOrder.length + index
+                    selectItem(buttonOrder[index])
+                }
+            }
+
+            function selectDown() {
+                if (selected == null) {
+                    selectItem(buttonOrder[0]);
+                } else {
+                    index = buttonOrder.indexOf(selected);
+                    index = (index + 8) % buttonOrder.length;
+                    selectItem(buttonOrder[index])
+                }
+            }
+
+            function clickSelectedItem() {
+                if (selected != null) {
+                    $('#' + selected).click();
+                }
+            }
+
+            $(document).keydown(function(event) {
+ 
+                if (event.keyCode == 38) {
+                    selectUp()	
+                } 
+                else if (event.keyCode == 40) {
+                    selectDown()	
+                }else if (event.keyCode == 39) {
+                    selectNext()
+                }
+                else if (event.keyCode == 37) {
+                    selectPrevious()
+                }
+                else if (event.keyCode == 13) {
+                    clickSelectedItem()
+                }
+            })
+        </script> 
 
         <title>Un-Chess-Ted</title>
 
-        <style>
-          input[name='space']{
-            border: 4px outset;
-            padding: 30px 30px;
-            color:rgba(0,0,0,0);
-          }
-
-          .buttonRow{
-              display:inline-block;
-              margin-right: 5px;
-              height: 23px;
-          }
-
-        </style>
 
         <div id="container1">
           <h1> It is {{ player }}'s turn</h1>
         </div>
-        <form action="" method = "POST">
-            <div class="buttonRow">
-                <input type="submit" id="quitButton" name="Quit" value="Quit" />
-            </div>
-            <div class="buttonRow">
-                <input type="submit" id="restartButton" name="Restart" value="Restart" />
-            </div>
-            <div class="buttonRow">
-              <input type="submit" id="rulesButton" name="Rules" value="Rules">
-            </div>
-        </form>
-
-
-
-
+ 
     </head>
 
     <body>
-
-        <div class="container">
-
-
-
+         <div id = 'buttons'>
+             <form action="" method = "POST" class = "btn">
+                    <div class="buttonRow">
+                        <input type="submit" id="quitButton" name="Quit" value="Quit" class="buttonRow" />
+                    </div>
+                    <div class="buttonRow">
+                        <input type="submit" id="restartButton" name="Restart" value="Restart" class="buttonRow" />
+                    </div>
+                    <div class="buttonRow">
+                      <input type="submit" id="rulesButton" name="Rules" value="Rules" class="buttonRow">
+                    </div>
+              </form>
+         </div>
+ 
 
         <div class="contentPane">
           <form action="" method = "POST">
@@ -55,7 +136,7 @@
 					<tr>
 						<td > <input id = "A8" type="submit"   name = 'space' value ="A8" class="btTxt submit"/> <!-- https://www.onenaught.com/posts/382/firefox-4-change-input-type-image-only-submits-x-and-y-not-name#toc-workarounds-->
                         </td>
-						<td > <input id = "B8" type="submit"   name = 'space' value ="B8" class="btTxt submit"/>
+						<td > <input id = "B8" type="submit"   name = 'space' value ="B8"/>
                         </td>
 						<td > <input id = "C8" type="submit"   name = 'space' value ="C8" class="btTxt submit"/>
                         </td>
@@ -199,7 +280,7 @@
 				</table>
                 </form>
             </div>
-        </div>
+
 
 
 
@@ -223,8 +304,8 @@
               document.getElementById(moves[i]).style.border = "4px solid rgb(250, 255, 55)"
             }
 
-
         </script>
+        
     </body>
 
 

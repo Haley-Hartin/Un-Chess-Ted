@@ -4,12 +4,69 @@
 <!-- 		<meta http-equiv="content-type" content="text/php; charset=utf-8" /> -->
 		
         <link href="{{ url_for('static', filename='multiplayer.css') }}" rel="stylesheet" media="screen">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <title>Un-Chess-Ted</title>
         
 
 		<div class = 'title'>
             <h1>MultiPlayer</h1>
         </div>
+        <script>  //This script just adds functionality to navigate and select spaces using only the keyboard
+            buttonOrder = ["submit", 'back'];
+            selected = null
+
+                function selectItem(name) {
+                selected = name;
+                if(selected == 'submit'){
+                    document.getElementById('submit').style.border = "2px solid black";
+                    document.getElementById('back').style.border = "none";
+                }
+                else{
+                    document.getElementById('submit').style.border = 'none';
+                    document.getElementById('back').style.border = "2px solid black";
+                }
+                
+            }
+
+            function selectUp() {
+                if (selected == null) {
+                    selectItem(buttonOrder[0]);
+                } else {
+                    index = buttonOrder.indexOf(selected);
+                    index = (index - 1);
+                    if (index < 0) index = 0
+                    console.log(index)
+                    selectItem(buttonOrder[index])
+                }
+            }
+
+            function selectDown() {
+                if (selected == null) {
+                    selectItem(buttonOrder[0]);
+                } else {
+                    index = buttonOrder.indexOf(selected);
+                    index = (index + 1) % buttonOrder.length;
+                    console.log(index)
+                    selectItem(buttonOrder[index])
+                }
+            }
+
+
+
+            $(document).keydown(function(event) {
+ 
+                if (event.keyCode == 38) {
+                    selectUp()	
+                } 
+                else if (event.keyCode == 40) {
+                    selectDown()	
+                }
+                else if (event.keyCode == 13) {
+                    $('#' + selected).click();
+                }
+            })
+        </script> 
+        
      
         
     </head>
@@ -20,20 +77,22 @@
           <br>
           <form action="" method="post" class = "players">
              <label for="firstname">Player one name:</label>
-            <input type="text" name="firstname" value="{{
+            <input id = 'p1'type="text" name="firstname" value="{{
               request.form.firstname }}">
               <br>
+              <br>
               <label for="secondname">Player two name:</label>
-             <input type="text" name="secondname" value="{{
+             <input id = 'p2' type="text" name="secondname" value="{{
               request.form.secondname }}">
               <br>
               <br>
-            <input class="btn btn-default" type="submit" value="Play">
+            <input id = 'submit' class="btn btn-default" type="submit" value="Play">
+              <br>
+            <input type = 'submit' name = 'Back' value = 'Back' class  = 'back' id = 'back' >
           </form>
          
     </div>
 
-		<script src="chess.js"></script>
     </body>
 
 

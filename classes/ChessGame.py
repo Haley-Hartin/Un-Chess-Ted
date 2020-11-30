@@ -132,6 +132,16 @@ class ChessGame(Subject):
 
         else:
             print("The game is over I can't move any pieces")
+    
+    def game_over(self):
+        # if the game if over, return the winner, if not, return nothing
+        if(self.gameOver):
+            print("here")
+            return self.player1_name #just for testing, will need to determine winner
+        else:
+            return None
+            
+        
 
 
 #game1 = ChessGame("John", "Alice", True)

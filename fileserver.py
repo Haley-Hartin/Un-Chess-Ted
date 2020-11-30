@@ -90,11 +90,12 @@ def chess():
     Future implememntation should also pass in the space the piece was moved to in order to evaluate a checkmate or tie.
     """
 
-
+    text = get_text() #get the text to display in html page
 
     if request.method == 'POST':
         session['moves'] = []
         session['num_clicks'] += 1
+        
 
         if 'Restart' in request.form: #handle the requests to restart the game
             session['image_dict'] = board.board #get the board dictionary from board.py file
@@ -110,22 +111,33 @@ def chess():
         elif int(session['num_clicks']) == 1: #get the space from first click - the space of the piece to move
             
             session['start space'] = request.form['space'] #get the space selected
-            pass_move()
+            
+            pass_move() #pass move to back end
+            change_turns()
 
         elif int(session['num_clicks']) == 2: #get the space from second click - the space to move to
 
             session['end space'] = request.form['space'] #get the space to move the piece to
             
-            check_move()
-            change_turns()
-
+            check_move() #check the move is valid 
+            
 
     json_converted_moves= json.dumps(session['moves'])
     json_converted_dict = json.dumps(session['image_dict'])
     return render_template('chess.html',
-                           player = session['player_turn'],
+                           display_text = text,
                            image_dict = json_converted_dict,
                            availiable_moves = json_converted_moves)
+
+def get_game_object():
+    """Function to decode the chessgame object."""
+    return jsonpickle.decode(session['game']) #deocde JSON game object
+
+def store_game_object(gameJSON):
+    """function to re encode the chessGame object and store it."""
+    gameEncoded = jsonpickle.encode(gameJSON, unpicklable=True)#re encode it to JSON
+    session['game'] = gameEncoded #store it back in session data
+
 
 def change_turns():
     """function to handle switching turns.
@@ -137,6 +149,7 @@ def change_turns():
         session['player_turn'] = session['player1']
 
 def pass_move():
+    """function to pass the spot to move from to the chessGame class and get a list of legal moves in return."""
     #save the image url from that space
     if session['start space'] in session['image_dict']:
         session['img url'] =  session['image_dict'][session['start space']]
@@ -145,26 +158,41 @@ def pass_move():
         session['image_dict'][session['start space']] = ''
         session['img url'] =  ''
     
+   
+    gameJSON = get_game_object()
+    gameJSON.player_wants_move_list(session['start space']) #call class method 
     session['moves'] = ['A1', 'B1', 'C2'] #this is just for testing, should be a function call to get the availiable moves
 
-    gameJSON = jsonpickle.decode(session['game']) #deocde JSON game object
-    gameJSON.player_wants_move_list(session['start space']) #call class method 
-            
-    gameEncoded = jsonpickle.encode(gameJSON, unpicklable=True) #re encode it to JSON
-    session['game'] = gameEncoded #store it back in session data
+
+    store_game_object(gameJSON)
+
 
 def check_move():
+    """Function to check if the spot moved to is valid. Move will get passed to the ChessGame class to be validated."""
     #set the img url on the end space to the img url from the start space
     session['image_dict'][session['end space']] = session['img url']
     session['image_dict'][session['start space']] = "" #remove the img url from the start space
     session['num_clicks']  = 0
     session['moves'] = []
     
-    gameJSON = jsonpickle.decode(session['game']) #deocde JSON game object
-    gameJSON.player_wants_to_make_move(session['start space'], session['end space'])  #call class method 
-            
-    gameEncoded = jsonpickle.encode(gameJSON, unpicklable=True)#re encode it to JSON
-    session['game'] = gameEncoded #store it back in session data
+    gameJSON = get_game_object()
+    gameJSON.player_wants_to_make_move(session['start space'], session['end space'])  #call class method     
+    store_game_object(gameJSON)
+
+    
+def get_text(): 
+    """Get either whose turn it it, or who won the game to display to the front end."""
+    gameJSON = get_game_object()
+    
+    #if game over
+    if(gameJSON.game_over() != None):
+        text = gameJSON.game_over() + " won!"
+        
+    #if not game over
+    else:
+        text = "It is " + session['player_turn'] + "'s turn"
+         
+    return str(text)
 
 
 

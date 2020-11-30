@@ -107,15 +107,11 @@
 
         <title>Un-Chess-Ted</title>
 
-
-        <div id="container1">
-          <h1> It is {{ player }}'s turn</h1>
-        </div>
  
     </head>
 
     <body>
-         <div id = 'buttons'>
+<!--          <div id = 'buttons'>
              <form action="" method = "POST" class = "btn">
                     <div class="buttonRow">
                         <input type="submit" id="quitButton" name="Quit" value="Quit" class="buttonRow" />
@@ -127,159 +123,193 @@
                       <input type="submit" id="rulesButton" name="Rules" value="Rules" class="buttonRow">
                     </div>
               </form>
-         </div>
- 
-
-        <div class="contentPane">
-          <form action="" method = "POST">
-				<table id="chess_board" cellpadding="0" cellspacing="0">
-					<tr>
-						<td > <input id = "A8" type="submit"   name = 'space' value ="A8" class="btTxt submit"/> <!-- https://www.onenaught.com/posts/382/firefox-4-change-input-type-image-only-submits-x-and-y-not-name#toc-workarounds-->
-                        </td>
-						<td > <input id = "B8" type="submit"   name = 'space' value ="B8"/>
-                        </td>
-						<td > <input id = "C8" type="submit"   name = 'space' value ="C8" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "D8" type="submit"   name = 'space' value ="D8" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "E8" type="submit"   name = 'space' value ="E8" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "F8" type="submit"   name = 'space' value ="F8" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "G8" type="submit"   name = 'space' value ="G8" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "H8" type="submit"   name = 'space' value ="H8" class="btTxt submit"/>
-                        </td>
-					</tr>
-					<tr>
-						<td > <input id = "A7" type="submit"   name = 'space' value ="A7" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "B7" type="submit"   name = 'space' value ="B7" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "C7" type="submit"   name = 'space' value ="C7" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "D7" type="submit"   name = 'space' value ="D7" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "E7" type="submit"   name = 'space' value ="E7" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "F7" type="submit"   name = 'space' value ="F7" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "G7" type="submit"   name = 'space' value ="G7" class="btTxt submit"/>
-                        </td>
-                        <td > <input id = "H7" type="submit"   name = 'space' value ="H7" class="btTxt submit"/>
-                        </td>
-					</tr>
-					<tr>
-						<td > <input id = "A6" type="submit"  name = 'space' value ="A6" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "B6" type="submit"   name = 'space' value ="B6" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "C6" type="submit"   name = 'space' value ="C6" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "D6" type="submit"   name = 'space' value ="D6" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "E6" type="submit"   name = 'space' value ="E6" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "F6" type="submit"   name = 'space' value ="F6" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "G6" type="submit"   name = 'space' value ="G6" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "H6" type="submit"   name = 'space' value ="H6" class="btTxt submit"/>
-                        </td>
-					</tr>
-					<tr>
-						<td > <input id = "A5" type="submit"   name = 'space' value ="A5" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "B5" type="submit"   name = 'space' value ="B5" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "C5" type="submit"   name = 'space' value ="C5" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "D5" type="submit"   name = 'space' value ="D5" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "E5" type="submit"   name = 'space' value ="E5" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "F5" type="submit"   name = 'space' value ="F5" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "G5" type="submit"   name = 'space' value ="G5" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "H5" type="submit"   name = 'space' value ="H5" class="btTxt submit"/>
-                        </td>
-					</tr>
-					<tr>
-						<td > <input id = "A4" type="submit"   name = 'space' value ="A4" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "B4" type="submit"   name = 'space' value ="B4" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "C4" type="submit"   name = 'space' value ="C4" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "D4" type="submit"   name = 'space' value ="D4" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "E4" type="submit"   name = 'space' value ="E4" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "F4" type="submit"   name = 'space' value ="F4" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "G4" type="submit"   name = 'space' value ="G4" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "H4" type="submit"   name = 'space' value ="H4" class="btTxt submit"/>
-                        </td>
-					</tr>
-					<tr>
-						<td > <input id = "A3" type="submit"   name = 'space' value ="A3" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "B3" type="submit"   name = 'space' value ="B3" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "C3" type="submit"   name = 'space' value ="C3" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "D3" type="submit"   name = 'space' value ="D3" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "E3" type="submit"   name = 'space' value ="E3" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "F3" type="submit"   name = 'space' value ="F3" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "G3" type="submit"   name = 'space' value ="G3" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "H3" type="submit"   name = 'space' value ="H3" class="btTxt submit"/>
-                        </td>
-					</tr>
-					<tr>
-						<td > <input id = "A2" type="submit"   name = 'space' value ="A2" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "B2" type="submit"   name = 'space' value ="B2" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "C2" type="submit"   name = 'space' value ="C2" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "D2" type="submit"   name = 'space' value ="D2" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "E2" type="submit"   name = 'space' value ="E2" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "F2" type="submit"   name = 'space' value ="F2" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "G2" type="submit"   name = 'space' value ="G2" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "H2" type="submit"   name = 'space' value ="H2" class="btTxt submit"/>
-                        </td>
-					</tr>
-					<tr>
-						<td > <input id = "A1" type="submit"   name = 'space' value ="A1" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "B1" type="submit"   name = 'space' value ="B1" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "C1" type="submit"   name = 'space' value ="C1" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "D1" type="submit"   name = 'space' value ="D1" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "E1" type="submit"   name = 'space' value ="E1" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "F1" type="submit"   name = 'space' value ="F1" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "G1" type="submit"   name = 'space' value ="G1" class="btTxt submit"/>
-                        </td>
-						<td > <input id = "H1" type="submit"   name = 'space' value ="H1" class="btTxt submit"/>
-                        </td>
-					</tr>
-				</table>
-                </form>
+         </div> -->
+        <div class = "row">
+        <div class = "col">
+            <div class="contentPane">
+              <form action="" method = "POST">
+                    <table id="chess_board" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td > <input id = "A8" type="submit"   name = 'space' value ="A8" class="btTxt submit"/> <!-- https://www.onenaught.com/posts/382/firefox-4-change-input-type-image-only-submits-x-and-y-not-name#toc-workarounds-->
+                            </td>
+                            <td > <input id = "B8" type="submit"   name = 'space' value ="B8"/>
+                            </td>
+                            <td > <input id = "C8" type="submit"   name = 'space' value ="C8" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D8" type="submit"   name = 'space' value ="D8" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E8" type="submit"   name = 'space' value ="E8" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F8" type="submit"   name = 'space' value ="F8" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G8" type="submit"   name = 'space' value ="G8" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H8" type="submit"   name = 'space' value ="H8" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td > <input id = "A7" type="submit"   name = 'space' value ="A7" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "B7" type="submit"   name = 'space' value ="B7" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "C7" type="submit"   name = 'space' value ="C7" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D7" type="submit"   name = 'space' value ="D7" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E7" type="submit"   name = 'space' value ="E7" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F7" type="submit"   name = 'space' value ="F7" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G7" type="submit"   name = 'space' value ="G7" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H7" type="submit"   name = 'space' value ="H7" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td > <input id = "A6" type="submit"  name = 'space' value ="A6" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "B6" type="submit"   name = 'space' value ="B6" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "C6" type="submit"   name = 'space' value ="C6" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D6" type="submit"   name = 'space' value ="D6" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E6" type="submit"   name = 'space' value ="E6" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F6" type="submit"   name = 'space' value ="F6" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G6" type="submit"   name = 'space' value ="G6" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H6" type="submit"   name = 'space' value ="H6" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td > <input id = "A5" type="submit"   name = 'space' value ="A5" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "B5" type="submit"   name = 'space' value ="B5" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "C5" type="submit"   name = 'space' value ="C5" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D5" type="submit"   name = 'space' value ="D5" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E5" type="submit"   name = 'space' value ="E5" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F5" type="submit"   name = 'space' value ="F5" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G5" type="submit"   name = 'space' value ="G5" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H5" type="submit"   name = 'space' value ="H5" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td > <input id = "A4" type="submit"   name = 'space' value ="A4" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "B4" type="submit"   name = 'space' value ="B4" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "C4" type="submit"   name = 'space' value ="C4" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D4" type="submit"   name = 'space' value ="D4" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E4" type="submit"   name = 'space' value ="E4" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F4" type="submit"   name = 'space' value ="F4" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G4" type="submit"   name = 'space' value ="G4" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H4" type="submit"   name = 'space' value ="H4" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td > <input id = "A3" type="submit"   name = 'space' value ="A3" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "B3" type="submit"   name = 'space' value ="B3" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "C3" type="submit"   name = 'space' value ="C3" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D3" type="submit"   name = 'space' value ="D3" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E3" type="submit"   name = 'space' value ="E3" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F3" type="submit"   name = 'space' value ="F3" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G3" type="submit"   name = 'space' value ="G3" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H3" type="submit"   name = 'space' value ="H3" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td > <input id = "A2" type="submit"   name = 'space' value ="A2" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "B2" type="submit"   name = 'space' value ="B2" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "C2" type="submit"   name = 'space' value ="C2" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D2" type="submit"   name = 'space' value ="D2" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E2" type="submit"   name = 'space' value ="E2" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F2" type="submit"   name = 'space' value ="F2" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G2" type="submit"   name = 'space' value ="G2" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H2" type="submit"   name = 'space' value ="H2" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td > <input id = "A1" type="submit"   name = 'space' value ="A1" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "B1" type="submit"   name = 'space' value ="B1" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "C1" type="submit"   name = 'space' value ="C1" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D1" type="submit"   name = 'space' value ="D1" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E1" type="submit"   name = 'space' value ="E1" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F1" type="submit"   name = 'space' value ="F1" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G1" type="submit"   name = 'space' value ="G1" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H1" type="submit"   name = 'space' value ="H1" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                    </table>
+                    </form>
+                </div>
             </div>
+            <div class = "col2">
+                <table id="game_info" cellpadding="0" cellspacing="0" width = "50%">
+                   <tr height="400px" id = display>
+                       <td>
+                            <div id="display">
+                         
+                                          <h1>{{ display_text|safe }}</h1>
+
+                            </div>
+                       </td>
+                   </tr>
+                   <tr>
+                       <td>
+                      
+                         <div id = 'buttons'>
+                             <form action="" method = "POST" class = "btn">
+                                    <div class="buttonRow">
+                                        <input type="submit" id="quitButton" name="Quit" value="Quit" class="buttonRow" />
+                                    </div><br>
+
+                                    <div class="buttonRow">
+                                        <input type="submit" id="restartButton" name="Restart" value="Restart" class="buttonRow" />
+                                    </div><br>
+                                    <div class="buttonRow">
+                                      <input type="submit" id="rulesButton" name="Rules" value="Rules" class="buttonRow">
+                                    </div>
+                              </form>
+                        </div>
+                       </td>
+                    </tr>
+                </table>
+           </div>
+        </div>
 
 
 
@@ -288,6 +318,7 @@
 
             var board_images = JSON.parse('{{ image_dict|safe }}');
             var moves = JSON.parse('{{ availiable_moves|safe }}');
+
 
 
             //loop through dictionary and map each img url to its table entry

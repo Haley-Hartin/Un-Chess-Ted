@@ -1,8 +1,8 @@
-
 body{
     margin-left: 30px; 
     display: block
 }
+/* box-sizing: border-box; */
 #chess_board a {
 	color:#000;
 	display:block;
@@ -25,7 +25,7 @@ body{
 	height:80px;
 	text-align:center;
 	vertical-align:middle;
-	width:80px;
+	width:90px;
 
 }
 #chess_board tr:nth-child(odd) td:nth-child(even),
@@ -41,36 +41,63 @@ body{
 
 
 input[class='buttonRow'] {
-    display:inline-block;
-    width: 150px;
-    height: 40px; 
+    display: block;
+    width: 100%;
+    height: 70px; 
     font-size: 20px;
-    float: left;
-    margin-left: 10px;
+    margin-left: 0px;
     background-color: rgb(203, 229, 247);
     border-radius: 4px;
     
 
 }
+
 input[name='space']{
-     border: 4px outset;
+     border: 8px outset;
      padding: 30px 30px;
      color:rgba(0,0,0,0);
 }
 
-
-form {
-    margin: 0 auto;
+#btns{
+    margin-left: 0px;
+    
 }
 
 table{
-    margin-top: 90px;
+    width: 60%;
+/*     margin-top: 20px; */
     margin-left: 10px;
 }
 
 #container1{
   margin-left: 10px;  
 }
+.col {
+  width: 60%;
+  flex: 60%;
+}
+.col2 {
+
+  flex: 40%;
+}
+.row {
+    display: flex;
+    height: 400px;
+
+}
+
+#game_info{
+    width: 90%
+}
+
+#display{
+    margin-top: 10px;
+}
+
+
+
+
+
 
 
 

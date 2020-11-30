@@ -12,5 +12,5 @@ class Queen(Piece):
     def giveMoveList(self, position, ):
         print("I move like a Queen")
 
-    def capture(self):
+    def giveCaptureList(self,board):
         print("I capture like a Queen")

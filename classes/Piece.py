@@ -10,9 +10,9 @@ class Piece(metaclass=ABCMeta):
     def giveMoveList(self, board):
         pass
 
-    @abstractmethod
-    def giveCaptureList(self, board):
-        pass
+#     @abstractmethod
+#     def giveCaptureList(self, board):
+#         pass
 
     def getId(self):
         return self.id

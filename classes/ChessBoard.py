@@ -78,7 +78,7 @@ class ChessBoard(Observer):
 
 
     def getMoveListForPiece(self,row,column,color):
-        piece = self.board[(row,column)]
+        piece = self.board[str((row, column))]
         moveList = piece.giveMoveList(self)
         print(moveList)
         captureList = piece.giveCaptureList(self)
@@ -104,12 +104,14 @@ class ChessBoard(Observer):
 
 
     def getPiece(self, row, column):
-        return self.board[(row,column)]
+        x = str((row, column))
+        return self.board[x]
 
 
     def getPieceColor(self,row,column):
-        if(self.board[(row,column)] != None):
-            color = self.board[(row,column)].getColor()
+        x = str((row, column))
+        if(self.board[x] != None):
+            color = self.board[x].getColor()
             return color
         else:
             print("There is no piece at that location -- cannot return color")

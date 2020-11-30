@@ -16,6 +16,8 @@ from json import JSONEncoder
 app = Flask(__name__)
 app.secret_key = 'some secret key' #can be changes later
 
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     """navigate to the single player page or multiplayer page"""
@@ -23,11 +25,13 @@ def index():
     session['num_clicks'] = 0
     session['moves'] = []
 
+
     if request.method == 'POST':
         if request.form['submit_button'] == 'Single Player':
                 return redirect(url_for('singleplayer_setup')) #if the clicked on singleplayer mode
         elif request.form['submit_button'] == 'MultiPlayer':
                 return redirect(url_for('multiplayer_setup')) #if the clicked on multiplayer mode
+    
     return render_template('homepage.html')
 
 @app.route('/multiplayer', methods=['GET', 'POST'])
@@ -96,7 +100,7 @@ def chess():
         session['moves'] = []
         session['num_clicks'] += 1
         
-
+        print(request.form)
         if 'Restart' in request.form: #handle the requests to restart the game
             session['image_dict'] = board.board #get the board dictionary from board.py file
             session['player_turn'] = session['player1']
@@ -107,6 +111,9 @@ def chess():
 
         elif 'Rules' in request.form:
             return redirect("https://en.wikipedia.org/wiki/Rules_of_chess")
+        
+        elif 'Results' in request.form: #handle the requests to restart to quit
+            return render_template('results.html')
 
         elif int(session['num_clicks']) == 1: #get the space from first click - the space of the piece to move
             
@@ -160,8 +167,8 @@ def pass_move():
     
    
     gameJSON = get_game_object()
-    gameJSON.player_wants_move_list(session['start space']) #call class method 
-    session['moves'] = ['A1', 'B1', 'C2'] #this is just for testing, should be a function call to get the availiable moves
+    print(gameJSON.player_wants_move_list(session['start space'])) #call class method 
+    session['moves'] = gameJSON.player_wants_move_list(session['start space']) #this is just for testing, should be a function call to get the availiable moves
 
 
     store_game_object(gameJSON)
@@ -193,6 +200,8 @@ def get_text():
         text = "It is " + session['player_turn'] + "'s turn"
          
     return str(text)
+
+
 
 
 

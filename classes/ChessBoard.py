@@ -68,13 +68,54 @@ class ChessBoard(Observer):
     def getBoard(self):
         return self.board
 
-    def getPieceColor(self,location):
-        print("I am the board and I am going to determine what color is at location " + str(location))
-        # For now I am just going to return white as a default
-        return "white"
+    def convertList(self, finalList):
+        stringList = []
+        file = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+        for pair in finalList:
+            position = file[pair[1]] + str(pair[0] + 1 )
+            stringList.append(position)
+        return stringList
+
+
+    def getMoveListForPiece(self,row,column,color):
+        piece = self.board[(row,column)]
+        moveList = piece.giveMoveList(self)
+        print(moveList)
+        captureList = piece.giveCaptureList(self)
+        print(captureList)
+        if(moveList != None and captureList != None):
+            finalList = moveList + captureList
+        elif(moveList != None and captureList == None):
+            finalList = moveList
+        elif (moveList == None and captureList != None):
+            finalList = captureList
+        else:
+            return None
+        print(finalList)
+        convertedList = self.convertList(finalList)
+        print(convertedList)
+        return convertedList
+
+
+
+
+    def printHi(self):
+        print("hi")
+
+
+    def getPiece(self, row, column):
+        return self.board[(row,column)]
+
+
+    def getPieceColor(self,row,column):
+        if(self.board[(row,column)] != None):
+            color = self.board[(row,column)].getColor()
+            return color
+        else:
+            print("There is no piece at that location -- cannot return color")
+            return None
 
     def update(self, player: Player) -> None:
         print()
         print("Board: I was just notified that the player would like to move the piece that is at location " + str(player.locationSelected) + " to location " + str(player.finalLocation))
         print("Board: I am going to update my board to reflect the players move.")
-

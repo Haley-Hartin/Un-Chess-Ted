@@ -12,5 +12,5 @@ class King(Piece):
     def giveMoveList(self, position, ):
         print("I move like a King")
 
-    def capture(self):
+    def giveCaptureList(self,board):
         print("I capture like a King")

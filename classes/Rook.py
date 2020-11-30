@@ -12,5 +12,5 @@ class Rook(Piece):
     def giveMoveList(self, position, ):
         print("I move like a Rook")
 
-    def capture(Piece):
+    def giveCaptureList(self,board):
         print("I capture like a Rook")

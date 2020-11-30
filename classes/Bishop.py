@@ -12,5 +12,5 @@ class Bishop(Piece):
     def giveMoveList(self, position, ):
         print("I move like a Bishop")
 
-    def capture(self):
+    def giveCaptureList(self,board):
         print("I capture like a Bishop")

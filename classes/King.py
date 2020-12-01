@@ -14,3 +14,6 @@ class King(Piece):
 
     def giveCaptureList(self,board):
         print("I capture like a King")
+    
+    def is_captured(self):
+        return self.isCaptured

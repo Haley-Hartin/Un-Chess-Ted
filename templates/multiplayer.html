@@ -12,17 +12,17 @@
             <h1>MultiPlayer</h1>
         </div>
         <script>  //This script just adds functionality to navigate and select spaces using only the keyboard
-            buttonOrder = ["submit", 'back'];
+            buttonOrder = ["Play", 'back'];
             selected = null
 
                 function selectItem(name) {
                 selected = name;
-                if(selected == 'submit'){
-                    document.getElementById('submit').style.border = "2px solid black";
+                if(selected == 'Play'){
+                    document.getElementById('Play').style.border = "2px solid black";
                     document.getElementById('back').style.border = "none";
                 }
                 else{
-                    document.getElementById('submit').style.border = 'none';
+                    document.getElementById('Play').style.border = 'none';
                     document.getElementById('back').style.border = "2px solid black";
                 }
                 
@@ -86,7 +86,7 @@
               request.form.secondname }}">
               <br>
               <br>
-            <input id = 'submit' class="btn btn-default" type="submit" value="Play">
+            <input id = 'Play' class="btn btn-default" type="submit" value="Play" name = 'Play'>
               <br>
             <input type = 'submit' name = 'Back' value = 'Back' class  = 'back' id = 'back' >
           </form>

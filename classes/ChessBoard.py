@@ -4,7 +4,7 @@ from classes.Observer import Observer
 from classes.Player import Player
 from abc import ABC, abstractmethod
 
-class ChessBoard(Observer):
+class ChessBoard:
     def __init__(self):
         self.board = {}
         self.populate_chess_board()
@@ -99,12 +99,13 @@ class ChessBoard(Observer):
         print(convertedList)
         return convertedList
 
-    def printHi(self):
-        print("hi")
 
     def getPiece(self, row, column):
         x = str((row, column))
-        return self.board[x]
+        if (self.board[x] != None):
+            return self.board[x]
+        else:
+            return None 
 
     def getPieceColor(self,row,column):
         x = str((row, column))
@@ -112,13 +113,9 @@ class ChessBoard(Observer):
             color = self.board[x].getColor()
             return color
         else:
-            print("There is no piece at that location -- cannot return color")
+            #print("There is no piece at that location -- cannot return color")
             return None
 
-    def update(self, player: Player) -> None:
-        print()
-        #print("Board: I was just notified that the player would like to move the piece that is at location " + str(player.locationSelected) + " to location " + str(player.finalLocation))
-        #print("Board: I am going to update my board to reflect the players move.")
 
     def updateBoard(self, initialRow, initialColumn, finalRow, finalColumn):
         initialLocation = str((initialRow, initialColumn))
@@ -131,6 +128,37 @@ class ChessBoard(Observer):
         self.board[initialLocation].setPosition(newPostion)
         self.board[finalLocation] = self.board[initialLocation]
         self.board[initialLocation] = None
+        
+    def check_stalemate(self, player_color):
+        #loop through the board
+        for x in range(0,8):
+            for y in range(0,8):
+                piece_color = self.getPieceColor(x,y)
+                if piece_color != None:
+                    #check each piece of the player in question
+                    if piece_color == player_color:
+                        moves = self.getMoveListForPiece(x,y,piece_color)
+                        if moves != None:
+                            print("The game is not over.")
+                            return False #check if theres any possible moves
+        print("The game is at stalemate.")
+        return True 
+    
+    def check_checkmate(self, color):
+        print("checking if " + color + " is in checkmate.")
+        for x in range(0,8):
+            for y in range(0,8):
+                if ((self.getPieceColor(x,y)==color) and (self.getPiece(x,y) == 'wK1' or self.getPiece(x,y) == 'bK2') ):
+                    king = self.getPiece(x,y)
+                    if king.is_captured() and self.getMoveListForPiece(x,y,color):
+                        print(color + "'s king is in checkmate with no moves.")
+                        return True
+        print(color + "'s king is not in checkmate with no moves.")
+        return False
+         
+                
+                        
+                            
 
 
 

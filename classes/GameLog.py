@@ -20,9 +20,10 @@ class GameLog(Observer):
         f.close()
     
     def reset_page(self):
-        os.remove("../templates/results.html")
+        os.remove("templates/results.html")
     
     def write(self):
+        print("I am writing to the results page.")
         f = open("templates/results.html", "a")
         f.write("<tr>")
         f.write("<td>"+self.turn[0]+"</td>")
@@ -35,14 +36,14 @@ class GameLog(Observer):
     def update(self, player: Player):
         print()
         print("Board: I was just notified that the player would like to move the piece that is at location " +   str(player.piece.getID()) + str(player.finalLocation) )
-        self.reset_turns()
         self.turn.append(player.piece.getID())
         self.turn.append(str(player.finalLocation))
-        print(self.turn)
+        self.reset_turns()
     
     def reset_turns(self): 
         
         if(len(self.turn)==4):
+            print("Both players have made a move.")
             self.write()
             self.turn = []
         

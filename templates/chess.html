@@ -2,6 +2,7 @@
 <html>
     <head>
 		<meta http-equiv="content-type" content="text/php; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chess.css') }}" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
@@ -15,19 +16,20 @@
                           "A4","B4","C4","D4","E4","F4","G4","H4",
                           "A3","B3","C3","D3","E3","F3","G3","H3",
                           "A2","B2","C2","D2","E2","F2","G2","H2",
-                          "A1","B1","C1","D1","E1","F1","G1","H1",];
+                          "A1","B1","C1","D1","E1","F1","G1","H1",
+                           "results", "quit", "restart","rules"];
             selected = null
 
             function selectItem(name) {
                 var moves = JSON.parse('{{ availiable_moves|safe }}');
                 selected = name;
-                var x = document.getElementsByName("space"); // plural
+                var x = document.getElementsByTagName("input"); // plural
                 
                 for(var i = 0; i < x.length; i++) {
                     var id = x[i].id;
                     console.log(id + moves)
                     if(id == selected){
-                         x[i].style.border = "2px solid black";
+                         x[i].style.border = "3px solid black";
                     }
                     else if( moves.includes(id) ){
                         document.getElementById(id).style.border = "4px solid rgb(250, 255, 55)"
@@ -278,7 +280,7 @@
                 </div>
             </div>
             <div class = "col2">
-                <table id="game_info" cellpadding="0" cellspacing="0" width = "50%">
+                <table id="game_info" cellpadding="0" cellspacing="0">
                    <tr height="400px" id = display>
                        <td>
                             <div id="display">
@@ -296,17 +298,17 @@
                          <div id = 'buttons'>
                              <form action="" method = "POST" class = "btn">
                                     <div class="buttonRow">
-                                        <input type="submit" id="results" name="Results" value="Results" class="buttonRow" />
+                                        <input type="submit" id="results" name="Results" value="Results" class="buttonRow" id = 'results' />
                                     </div><br>
                                     <div class="buttonRow">
-                                        <input type="submit" id="quitButton" name="Quit" value="Quit" class="buttonRow" />
+                                        <input type="submit" id="quit" name="Quit" value="Quit" class="buttonRow" />
                                     </div><br>
 
                                     <div class="buttonRow">
-                                        <input type="submit" id="restartButton" name="Restart" value="Restart" class="buttonRow" />
+                                        <input type="submit" id="restart" name="Restart" value="Restart" id= 'restart' class="buttonRow" />
                                     </div><br>
                                     <div class="buttonRow">
-                                      <input type="submit" id="rulesButton" name="Rules" value="Rules" class="buttonRow">
+                                      <input type="submit" id="rules" name="Rules" value="Rules" class="buttonRow" id ='rules' >
                                     </div>
                               </form>
                         </div>

@@ -42,19 +42,20 @@ def multiplayer_setup():
     if request.method == 'POST':
         if 'Back' in request.form: #handle the requests to restart the game
             return redirect(url_for('index')) #call homepage function
+        
         player_one = request.form['firstname']
         player_two = request.form['secondname']
-        session['player1'] = player_one #Use sessions to store data between calls
-        session['player2'] = player_two
-        session['player_turn'] = session['player1']
 
+        session['player_turn'] = player_one
         game = ChessGame(player_one, player_two, True) #create instance of chess game
-        gameJSON = jsonpickle.encode(game, unpicklable=True) #encode it to JSON
-        session['game'] = gameJSON #store it in session data
-       
-        return redirect(url_for('chess')) #call chess()
+        game.createHumanPlayers()
+        store_game_object(game)
+        print(request.form)
+        if 'Back' in request.form: #handle the requests to restart the game
+            return redirect(url_for('index')) #call homepage function
 
-
+        if 'Play' in request.form: #once the "play" button is pressed, call chess()
+            return redirect(url_for('chess'))
     return render_template('multiplayer.html', error=error)
 
 @app.route('/singleplayer', methods=['GET', 'POST'])
@@ -63,22 +64,16 @@ def singleplayer_setup():
     error = None
     
     if request.method == 'POST':
+        player_one = request.form['firstname'] #use request.form[] to get the data from html pages
+        session['player_turn'] = player_one
+        game = ChessGame(player_one, "Computer", False) #create instance of chess game
+        game.createHumanAndAIPlayer()
+        store_game_object(game)
+        
         if 'Back' in request.form: #handle the requests to restart the game
             return redirect(url_for('index')) #call homepage function
-        player_one = request.form['firstname'] #use request.form[] to get the data from html pages
-        difficulty = request.form.get('submit_button')
-        session['difficulty'] = difficulty
-
-        session['player1'] = player_one #save player names
-        session['player2'] = "Computer"
-        session['player_turn'] = session['player1']
 
         if request.form.get('play') == 'Play': #once the "play" button is pressed, call chess()
-
-            game = ChessGame(player_one, "Computer", False) #create instance of chess game
-            empJSON = jsonpickle.encode(game, unpicklable=True) #encode it to JSON
-            session['game'] = empJSON #store it in session data
-  
             return redirect(url_for('chess'))
 
 
@@ -99,8 +94,7 @@ def chess():
     if request.method == 'POST':
         session['moves'] = []
         session['num_clicks'] += 1
-        
-        print(request.form)
+
         if 'Restart' in request.form: #handle the requests to restart the game
             session['image_dict'] = board.board #get the board dictionary from board.py file
             session['player_turn'] = session['player1']
@@ -120,13 +114,14 @@ def chess():
             session['start space'] = request.form['space'] #get the space selected
             
             pass_move() #pass move to back end
-            change_turns()
 
         elif int(session['num_clicks']) == 2: #get the space from second click - the space to move to
 
             session['end space'] = request.form['space'] #get the space to move the piece to
             
             check_move() #check the move is valid 
+            text = get_text() 
+            
             
 
     json_converted_moves= json.dumps(session['moves'])
@@ -146,15 +141,6 @@ def store_game_object(gameJSON):
     session['game'] = gameEncoded #store it back in session data
 
 
-def change_turns():
-    """function to handle switching turns.
-    Note: class objects can't be stored within the 'session' dictionary which is why I didn't make a players class.
-    """
-    if session['player_turn'] == session['player1']:
-        session['player_turn'] = session['player2']
-    else:
-        session['player_turn'] = session['player1']
-
 def pass_move():
     """function to pass the spot to move from to the chessGame class and get a list of legal moves in return."""
     #save the image url from that space
@@ -167,7 +153,6 @@ def pass_move():
     
    
     gameJSON = get_game_object()
-    print(gameJSON.player_wants_move_list(session['start space'])) #call class method 
     session['moves'] = gameJSON.player_wants_move_list(session['start space']) #this is just for testing, should be a function call to get the availiable moves
 
 
@@ -185,7 +170,7 @@ def check_move():
         session['image_dict'][session['start space']] = "" #remove the img url from the start space
         session['num_clicks']  = 0
         session['moves'] = []
-        change_turns()
+
     elif(allowed == False):
         session['num_clicks'] = 0
         session['moves'] = []
@@ -195,15 +180,16 @@ def check_move():
 def get_text(): 
     """Get either whose turn it it, or who won the game to display to the front end."""
     gameJSON = get_game_object()
+    game_state = gameJSON.check_game_over()
     
-    #if game over
-    if(gameJSON.game_over() != None):
-        text = gameJSON.game_over() + " won!"
-        
-    #if not game over
+    if game_state == 'Stalemate':
+        text = "There are no moves left. The game ends in a Stalemate."
+    elif game_state != None:
+        text = game_state + " won!"
     else:
-        text = "It is " + session['player_turn'] + "'s turn"
-         
+         text = "It is " + gameJSON.get_player_turn_name() + "'s turn - " + gameJSON.get_player_turn_color()
+    
+    store_game_object(gameJSON)
     return str(text)
 
 

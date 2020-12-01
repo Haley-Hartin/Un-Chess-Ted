@@ -25,9 +25,9 @@ class ChessGame(Subject):
         changes.
     """
 
-    locationSelected: int = None # Right this is just an int but it should be in the form [x,y] that correspond to board array
-    finalLocation: int = None # Right this is just an int but it should be in the form [x,y] that correspond to board array
-    piece = None
+#     locationSelected: int = None # Right this is just an int but it should be in the form [x,y] that correspond to board array
+#     finalLocation: int = None # Right this is just an int but it should be in the form [x,y] that correspond to board array
+#     piece = None
     """
     For the sake of simplicity, the Player's state, essential to all
     subscribers, is stored in this variable.
@@ -57,9 +57,7 @@ class ChessGame(Subject):
         """
 
         print("Player: Notifying observers...")
-        print(self._observers)
         for observer in self._observers:
-            print(observer)
             observer.update(self)
 
 
@@ -114,7 +112,6 @@ class ChessGame(Subject):
         if(self.gameOver != True):
             print("The game isn't over I will get the move list")
             print("The player wants the moves for the piece at location " + str(location))
-            self.gameBoard.printHi()
             array_location = self.convert_piece_location(str(location))
             pieceColor = self.gameBoard.getPieceColor(array_location[0], array_location[1])
 
@@ -168,6 +165,8 @@ class ChessGame(Subject):
             # check that the color to move is the current players color
             if(color == "white" and self.whitesTurn == True):
                 # It's white's turn and they want to move a white piece
+                print(self.piece.getID())
+                print(self.finalLocation )
                 self.notify() # Observer method - notify the chess board that the player is moving a piece
 
                 if(finalLocation in self.currentMoveList):
@@ -181,7 +180,7 @@ class ChessGame(Subject):
 
 
             elif(color == "black" and self.whitesTurn == False):
-
+                self.notify() # Observer method - notify the chess board that the player is moving a piece
                 if (finalLocation in self.currentMoveList):
                     print("that move is allowed")
                     self.whitesTurn = True
@@ -194,13 +193,42 @@ class ChessGame(Subject):
         else:
             print("The game is over I can't move any pieces")
 
-    def game_over(self):
+        
+
+    def check_game_over(self):
+        if self.whitesTurn:
+            color = 'white'
+            winner = self.blackPlayer
+        else:
+            color = 'black'
+            winner = self.whitePlayer
+        print("Checking if " + color + " has any moves to make.")
+       
         # if the game if over, return the winner, if not, return nothing
-        if (self.gameOver):
+        if self.gameBoard.check_stalemate(color):
+            self.gameOver = True
             self.gameLog.reset_page()
-            return self.player1_name  # just for testing, will need to determine winner
+            return "Stalemate"  # just for testing, will need to determine winner
+        elif self.gameBoard.check_checkmate(color):
+            return winner
+            self.gameOver = True
         else:
             return None
+    
+    def get_player_turn_name(self):
+
+        if self.whitesTurn:
+            return self.whitePlayer.get_name()
+        else:
+            return self.blackPlayer.get_name()
+    
+    def get_player_turn_color(self):
+        if self.whitesTurn:
+            return "white"
+        else:
+            return "black"
+
+        
 
 #game1 = ChessGame("John", "Alice", True)
 #game1.player_wants_to_make_move(2,3)

@@ -152,11 +152,11 @@ class ChessGame(Subject):
         self.locationSelected = initalLocation
         self.finalLocation = finalLocation
         self.piece = self.gameBoard.getPiece(array_location[0], array_location[1])
-        
-        print("A player wants to make a move")
+
+        print("Player wants to move piece from " + initalLocation + " to " + finalLocation)
+
         # check if the game is still running
         if(self.gameOver != True):
-            print("The game is not over I will update the board")
 
             # get the color of the piece selected
 
@@ -172,22 +172,24 @@ class ChessGame(Subject):
 
                 if(finalLocation in self.currentMoveList):
                     print("that move is allowed")
+                    self.whitesTurn = False
+                    self.gameBoard.updateBoard(array_intial_location[0], array_intial_location[1], array_final_location[0], array_final_location[1])
+                    return True
+                else:
+                    print("that move is not allowed")
+                    return False
 
-
-                # Check if the game is over now
-
-                # If the game isn't over change the turn to be black's
-                self.whitesTurn = False
 
             elif(color == "black" and self.whitesTurn == False):
 
                 if (finalLocation in self.currentMoveList):
                     print("that move is allowed")
-                # It's black's turn and they want to move a black piece
-                self.notify() # Observer method - notify the chess board that the player is moving a piece
-
-                # If the game isn't over change the turn to be white's
-                self.whitesTurn = True
+                    self.whitesTurn = True
+                    self.gameBoard.updateBoard(array_intial_location[0], array_intial_location[1],array_final_location[0], array_final_location[1])
+                    return True
+                else:
+                    print("that move is not allowed")
+                    return False
 
         else:
             print("The game is over I can't move any pieces")

@@ -176,15 +176,20 @@ def pass_move():
 
 def check_move():
     """Function to check if the spot moved to is valid. Move will get passed to the ChessGame class to be validated."""
-    #set the img url on the end space to the img url from the start space
-    session['image_dict'][session['end space']] = session['img url']
-    session['image_dict'][session['start space']] = "" #remove the img url from the start space
-    session['num_clicks']  = 0
-    session['moves'] = []
-    
     gameJSON = get_game_object()
-    gameJSON.player_wants_to_make_move(session['start space'], session['end space'])  #call class method     
+    allowed = gameJSON.player_wants_to_make_move(session['start space'], session['end space'])  # call class method
     store_game_object(gameJSON)
+    if(allowed == True):
+        #set the img url on the end space to the img url from the start space
+        session['image_dict'][session['end space']] = session['img url']
+        session['image_dict'][session['start space']] = "" #remove the img url from the start space
+        session['num_clicks']  = 0
+        session['moves'] = []
+        change_turns()
+    elif(allowed == False):
+        session['num_clicks'] = 0
+        session['moves'] = []
+
 
     
 def get_text(): 

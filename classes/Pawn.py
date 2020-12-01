@@ -69,12 +69,12 @@ class Pawn(Piece):
 
 
     def giveCaptureList(self,board):
+
         captureList = []
 
         if (self.getColor() == "white"):
 
             if (self.position[0] == 7):
-                print("The pawn is at the end of the board and cannot capture")
                 return captureList
 
             possible_row = self.position[0] + 1
@@ -91,19 +91,23 @@ class Pawn(Piece):
                 possible_column_1 = 6
                 if (board.getPiece(possible_row, possible_column_1) is not None and board.getPiece(possible_row, possible_column_1).getColor() == "black"):
                     captureList.append([possible_row, possible_column_1])
+                return captureList
 
             else:
+
                 possible_column_1 = self.position[1] - 1
                 possible_column_2 = self.position[1] + 1
-                if (board.getPiece(possible_row, possible_column_1) is not None and board.getPiece(possible_row, possible_column_1).getColor() == "black"):
-                    captureList.append([possible_row, possible_column_2])
-                if (board.getPiece(possible_row, possible_column_2) is not None and board.getPiece(possible_row, possible_column_2).getColor() == "black"):
-                    captureList.append([possible_row, possible_column_2])
+                if (board.getPiece(possible_row, possible_column_1) != None and board.getPiece(possible_row, possible_column_1).getColor() == "black"):
 
-        elif(self.getColor == "black"):
+                    captureList.append([possible_row, possible_column_1])
+                if (board.getPiece(possible_row, possible_column_2) != None and board.getPiece(possible_row, possible_column_2).getColor() == "black"):
+
+                    captureList.append([possible_row, possible_column_2])
+                return captureList
+
+        elif(self.getColor() == "black"):
 
             if (self.position[0] == 0):
-                print("The pawn is at the end of the board and cannot capture")
                 return captureList
 
             possible_row = self.position[0] - 1
@@ -111,25 +115,25 @@ class Pawn(Piece):
             # The black pawn is in the first column and can only capture pieces that are in the column to its right
             if (self.position[1] == 0):
                 possible_column_1 = 1
-                if (board.getPiece(possible_row, possible_column_1) is not None and board.getPiece(possible_row,
-                                                                                                   possible_column_1).getColor() == "white"):
+                if (board.getPiece(possible_row, possible_column_1) != None and board.getPiece(possible_row, possible_column_1).getColor() == "white"):
                     captureList.append([possible_row, possible_column_1])
                 return captureList
 
             # The black pawn is in the last column and can only capture pieces that are in the column to its left
             elif (self.position[1] == 7):
                 possible_column_1 = 6
-                if (board.getPiece(possible_row, possible_column_1) is not None and board.getPiece(possible_row,
-                                                                                                   possible_column_1).getColor() == "white"):
+                if (board.getPiece(possible_row, possible_column_1) != None and board.getPiece(possible_row, possible_column_1).getColor() == "white"):
                     captureList.append([possible_row, possible_column_1])
+                return captureList
 
             else:
                 possible_column_1 = self.position[1] - 1
                 possible_column_2 = self.position[1] + 1
-                if (board.getPiece(possible_row, possible_column_1) is not None and board.getPiece(possible_row,
-                                                                                                   possible_column_1).getColor() == "white"):
+                if (board.getPiece(possible_row, possible_column_1) != None and board.getPiece(possible_row, possible_column_1).getColor() == "white"):
+
+                    captureList.append([possible_row, possible_column_1])
+                if (board.getPiece(possible_row, possible_column_2) != None and board.getPiece(possible_row, possible_column_2).getColor() == "white"):
+
                     captureList.append([possible_row, possible_column_2])
-                if (board.getPiece(possible_row, possible_column_2) is not None and board.getPiece(possible_row,
-                                                                                                   possible_column_2).getColor() == "white"):
-                    captureList.append([possible_row, possible_column_2])
+                return captureList
 

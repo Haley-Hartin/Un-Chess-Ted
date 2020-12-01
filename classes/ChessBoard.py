@@ -80,8 +80,10 @@ class ChessBoard(Observer):
     def getMoveListForPiece(self,row,column,color):
         piece = self.board[str((row, column))]
         moveList = piece.giveMoveList(self)
+        print("The move list is: ")
         print(moveList)
         captureList = piece.giveCaptureList(self)
+        print("The capture list is: ")
         print(captureList)
         if(moveList != None and captureList != None):
             finalList = moveList + captureList
@@ -93,20 +95,16 @@ class ChessBoard(Observer):
             return None
         print(finalList)
         convertedList = self.convertList(finalList)
+        print("The piece is allowed to move to: ")
         print(convertedList)
         return convertedList
-
-
-
 
     def printHi(self):
         print("hi")
 
-
     def getPiece(self, row, column):
         x = str((row, column))
         return self.board[x]
-
 
     def getPieceColor(self,row,column):
         x = str((row, column))
@@ -119,5 +117,20 @@ class ChessBoard(Observer):
 
     def update(self, player: Player) -> None:
         print()
-        print("Board: I was just notified that the player would like to move the piece that is at location " + str(player.locationSelected) + " to location " + str(player.finalLocation))
-        print("Board: I am going to update my board to reflect the players move.")
+        #print("Board: I was just notified that the player would like to move the piece that is at location " + str(player.locationSelected) + " to location " + str(player.finalLocation))
+        #print("Board: I am going to update my board to reflect the players move.")
+
+    def updateBoard(self, initialRow, initialColumn, finalRow, finalColumn):
+        initialLocation = str((initialRow, initialColumn))
+        finalLocation = str((finalRow,finalColumn))
+
+        # If the final location of the piece is not empty then it is capturing -- set the piece at that location to be captured
+        if(self.board[finalLocation] != None):
+            self.board[finalLocation].setIsCaptured(True)
+        newPostion = [finalRow, finalColumn]
+        self.board[initialLocation].setPosition(newPostion)
+        self.board[finalLocation] = self.board[initialLocation]
+        self.board[initialLocation] = None
+
+
+

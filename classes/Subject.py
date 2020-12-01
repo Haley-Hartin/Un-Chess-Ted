@@ -1,4 +1,4 @@
-#from __future__ import annotations
+from __future__ import annotations
 from abc import ABC, abstractmethod
 from classes.Observer import Observer
 from typing import List

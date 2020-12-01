@@ -22,17 +22,27 @@ class GameLog(Observer):
     def reset_page(self):
         os.remove("../templates/results.html")
     
-    def write(wp, move1, bp, move2):
+    def write(self):
         f = open("templates/results.html", "a")
         f.write("<tr>")
-        f.write("<td>"+wp+"</td>")
-        f.write("<td>"+move1+"</td>")
-        f.write("<td>"+bp+"</td>")
-        f.write("<td>"+move2+"</td>")
+        f.write("<td>"+self.turn[0]+"</td>")
+        f.write("<td>"+self.turn[1]+"</td>")
+        f.write("<td>"+self.turn[2]+"</td>")
+        f.write("<td>"+self.turn[3]+"</td>")
         f.write("</tr>")
         f.close()
         
     def update(self, player: Player):
         print()
-        print("Board: I was just notified that the player would like to move the piece that is at location " +   str(player.piece) + str(player.finalLocation) )
-        print("Board: I am going to update my board to reflect the players move.")
+        print("Board: I was just notified that the player would like to move the piece that is at location " +   str(player.piece.getID()) + str(player.finalLocation) )
+        self.reset_turns()
+        self.turn.append(player.piece.getID())
+        self.turn.append(str(player.finalLocation))
+        print(self.turn)
+    
+    def reset_turns(self): 
+        
+        if(len(self.turn)==4):
+            self.write()
+            self.turn = []
+        

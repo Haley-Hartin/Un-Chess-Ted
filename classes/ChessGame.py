@@ -57,6 +57,7 @@ class ChessGame(Subject):
         """
 
         print("Player: Notifying observers...")
+        print(self._observers)
         for observer in self._observers:
             print(observer)
             observer.update(self)
@@ -194,7 +195,7 @@ class ChessGame(Subject):
     def game_over(self):
         # if the game if over, return the winner, if not, return nothing
         if (self.gameOver):
-            print("here")
+            self.gameLog.reset_page()
             return self.player1_name  # just for testing, will need to determine winner
         else:
             return None

@@ -9,6 +9,9 @@ class Pawn(Piece):
         self.isCaptured = False
         #print("Creating " + self.color + " " + self.type)
 
+    def getID(self):
+        return self.id
+    
     def giveMoveList(self, board):
         moveList = []
 

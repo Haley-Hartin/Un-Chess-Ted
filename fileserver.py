@@ -123,7 +123,7 @@ def chess():
         elif session["valid_selection"] == False: #get the space from first click - the space of the piece to move
 
             session['start space'] = request.form['space'] #get the space selected
-            session['highlighted'] = session['start space']
+            session['highlighted'] = str(session['start space'])
 
             pass_move() #pass move to back end
 
@@ -137,8 +137,7 @@ def chess():
 
     json_converted_moves= json.dumps(session['moves'])
     json_converted_dict = json.dumps(session['image_dict'])
-#     json_highlighted = json.dumps(session['highlighted'])
-    json_highlighted = session['highlighted']
+    json_highlighted = json.dumps(session['highlighted'])
     print(json_highlighted)
     return render_template('chess.html',
                            display_text = text,

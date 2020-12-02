@@ -110,9 +110,10 @@ def chess():
             session["valid_selection"] = False
 
         elif 'Quit' in request.form: #handle the requests to restart to quit
-            return redirect(url_for('index')) #call homepage function
             gameJSON = get_game_object()
             gameJSON.reset_results()
+            return redirect(url_for('index')) #call homepage function
+            
             store_game_object(gameJSON)
 
         elif 'Rules' in request.form:

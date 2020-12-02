@@ -1,11 +1,11 @@
-from classes.Subject import Subject
+# from classes.Subject import Subject
 from classes.HumanPlayer import HumanPlayer
 from classes.AIPlayer import AIPlayer
 # from classes.ChessBoard import ChessBoard
 from classes.Observer import Observer
 from typing import List
 import os
-from classes.Player import Player
+# from classes.Player import Player
 # from classes.ChessGame import ChessGame
 
 class GameLog(Observer):
@@ -21,8 +21,10 @@ class GameLog(Observer):
         f.close()
     
     def reset_page(self):
+        print("reseting page")
         curr_dir = os.path.join(os.getcwd(), "templates" )
-        if ("results.html" in curr_dir):
+        if ("results.html" in os.listdir(curr_dir)):
+            print("deleting templates")
             os.remove("templates/results.html")
     
     def write(self):

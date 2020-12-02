@@ -33,7 +33,8 @@ class ChessGame(Subject):
     def attach(self, observer: Observer) -> None:
         print("ChessGame: Attached an observer.")
         print("observer: ",observer )
-        self._observers.append(observer)
+        if (len(self._observers) == 0):
+            self._observers.append(observer)
         print("Observers list: ", self._observers)
 
     def detach(self, observer: Observer) -> None:
@@ -259,13 +260,3 @@ class ChessGame(Subject):
     def reset_results(self):
         self.gameLog.reset_page()
         self.gameLog.create_results_page()
-
-    # def test_board(self):
-    #
-    #     test_board = ChessBoard()
-    #     test_board2 = test_board.clone()
-    #     #print(test_board.getBoard())
-    #     test_board.updateBoard(0,0,2,3)
-    #     test_board.print_board()
-    #     test_board2.print_board()
-    #     print("The two test boards are the same: " + str(test_board is test_board2))

@@ -13,10 +13,12 @@ class GameLog(Observer):
         self.turn = []
     
     def create_results_page(self):
+        print("creating results page")
         f = open("templates/results.html", "w+")
         content = "<style> table, th, td{ border: 1px solid black;}"
         f.write(content)
         content = "</style> <table style='width:90%'> <tr><th>White Piece</th><th>White Move</th> <th>Black Piece</th><th>Black Move</th></tr>"
+        print("content: ", content)
         f.write(content)
         f.close()
     

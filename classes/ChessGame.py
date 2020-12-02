@@ -72,6 +72,7 @@ class ChessGame(Subject):
 
     def runGame(self):
         # create board
+        print("about to create game log")
         self.gameLog = GameLog()
         self.gameLog.create_results_page()
         self.attach(self.gameLog)

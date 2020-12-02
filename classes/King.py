@@ -7,7 +7,6 @@ class King(Piece):
         self.color = color
         self.position = position
         self.isCaptured = False
-        #print("Creating " + self.color + " " + self.type)
 
     def getID(self):
         return self.id

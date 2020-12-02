@@ -103,15 +103,12 @@ class ChessGame(Subject):
                 if(location[0] == file[i]):
                     column = i
         row = int(location[1]) - 1
-        print("The piece is at location: [" + str(row) + ", " + str(column) + "] in the board array")
         array_positon = [row, column]
         return array_positon
 
     def player_wants_move_list(self, location):
         # check if the game is still running
         if(self.gameOver != True):
-            print("The game isn't over I will get the move list")
-            print("The player wants the moves for the piece at location " + str(location))
             array_location = self.convert_piece_location(str(location))
             pieceColor = self.gameBoard.getPieceColor(array_location[0], array_location[1])
 
@@ -121,14 +118,12 @@ class ChessGame(Subject):
                 return None
 
             if(self.whitesTurn == True and pieceColor == "white"):
-                print("It's white's turn and they want to move a white piece -- I will get move list")
                 possibleMoves = self.gameBoard.getMoveListForPiece(array_location[0], array_location[1], pieceColor)
                 if(possibleMoves is not None):
                     self.currentMoveList = possibleMoves
                     return possibleMoves
 
             elif(self.whitesTurn == False and pieceColor == "black"):
-                print("It's black's turn and they want to move a black piece -- I will get move list")
                 possibleMoves = self.gameBoard.getMoveListForPiece(array_location[0], array_location[1], pieceColor)
                 if (possibleMoves is not None):
                     self.currentMoveList = possibleMoves
@@ -149,8 +144,6 @@ class ChessGame(Subject):
         self.locationSelected = initalLocation
         self.finalLocation = finalLocation
         self.piece = self.gameBoard.getPiece(array_location[0], array_location[1])
-
-        print("Player wants to move piece from " + initalLocation + " to " + finalLocation)
 
         # check if the game is still running
         if(self.gameOver != True):

@@ -20,24 +20,14 @@ class ChessGame(Subject):
         self.gameBoard = None
         self.runGame()
 
-
-    """
-        The Subject owns some important state and notifies observers when the state
-        changes.
-    """
-
-#     locationSelected: int = None # Right this is just an int but it should be in the form [x,y] that correspond to board array
-#     finalLocation: int = None # Right this is just an int but it should be in the form [x,y] that correspond to board array
-#     piece = None
-    """
-    For the sake of simplicity, the Player's state, essential to all
-    subscribers, is stored in this variable.
-    """
+    '''
+    https://refactoring.guru/design-patterns/observer/python/example
+    Used for the structure of the Observer design pattern in python
+    '''
 
     _observers: List[Observer] = []
     """
-    List of subscribers. In real life, the list of subscribers can be stored
-    more comprehensively (categorized by event type, etc.).
+    List of subscribers.
     """
 
     def attach(self, observer: Observer) -> None:
@@ -46,6 +36,7 @@ class ChessGame(Subject):
         self._observers.append(observer)
 
     def detach(self, observer: Observer) -> None:
+        print("detching: ", observer)
         self._observers.remove(observer)
 
     """
@@ -58,6 +49,7 @@ class ChessGame(Subject):
         """
 
         print("Player: Notifying observers...")
+        print("observers: ", self._observers)
         for observer in self._observers:
             observer.update(self)
 
@@ -170,8 +162,6 @@ class ChessGame(Subject):
             # check that the color to move is the current players color
             if(color == "white" and self.whitesTurn == True):
                 # It's white's turn and they want to move a white piece
-                print('---',self.piece.getID())
-                print('---',self.finalLocation )
                 self.notify() # Observer method - notify the chess board that the player is moving a piece
 
                 if(finalLocation in self.currentMoveList):
@@ -186,6 +176,7 @@ class ChessGame(Subject):
 
             elif(color == "black" and self.whitesTurn == False):
                 self.notify() # Observer method - notify the chess board that the player is moving a piece
+                
                 if (finalLocation in self.currentMoveList):
 #                     print("that move is allowed")
                     self.whitesTurn = True

@@ -10,6 +10,9 @@ class King(Piece):
 
     def getID(self):
         return self.id
+    
+    def getPosition(self):
+        return self.position
 
     def giveMoveList(self, board):
         moveList = []
@@ -83,3 +86,6 @@ class King(Piece):
     
     def is_captured(self):
         return self.isCaptured
+    
+
+        

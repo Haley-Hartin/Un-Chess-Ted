@@ -20,7 +20,9 @@ class GameLog(Observer):
         f.close()
     
     def reset_page(self):
-        os.remove("templates/results.html")
+        curr_dir = os.path.join(os.getcwd(), "templates" )
+        if ("results.html" in curr_dir):
+            os.remove("templates/results.html")
     
     def write(self):
         print("I am writing to the results page.")

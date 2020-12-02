@@ -113,22 +113,48 @@ class ChessBoard:
                     if piece_color == player_color:
                         moves = self.getMoveListForPiece(x,y,piece_color)
                         if moves != None:
-                            print("The game is not over.")
+#                             print("The game is not over.")
                             return False #check if theres any possible moves
-        print("The game is at stalemate.")
+#         print("The game is at stalemate.")
         return True 
     
-    def check_checkmate(self, color):
-        print("checking if " + color + " is in checkmate.")
+
+    
+    def find_piece_location(self, piece_id):
+        
+        #find the location of a piece on the board
         for x in range(0,8):
             for y in range(0,8):
-                if ((self.getPieceColor(x,y)==color) and (self.getPiece(x,y) == 'wK1' or self.getPiece(x,y) == 'bK2') ):
-                    king = self.getPiece(x,y)
-                    if king.is_captured() and self.getMoveListForPiece(x,y,color):
-                        print(color + "'s king is in checkmate with no moves.")
-                        return True
-        print(color + "'s king is not in checkmate with no moves.")
-        return False
+                piece =  self.getPiece(x,y)
+                if piece:
+                    if piece.getID() == piece_id:
+                        return x,y
+        return None
+     
+    
+    def king_is_in_check(self, color, king_location):
+        #loop through the board
+        for x in range(0,8):
+            for y in range(0,8):
+                #check the color of each piece
+                piece_color = self.getPieceColor(x,y)
+                if piece_color != None:
+                    
+                    #If its the other players piece
+                    if piece_color != color:
+                        
+                        #get the pieces moves
+                        moves = self.getMoveListForPiece(x,y,piece_color)
+                        piece = self.getPiece(x,y)
+#                         print(king_location, moves, piece.getPosition())
+                        if king_location in moves: #if the piece can move to the king
+#                             print("The ", color, " king IS in check by ", piece.getPosition())
+#                             print(king_location, moves, piece.getID())
+                            return True #check if theres any possible moves
+#         print("The king is NOT in check.")
+        return False    
+    
+
          
                 
                         

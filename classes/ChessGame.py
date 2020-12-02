@@ -20,6 +20,7 @@ class ChessGame(Subject):
         self.gameBoard = None
         self.runGame()
 
+
     """
         The Subject owns some important state and notifies observers when the state
         changes.
@@ -60,7 +61,7 @@ class ChessGame(Subject):
         for observer in self._observers:
             observer.update(self)
 
-
+        
     def createHumanPlayers(self):
         # create white player
         self.whitePlayer = HumanPlayer("white", self.player1_name)
@@ -105,6 +106,18 @@ class ChessGame(Subject):
         row = int(location[1]) - 1
         array_positon = [row, column]
         return array_positon
+    
+    def convert_piece_location_back(self, location):
+        
+        if location:
+            file = ['A','B','C','D','E','F','G','H']
+            x = location[0] + 1
+            y = location[1]
+            new_location = file[y] + str(x)
+            return new_location
+
+
+
 
     def player_wants_move_list(self, location):
         # check if the game is still running
@@ -158,29 +171,29 @@ class ChessGame(Subject):
             # check that the color to move is the current players color
             if(color == "white" and self.whitesTurn == True):
                 # It's white's turn and they want to move a white piece
-                print(self.piece.getID())
-                print(self.finalLocation )
+                print('---',self.piece.getID())
+                print('---',self.finalLocation )
                 self.notify() # Observer method - notify the chess board that the player is moving a piece
 
                 if(finalLocation in self.currentMoveList):
-                    print("that move is allowed")
+#                     print("that move is allowed")
                     self.whitesTurn = False
                     self.gameBoard.updateBoard(array_intial_location[0], array_intial_location[1], array_final_location[0], array_final_location[1])
                     return True
-                else:
-                    print("that move is not allowed")
+#                 else:
+#                     print("that move is not allowed")
                     return False
 
 
             elif(color == "black" and self.whitesTurn == False):
                 self.notify() # Observer method - notify the chess board that the player is moving a piece
                 if (finalLocation in self.currentMoveList):
-                    print("that move is allowed")
+#                     print("that move is allowed")
                     self.whitesTurn = True
                     self.gameBoard.updateBoard(array_intial_location[0], array_intial_location[1],array_final_location[0], array_final_location[1])
                     return True
                 else:
-                    print("that move is not allowed")
+#                     print("that move is not allowed")
                     return False
 
         else:
@@ -191,20 +204,39 @@ class ChessGame(Subject):
     def check_game_over(self):
         if self.whitesTurn:
             color = 'white'
-            winner = self.blackPlayer
+            winner = self.blackPlayer.get_name()
+            piece_id = 'wK1'
         else:
             color = 'black'
-            winner = self.whitePlayer
-        print("Checking if " + color + " has any moves to make.")
+            winner = self.whitePlayer.get_name()
+            piece_id = 'bK2'
+        
+        king_location = self.gameBoard.find_piece_location(piece_id)
+        if(king_location):
+            king_moves = self.gameBoard.getMoveListForPiece(king_location[0], king_location[1], color)
+        
+            king_location = self.convert_piece_location_back(king_location)
+            in_check =  self.gameBoard.king_is_in_check(color, king_location)
+        #king is captures
+        else:
+            return 'over'
+            self.gameOver = True
+            self.reset_results()
 
-        # if the game if over, return the winner, if not, return nothing
+        #if stalemate
         if self.gameBoard.check_stalemate(color):
             self.gameOver = True
-            self.gameLog.reset_page()
+            self.reset_results()
             return "Stalemate"  # just for testing, will need to determine winner
-        elif self.gameBoard.check_checkmate(color):
+        
+        #if the king is in checkand cant move
+        elif (in_check and len(king_moves) ==0 ):
             return winner
             self.gameOver = True
+            self.reset_results()
+        #if the king is in check and CAN move
+        elif (in_check and len(king_moves) > 0 ):
+            return "check"
         else:
             return None
 
@@ -231,6 +263,10 @@ class ChessGame(Subject):
 
         return False
     
+    def reset_results(self):
+        self.gameLog.reset_page()
+        self.gameLog.create_results_page()
 
-#game1 = ChessGame("John", "Alice", True)
-#game1.player_wants_to_make_move(2,3)
+    
+   
+

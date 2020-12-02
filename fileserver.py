@@ -137,7 +137,9 @@ def chess():
 
     json_converted_moves= json.dumps(session['moves'])
     json_converted_dict = json.dumps(session['image_dict'])
-    json_highlighted = json.dumps(session['highlighted'])
+#     json_highlighted = json.dumps(session['highlighted'])
+    json_highlighted = session['highlighted']
+    print(json_highlighted)
     return render_template('chess.html',
                            display_text = text,
                            image_dict = json_converted_dict,

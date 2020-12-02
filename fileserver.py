@@ -24,6 +24,7 @@ def index():
     session['image_dict'] = board.board #get the board dictionary from board.py file
     session['num_clicks'] = 0
     session['moves'] = []
+    session["valid_selection"] = False
 
 
     if request.method == 'POST':
@@ -31,7 +32,7 @@ def index():
                 return redirect(url_for('singleplayer_setup')) #if the clicked on singleplayer mode
         elif request.form['submit_button'] == 'MultiPlayer':
                 return redirect(url_for('multiplayer_setup')) #if the clicked on multiplayer mode
-    
+
     return render_template('homepage.html')
 
 @app.route('/multiplayer', methods=['GET', 'POST'])
@@ -42,7 +43,7 @@ def multiplayer_setup():
     if request.method == 'POST':
         if 'Back' in request.form: #handle the requests to restart the game
             return redirect(url_for('index')) #call homepage function
-        
+
         player_one = request.form['firstname']
         player_two = request.form['secondname']
 
@@ -62,14 +63,14 @@ def multiplayer_setup():
 def singleplayer_setup():
     """get and save the players name and difficulty"""
     error = None
-    
+
     if request.method == 'POST':
         player_one = request.form['firstname'] #use request.form[] to get the data from html pages
         session['player_turn'] = player_one
         game = ChessGame(player_one, "Computer", False) #create instance of chess game
         game.createHumanAndAIPlayer()
         store_game_object(game)
-        
+
         if 'Back' in request.form: #handle the requests to restart the game
             return redirect(url_for('index')) #call homepage function
 
@@ -98,31 +99,31 @@ def chess():
         if 'Restart' in request.form: #handle the requests to restart the game
             session['image_dict'] = board.board #get the board dictionary from board.py file
             session['player_turn'] = session['player1']
-            session['num_clicks']  = 0
+            session["valid_selection"] = False
 
         elif 'Quit' in request.form: #handle the requests to restart to quit
             return redirect(url_for('index')) #call homepage function
 
         elif 'Rules' in request.form:
             return redirect("https://en.wikipedia.org/wiki/Rules_of_chess")
-        
+
         elif 'Results' in request.form: #handle the requests to restart to quit
             return render_template('results.html')
 
-        elif int(session['num_clicks']) == 1: #get the space from first click - the space of the piece to move
-            
+        elif session["valid_selection"] == False: #get the space from first click - the space of the piece to move
+
             session['start space'] = request.form['space'] #get the space selected
-            
+
             pass_move() #pass move to back end
 
-        elif int(session['num_clicks']) == 2: #get the space from second click - the space to move to
+        elif  session["valid_selection"] == True: #get the space from second click - the space to move to
 
             session['end space'] = request.form['space'] #get the space to move the piece to
-            
-            check_move() #check the move is valid 
-            text = get_text() 
-            
-            
+
+            check_move() #check the move is valid
+            text = get_text()
+
+
 
     json_converted_moves= json.dumps(session['moves'])
     json_converted_dict = json.dumps(session['image_dict'])
@@ -150,11 +151,15 @@ def pass_move():
     else:
         session['image_dict'][session['start space']] = ''
         session['img url'] =  ''
-    
-   
+
+
     gameJSON = get_game_object()
     session['moves'] = gameJSON.player_wants_move_list(session['start space']) #this is just for testing, should be a function call to get the availiable moves
 
+    if(gameJSON.valid_selection(session['start space'])):
+        session["valid_selection"] = True
+    else:
+        session["valid_selection"] = False
 
     store_game_object(gameJSON)
 
@@ -168,27 +173,27 @@ def check_move():
         #set the img url on the end space to the img url from the start space
         session['image_dict'][session['end space']] = session['img url']
         session['image_dict'][session['start space']] = "" #remove the img url from the start space
-        session['num_clicks']  = 0
+        session["valid_selection"] = False
         session['moves'] = []
 
     elif(allowed == False):
-        session['num_clicks'] = 0
+        session["valid_selection"] = False
         session['moves'] = []
 
 
-    
-def get_text(): 
+
+def get_text():
     """Get either whose turn it it, or who won the game to display to the front end."""
     gameJSON = get_game_object()
     game_state = gameJSON.check_game_over()
-    
+
     if game_state == 'Stalemate':
         text = "There are no moves left. The game ends in a Stalemate."
     elif game_state != None:
         text = game_state + " won!"
     else:
          text = "It is " + gameJSON.get_player_turn_name() + "'s turn - " + gameJSON.get_player_turn_color()
-    
+
     store_game_object(gameJSON)
     return str(text)
 

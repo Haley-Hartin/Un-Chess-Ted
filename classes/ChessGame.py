@@ -79,7 +79,7 @@ class ChessGame(Subject):
         self.gameLog.create_results_page()
         self.attach(self.gameLog)
         self.gameBoard = ChessBoard()
-      
+
 
         # create players
         if(self.human_vs_human):
@@ -112,7 +112,7 @@ class ChessGame(Subject):
             array_location = self.convert_piece_location(str(location))
             pieceColor = self.gameBoard.getPieceColor(array_location[0], array_location[1])
 
-            
+
             if(pieceColor == None):
                 print("No piece at that location")
                 return None
@@ -140,7 +140,7 @@ class ChessGame(Subject):
 
     def player_wants_to_make_move(self, initalLocation, finalLocation):
         array_location = self.convert_piece_location(str(initalLocation))
-        
+
         self.locationSelected = initalLocation
         self.finalLocation = finalLocation
         self.piece = self.gameBoard.getPiece(array_location[0], array_location[1])
@@ -186,7 +186,7 @@ class ChessGame(Subject):
         else:
             print("The game is over I can't move any pieces")
 
-        
+
 
     def check_game_over(self):
         if self.whitesTurn:
@@ -196,7 +196,7 @@ class ChessGame(Subject):
             color = 'black'
             winner = self.whitePlayer
         print("Checking if " + color + " has any moves to make.")
-       
+
         # if the game if over, return the winner, if not, return nothing
         if self.gameBoard.check_stalemate(color):
             self.gameOver = True
@@ -207,21 +207,30 @@ class ChessGame(Subject):
             self.gameOver = True
         else:
             return None
-    
+
     def get_player_turn_name(self):
 
         if self.whitesTurn:
             return self.whitePlayer.get_name()
         else:
             return self.blackPlayer.get_name()
-    
+
     def get_player_turn_color(self):
         if self.whitesTurn:
             return "white"
         else:
             return "black"
 
-        
+    def valid_selection(self, location):
+        array_location = self.convert_piece_location(str(location))
+        piece_color = self.gameBoard.getPieceColor(array_location[0], array_location[1])
+        if(self.whitesTurn == True and piece_color == "white"):
+            return True
+        elif(self.whitesTurn == False and piece_color == "black"):
+            return True
+
+        return False
+    
 
 #game1 = ChessGame("John", "Alice", True)
 #game1.player_wants_to_make_move(2,3)

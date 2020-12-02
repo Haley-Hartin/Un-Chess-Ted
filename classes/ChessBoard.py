@@ -68,36 +68,10 @@ class ChessBoard:
     def getBoard(self):
         return self.board
 
-    def convertList(self, finalList):
-        stringList = []
-        file = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-        for pair in finalList:
-            position = file[pair[1]] + str(pair[0] + 1 )
-            stringList.append(position)
-        return stringList
-
-
     def getMoveListForPiece(self,row,column,color):
         piece = self.board[str((row, column))]
-        moveList = piece.giveMoveList(self)
-        print("The move list is: ")
-        print(moveList)
-        captureList = piece.giveCaptureList(self)
-        print("The capture list is: ")
-        print(captureList)
-        if(moveList != None and captureList != None):
-            finalList = moveList + captureList
-        elif(moveList != None and captureList == None):
-            finalList = moveList
-        elif (moveList == None and captureList != None):
-            finalList = captureList
-        else:
-            return None
-        print(finalList)
-        convertedList = self.convertList(finalList)
-        print("The piece is allowed to move to: ")
-        print(convertedList)
-        return convertedList
+        list = piece.getList(self)
+        return list
 
 
     def getPiece(self, row, column):

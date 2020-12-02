@@ -20,24 +20,14 @@ class ChessGame(Subject):
         self.gameBoard = None
         self.runGame()
 
-
-    """
-        The Subject owns some important state and notifies observers when the state
-        changes.
-    """
-
-#     locationSelected: int = None # Right this is just an int but it should be in the form [x,y] that correspond to board array
-#     finalLocation: int = None # Right this is just an int but it should be in the form [x,y] that correspond to board array
-#     piece = None
-    """
-    For the sake of simplicity, the Player's state, essential to all
-    subscribers, is stored in this variable.
-    """
+    '''
+    https://refactoring.guru/design-patterns/observer/python/example
+    Used for the structure of the Observer design pattern in python
+    '''
 
     _observers: List[Observer] = []
     """
-    List of subscribers. In real life, the list of subscribers can be stored
-    more comprehensively (categorized by event type, etc.).
+    List of subscribers.
     """
 
     def attach(self, observer: Observer) -> None:

@@ -8,6 +8,7 @@ import board
 import sys
 import logging
 import json
+#logging.basicConfig(level=logging.DEBUG)
 from classes.ChessGame import ChessGame
 import jsonpickle
 from json import JSONEncoder
@@ -52,7 +53,7 @@ def multiplayer_setup():
         game = ChessGame(player_one, player_two, True) #create instance of chess game
         game.createHumanPlayers()
         store_game_object(game)
-
+        print(request.form)
         if 'Back' in request.form: #handle the requests to restart the game
             return redirect(url_for('index')) #call homepage function
 
@@ -100,6 +101,7 @@ def chess():
         session['moves'] = []
         session['num_clicks'] += 1
 
+        #print("The player has made a valid selection: " + str(session["valid_selection"]))
         if 'Restart' in request.form: #handle the requests to restart the game
             session['image_dict'] = board.board #get the board dictionary from board.py file
             session['player_turn'] = session['player_one']
@@ -111,9 +113,6 @@ def chess():
 
         elif 'Quit' in request.form: #handle the requests to restart to quit
             return redirect(url_for('index')) #call homepage function
-            gameJSON = get_game_object()
-            gameJSON.reset_results()
-            store_game_object(gameJSON)
 
         elif 'Rules' in request.form:
             return redirect("https://en.wikipedia.org/wiki/Rules_of_chess")
@@ -140,7 +139,7 @@ def chess():
     json_converted_moves= json.dumps(session['moves'])
     json_converted_dict = json.dumps(session['image_dict'])
     json_highlighted = json.dumps(session['highlighted'])
-
+    print(json_highlighted)
     return render_template('chess.html',
                            display_text = text,
                            image_dict = json_converted_dict,
@@ -170,7 +169,7 @@ def pass_move():
 
 
     gameJSON = get_game_object()
-    session['moves'] = gameJSON.player_wants_move_list(session['start space']) 
+    session['moves'] = gameJSON.player_wants_move_list(session['start space']) #this is just for testing, should be a function call to get the availiable moves
 
     if(gameJSON.valid_selection(session['start space']) and len(session["moves"]) > 0):
         session["valid_selection"] = True
@@ -202,7 +201,7 @@ def get_text():
     """Get either whose turn it it, or who won the game to display to the front end."""
     gameJSON = get_game_object()
     game_state = gameJSON.check_game_over()
-
+    print(game_state)
 
     if game_state == 'over':
         text = gameJSON.get_player_turn_name() + "'s king is captured!"

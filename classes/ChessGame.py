@@ -18,6 +18,7 @@ class ChessGame(Subject):
         self.whitePlayer = None
         self.blackPlayer = None
         self.gameBoard = None
+        self.prototypeBoard = ChessBoard()
         self.runGame()
 
     '''
@@ -71,7 +72,7 @@ class ChessGame(Subject):
         self.gameLog = GameLog()
         self.gameLog.create_results_page()
         self.attach(self.gameLog)
-        self.gameBoard = ChessBoard()
+        self.gameBoard = self.prototypeBoard.clone()
 
 
         # create players
@@ -176,7 +177,7 @@ class ChessGame(Subject):
 
             elif(color == "black" and self.whitesTurn == False):
                 self.notify() # Observer method - notify the chess board that the player is moving a piece
-                
+
                 if (finalLocation in self.currentMoveList):
 #                     print("that move is allowed")
                     self.whitesTurn = True

@@ -36,8 +36,6 @@ class GameLog(Observer):
         f.close()
         
     def update(self, player: Player):
-        print()
-        print("Board: I was just notified that the player would like to move the piece that is at location " +   str(player.piece.getID()) + str(player.finalLocation) )
         self.turn.append(player.piece.getID())
         self.turn.append(str(player.finalLocation))
         self.reset_turns()

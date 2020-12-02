@@ -100,8 +100,8 @@ def chess():
     if request.method == 'POST':
         session['moves'] = []
         session['num_clicks'] += 1
-        
 
+        #print("The player has made a valid selection: " + str(session["valid_selection"]))
         if 'Restart' in request.form: #handle the requests to restart the game
             session['image_dict'] = board.board #get the board dictionary from board.py file
             session['player_turn'] = session['player_one']
@@ -118,7 +118,7 @@ def chess():
             return redirect("https://en.wikipedia.org/wiki/Rules_of_chess")
 
         elif 'Results' in request.form: #handle the requests to restart to quit
-            
+
             return render_template('results.html')
 
         elif session["valid_selection"] == False: #get the space from first click - the space of the piece to move
@@ -171,7 +171,7 @@ def pass_move():
     gameJSON = get_game_object()
     session['moves'] = gameJSON.player_wants_move_list(session['start space']) #this is just for testing, should be a function call to get the availiable moves
 
-    if(gameJSON.valid_selection(session['start space'])):
+    if(gameJSON.valid_selection(session['start space']) and len(session["moves"]) > 0):
         session["valid_selection"] = True
     else:
         session["valid_selection"] = False
@@ -202,7 +202,7 @@ def get_text():
     gameJSON = get_game_object()
     game_state = gameJSON.check_game_over()
     print(game_state)
-    
+
     if game_state == 'over':
         text = gameJSON.get_player_turn_name() + "'s king is captured!"
     elif game_state == 'Stalemate':

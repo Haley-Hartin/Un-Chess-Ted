@@ -61,7 +61,7 @@ class ChessGame(Subject):
         for observer in self._observers:
             observer.update(self)
 
-        
+
     def createHumanPlayers(self):
         # create white player
         self.whitePlayer = HumanPlayer("white", self.player1_name)
@@ -106,9 +106,9 @@ class ChessGame(Subject):
         row = int(location[1]) - 1
         array_positon = [row, column]
         return array_positon
-    
+
     def convert_piece_location_back(self, location):
-        
+
         if location:
             file = ['A','B','C','D','E','F','G','H']
             x = location[0] + 1
@@ -162,7 +162,6 @@ class ChessGame(Subject):
         if(self.gameOver != True):
 
             # get the color of the piece selected
-
             array_intial_location = self.convert_piece_location(str(initalLocation))
             array_final_location = self.convert_piece_location(str(finalLocation))
 
@@ -180,7 +179,7 @@ class ChessGame(Subject):
                     self.whitesTurn = False
                     self.gameBoard.updateBoard(array_intial_location[0], array_intial_location[1], array_final_location[0], array_final_location[1])
                     return True
-#                 else:
+                else:
 #                     print("that move is not allowed")
                     return False
 
@@ -210,11 +209,11 @@ class ChessGame(Subject):
             color = 'black'
             winner = self.whitePlayer.get_name()
             piece_id = 'bK2'
-        
+
         king_location = self.gameBoard.find_piece_location(piece_id)
         if(king_location):
             king_moves = self.gameBoard.getMoveListForPiece(king_location[0], king_location[1], color)
-        
+
             king_location = self.convert_piece_location_back(king_location)
             in_check =  self.gameBoard.king_is_in_check(color, king_location)
         #king is captures
@@ -228,7 +227,7 @@ class ChessGame(Subject):
             self.gameOver = True
             self.reset_results()
             return "Stalemate"  # just for testing, will need to determine winner
-        
+
         #if the king is in checkand cant move
         elif (in_check and len(king_moves) ==0 ):
             return winner
@@ -262,11 +261,7 @@ class ChessGame(Subject):
             return True
 
         return False
-    
+
     def reset_results(self):
         self.gameLog.reset_page()
         self.gameLog.create_results_page()
-
-    
-   
-

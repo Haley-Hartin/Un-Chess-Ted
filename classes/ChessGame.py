@@ -48,6 +48,7 @@ class ChessGame(Subject):
         """
 
         print("Player: Notifying observers...")
+        print("observers: ", self._observers)
         for observer in self._observers:
             observer.update(self)
 

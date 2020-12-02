@@ -113,6 +113,9 @@ def chess():
 
         elif 'Quit' in request.form: #handle the requests to restart to quit
             return redirect(url_for('index')) #call homepage function
+            gameJSON = get_game_object()
+            gameJSON.reset_results()
+            store_game_object(gameJSON)
 
         elif 'Rules' in request.form:
             return redirect("https://en.wikipedia.org/wiki/Rules_of_chess")

@@ -36,12 +36,14 @@ class GameLog(Observer):
         f.close()
         
     def update(self, player: Player):
+        print("updating game log: ", player.piece.getID(), " to: ",player.finalLocation)
         self.turn.append(player.piece.getID())
         self.turn.append(str(player.finalLocation))
         self.reset_turns()
     
     def reset_turns(self): 
-        
+        print("length of turns array: " , len(self.turn))
+        print(self.turn)
         if(len(self.turn)==4):
             print("Both players have made a move.")
             self.write()

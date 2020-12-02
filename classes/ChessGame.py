@@ -32,8 +32,9 @@ class ChessGame(Subject):
 
     def attach(self, observer: Observer) -> None:
         print("ChessGame: Attached an observer.")
-        print()
+        print("observer: ",observer )
         self._observers.append(observer)
+        print("Observers list: ", self._observers)
 
     def detach(self, observer: Observer) -> None:
         print("detching: ", observer)
@@ -50,6 +51,8 @@ class ChessGame(Subject):
 
         print("Player: Notifying observers...")
         print("observers: ", self._observers)
+        if (len(self._observers)==0):
+            self.attach(self.gameLog)
         for observer in self._observers:
             observer.update(self)
 

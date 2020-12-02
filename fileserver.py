@@ -169,7 +169,7 @@ def pass_move():
 
 
     gameJSON = get_game_object()
-    session['moves'] = gameJSON.player_wants_move_list(session['start space']) #this is just for testing, should be a function call to get the availiable moves
+    session['moves'] = gameJSON.player_wants_move_list(session['start space']) 
 
     if(gameJSON.valid_selection(session['start space']) and len(session["moves"]) > 0):
         session["valid_selection"] = True

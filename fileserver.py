@@ -95,11 +95,12 @@ def chess():
     """
     session['moves'] = []
     text = get_player() #get the text to display in html page
+    session['highlighted'] = []
 
     if request.method == 'POST':
         session['moves'] = []
         session['num_clicks'] += 1
-        session['highlighted'] = []
+        
 
         if 'Restart' in request.form: #handle the requests to restart the game
             session['image_dict'] = board.board #get the board dictionary from board.py file
@@ -123,7 +124,7 @@ def chess():
         elif session["valid_selection"] == False: #get the space from first click - the space of the piece to move
 
             session['start space'] = request.form['space'] #get the space selected
-            session['highlighted'] = [str(session['start space'])]
+            session['highlighted'] = [session['start space']]
 
             pass_move() #pass move to back end
 

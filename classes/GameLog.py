@@ -1,11 +1,12 @@
 from classes.Subject import Subject
 from classes.HumanPlayer import HumanPlayer
 from classes.AIPlayer import AIPlayer
-from classes.ChessBoard import ChessBoard
+# from classes.ChessBoard import ChessBoard
 from classes.Observer import Observer
 from typing import List
 import os
 from classes.Player import Player
+# from classes.ChessGame import ChessGame
 
 class GameLog(Observer):
     def __init__(self):
@@ -35,10 +36,10 @@ class GameLog(Observer):
         f.write("</tr>")
         f.close()
         
-    def update(self, player: Player):
-        print("updating game log: ", player.piece.getID(), " to: ",player.finalLocation)
-        self.turn.append(player.piece.getID())
-        self.turn.append(str(player.finalLocation))
+    def update(self, game):
+        print("updating game log: ", game.piece.getID(), " to: ",game.finalLocation)
+        self.turn.append(game.piece.getID())
+        self.turn.append(str(game.finalLocation))
         self.reset_turns()
     
     def reset_turns(self): 

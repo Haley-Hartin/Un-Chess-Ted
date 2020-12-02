@@ -36,6 +36,7 @@ class ChessGame(Subject):
         self._observers.append(observer)
 
     def detach(self, observer: Observer) -> None:
+        print("detching: ", observer)
         self._observers.remove(observer)
 
     """
@@ -161,8 +162,6 @@ class ChessGame(Subject):
             # check that the color to move is the current players color
             if(color == "white" and self.whitesTurn == True):
                 # It's white's turn and they want to move a white piece
-                print('---',self.piece.getID())
-                print('---',self.finalLocation )
                 self.notify() # Observer method - notify the chess board that the player is moving a piece
 
                 if(finalLocation in self.currentMoveList):
@@ -177,6 +176,7 @@ class ChessGame(Subject):
 
             elif(color == "black" and self.whitesTurn == False):
                 self.notify() # Observer method - notify the chess board that the player is moving a piece
+                
                 if (finalLocation in self.currentMoveList):
 #                     print("that move is allowed")
                     self.whitesTurn = True

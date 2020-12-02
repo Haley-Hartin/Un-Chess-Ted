@@ -1,5 +1,6 @@
 from __future__ import annotations
 from classes.Player import Player
+# from classes.ChessGame import ChessGame
 from abc import ABC, abstractmethod
 
 class Observer(ABC):
@@ -8,7 +9,7 @@ class Observer(ABC):
     """
 
     @abstractmethod
-    def update(self, Player: Player) -> None:
+    def update(self, ChessGame: ChessGame) -> None:
         """
         Receive update from Player.
         """

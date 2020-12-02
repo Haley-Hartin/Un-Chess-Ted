@@ -27,4 +27,8 @@ The game will keep track of the moves made in a table.
 Once the game ends, the player will see a game over screen who won.
 The player will also have the ability to either return to the home screen or start a new game.
 
+
+Access the game here:
+https://un-chess-ted.herokuapp.com/
+
   

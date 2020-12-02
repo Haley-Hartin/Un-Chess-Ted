@@ -79,6 +79,8 @@ class Rook(Piece):
             if (board.getPiece(row, column) != None and board.getPiece(row, column).getColor() != self.color):
                 captureList.append([row, column])
                 blocked = True
+            elif (board.getPiece(row, column) != None and board.getPiece(row, column).getColor() == self.color):
+                blocked = True
             row = row + 1
 
         row = self.position[0] - 1
@@ -89,6 +91,8 @@ class Rook(Piece):
             print("Second While Loop")
             if (board.getPiece(row, column) != None and board.getPiece(row, column).getColor() != self.color):
                 captureList.append([row, column])
+                blocked = True
+            elif (board.getPiece(row, column) != None and board.getPiece(row, column).getColor() == self.color):
                 blocked = True
             row = row - 1
 
@@ -101,6 +105,8 @@ class Rook(Piece):
             if (board.getPiece(row, column) != None and board.getPiece(row, column).getColor() != self.color):
                 captureList.append([row, column])
                 blocked = True
+            elif (board.getPiece(row, column) != None and board.getPiece(row, column).getColor() == self.color):
+                blocked = True
             column = column + 1
 
         row = self.position[0]
@@ -111,6 +117,8 @@ class Rook(Piece):
             print("Fourth While Loop")
             if (board.getPiece(row, column) != None and board.getPiece(row, column).getColor() != self.color):
                 captureList.append([row, column])
+                blocked = True
+            elif (board.getPiece(row, column) != None and board.getPiece(row, column).getColor() == self.color):
                 blocked = True
             column = column - 1
 

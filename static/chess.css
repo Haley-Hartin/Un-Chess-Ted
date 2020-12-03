@@ -1,5 +1,6 @@
 body{
-    display: block
+    display: block;
+    background-color: #BCD5D8;
 }
 * {
   box-sizing: border-box;
@@ -52,8 +53,8 @@ input[class='buttonRow'] {
     height: 70px; 
     font-size: 20px;
     margin-left: 0px;
-    background-color: rgb(203, 229, 247);
-    border-radius: 4px;
+    background-color: rgba(242, 242, 242, 0.94);
+    border-radius: 8px;
     
 
 }
@@ -118,6 +119,9 @@ table{
     width:100%;
   }
 }
+
+
+
 
 
 

@@ -15,9 +15,11 @@ body {background-color: #BCD5D8;}
   
 }
 
+
 div.title {
   text-align: center;
-    font-size: 60px;
+  font-size: 60px;
+  border-bottom: 1px solid black;
 }
 
 form {
@@ -37,6 +39,7 @@ input[type=submit]{
   font-size: 50px;
   align-items: center;
   justify-content: center;
+    border-radius: 8px;
     display: block;
     margin: 0 auto;
 }

@@ -43,7 +43,7 @@ def index():
     if request.method == 'POST':
         if request.form['submit_button'] == 'Single Player':
                 return redirect(url_for('singleplayer_setup')) #if the clicked on singleplayer mode
-        elif request.form['submit_button'] == 'MultiPlayer':
+        elif request.form['submit_button'] == 'Multiplayer':
                 return redirect(url_for('multiplayer_setup')) #if the clicked on multiplayer mode
 
     return render_template('homepage.html')

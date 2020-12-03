@@ -28,6 +28,7 @@ body {background-color: #BCD5D8;}
 div.title {
   text-align: center;
   font-size: 60px;
+  border-bottom: 1px solid black;
 }
 
 input[type=submit]{
@@ -42,8 +43,10 @@ input[type=submit]{
   font-size: 50px;
   align-items: center;
   justify-content: center;
+    border-radius: 8px;
 }
 input[type=text]{
+    border-radius: 8px;
   background-color: white;
   border: none;
   color: black;

@@ -9,7 +9,7 @@
         
 
 		<div class = 'title'>
-            <h1>MultiPlayer</h1>
+            <h1>Multiplayer</h1>
         </div>
         <script>  //This script just adds functionality to navigate and select spaces using only the keyboard
             buttonOrder = ["Play", 'back'];
@@ -74,20 +74,22 @@
     <body>
       <div class="container">
     
-          <br>
           <form action="" method="post" class = "players">
-             <label for="firstname">Player one name:</label>
-            <input id = 'p1'type="text" name="firstname" value="{{
-              request.form.firstname }}">
-              <br>
-              <br>
-              <label for="secondname">Player two name:</label>
-             <input id = 'p2' type="text" name="secondname" value="{{
-              request.form.secondname }}">
-              <br>
-              <br>
+             <div class = "inputs">
+                 <div class = 'col1'>
+                     <label for="firstname">Player one name:</label>
+                     <input id = 'p1'type="text" name="firstname" value="{{
+                      request.form.firstname }}">
+                 </div>
+                 <div class = 'col2'>
+                     <label for="secondname">Player two name:</label>
+                     <input id = 'p2' type="text" name="secondname" value="{{
+                      request.form.secondname }}">
+                 </div>
+             </div>
+
             <input id = 'Play' class="btn btn-default" type="submit" value="Play" name = 'Play'>
-              <br>
+
             <input type = 'submit' name = 'Back' value = 'Back' class  = 'back' id = 'back' >
           </form>
          

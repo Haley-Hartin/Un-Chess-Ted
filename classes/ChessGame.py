@@ -18,7 +18,7 @@ class ChessGame(Subject):
         self.whitePlayer = None
         self.blackPlayer = None
         self.gameBoard = None
-        self.prototypeBoard = ChessBoard()
+        self.prototypeBoard = ChessBoard() #prototype pattern
         self.runGame()
 
     '''
@@ -30,23 +30,22 @@ class ChessGame(Subject):
     """
     List of subscribers.
     """
-    #Observer patten - gameLog gets attached as an observer
+
     def attach(self, observer: Observer) -> None:
+        print("ChessGame: Attached an observer.")
         print("observer: ",observer )
-        if (observer not in self._observers):
+        if (len(self._observers) == 0):
             self._observers.append(observer)
         print("Observers list: ", self._observers)
-    #Observer pattern
-    def detach(self) -> None:
-        
-        for observer in self._observers:
-            print("detching: ", observer)
-            self._observers.remove(observer)
+
+    def detach(self, observer: Observer) -> None:
+        print("detching: ", observer)
+        self._observers.remove(observer)
 
     """
     The subscription management methods.
     """
-    #Observer pattern
+
     def notify(self) -> None:
         """
         Trigger an update in each subscriber.
@@ -54,6 +53,8 @@ class ChessGame(Subject):
 
         print("Player: Notifying observers...")
         print("observers: ", self._observers)
+        if (len(self._observers)==0):
+            self.attach(self.gameLog)
         for observer in self._observers:
             observer.update(self)
 
@@ -72,7 +73,11 @@ class ChessGame(Subject):
 
     def runGame(self):
         # create board
-        self.gameBoard = self.prototypeBoard.clone()
+        print("about to create game log")
+        self.gameLog = GameLog()
+        self.gameLog.create_results_page()
+        self.attach(self.gameLog)
+        self.gameBoard = self.prototypeBoard.clone() #prototype pattern
 
 
         # create players
@@ -104,9 +109,9 @@ class ChessGame(Subject):
 
         if location:
             file = ['A','B','C','D','E','F','G','H']
-            x = location[0] + 1
-            y = location[1]
-            new_location = file[y] + str(x)
+            x = int(location[0]) + 1
+            y = int(location[1])
+            new_location = str(file[y]) + str(x)
             return new_location
 
 
@@ -117,7 +122,6 @@ class ChessGame(Subject):
         if(self.gameOver != True):
             array_location = self.convert_piece_location(str(location))
             pieceColor = self.gameBoard.getPieceColor(array_location[0], array_location[1])
-
 
             if(pieceColor == None):
                 print("No piece at that location")
@@ -193,7 +197,6 @@ class ChessGame(Subject):
 
 
     def check_game_over(self):
-        """Check if there is a stalemate, checkmate, or a captured king."""
         if self.whitesTurn:
             color = 'white'
             winner = self.blackPlayer.get_name()
@@ -213,18 +216,19 @@ class ChessGame(Subject):
         else:
             return 'over'
             self.gameOver = True
-            self.detach()
+            self.reset_results()
 
         #if stalemate
         if self.gameBoard.check_stalemate(color):
             self.gameOver = True
+            self.reset_results()
             return "Stalemate"  # just for testing, will need to determine winner
 
         #if the king is in checkand cant move
         elif (in_check and len(king_moves) ==0 ):
             return winner
             self.gameOver = True
-            self.detach()
+            self.reset_results()
         #if the king is in check and CAN move
         elif (in_check and len(king_moves) > 0 ):
             return "check"
@@ -239,7 +243,6 @@ class ChessGame(Subject):
             return self.blackPlayer.get_name()
 
     def get_player_turn_color(self):
-        
         if self.whitesTurn:
             return "white"
         else:
@@ -254,3 +257,22 @@ class ChessGame(Subject):
             return True
 
         return False
+
+    def reset_results(self):
+        self.gameLog.reset_page()
+        self.gameLog.create_results_page()
+
+    def ai_player_turn(self):
+        if(self.whitesTurn == False and self.human_vs_human == False):
+            possible_black_moves = []
+            while(len(possible_black_moves) == 0 and possible_black_moves != None):
+                black_pieces = self.gameBoard.getBlackPieceLocations()
+                piece_initial_location = self.blackPlayer.selectPiece(black_pieces)
+                #print("AI initial piece location: " + str(piece_initial_location))
+                piece_initial_location = self.convert_piece_location_back(piece_initial_location)
+                #print("AI initial piece location: " + str(piece_initial_location))
+                possible_black_moves = self.player_wants_move_list(piece_initial_location)
+            piece_final_location = self.blackPlayer.decideMove(possible_black_moves)
+            self.player_wants_to_make_move(piece_initial_location, piece_final_location)
+            return (piece_initial_location, piece_final_location)
+    

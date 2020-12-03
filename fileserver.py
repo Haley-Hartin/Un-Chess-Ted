@@ -105,12 +105,7 @@ def chess():
         print("Player's turn: "  + session['player_turn'])
         if(session['game_mode'] == "Single Player" and session['player_turn'] == "Computer"):
             ai_player_takes_turn()
-            json_converted_dict = json.dumps(session['image_dict'])
-            text = get_text()
-            return render_template('chess.html',
-                               display_text = text,
-                               image_dict = json_converted_dict
-                              )
+
 
 
     if request.method == 'POST':

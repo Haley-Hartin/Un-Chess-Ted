@@ -38,9 +38,11 @@ class ChessGame(Subject):
             self._observers.append(observer)
         print("Observers list: ", self._observers)
 
-    def detach(self, observer: Observer) -> None:
-        print("detching: ", observer)
-        self._observers.remove(observer)
+    def detach(self) -> None:
+        
+        for observer in self._observers:
+            print("detching: ", observer)
+            self._observers.remove(observer)
 
     """
     The subscription management methods.
@@ -211,19 +213,18 @@ class ChessGame(Subject):
         else:
             return 'over'
             self.gameOver = True
-            self.reset_results()
+            self.detach()
 
         #if stalemate
         if self.gameBoard.check_stalemate(color):
             self.gameOver = True
-            self.reset_results()
             return "Stalemate"  # just for testing, will need to determine winner
 
         #if the king is in checkand cant move
         elif (in_check and len(king_moves) ==0 ):
             return winner
             self.gameOver = True
-            self.reset_results()
+            self.detach()
         #if the king is in check and CAN move
         elif (in_check and len(king_moves) > 0 ):
             return "check"

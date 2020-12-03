@@ -132,6 +132,9 @@ def chess():
         elif 'Quit' in request.form: #handle the requests to restart to quit
             gameLog = jsonpickle.decode(session['gameLog'])
             gameLog.reset_page()
+            gameJSON = get_game_object()
+            gameJSON.detach()
+            store_game_object(gameJSON)
             session['gameLog'] = jsonpickle.encode(gameLog, unpicklable=True)
             return redirect(url_for('index')) #call homepage function
 

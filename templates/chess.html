@@ -122,19 +122,7 @@
     </head>
 
     <body>
-<!--          <div id = 'buttons'>
-             <form action="" method = "POST" class = "btn">
-                    <div class="buttonRow">
-                        <input type="submit" id="quitButton" name="Quit" value="Quit" class="buttonRow" />
-                    </div>
-                    <div class="buttonRow">
-                        <input type="submit" id="restartButton" name="Restart" value="Restart" class="buttonRow" />
-                    </div>
-                    <div class="buttonRow">
-                      <input type="submit" id="rulesButton" name="Rules" value="Rules" class="buttonRow">
-                    </div>
-              </form>
-         </div> -->
+
         <div class = "row">
         <div class = "col">
             <div class="contentPane">
@@ -296,8 +284,6 @@
 
                                           <h1>{{ display_text|safe }}</h1>
 
-
-
                             </div>
                        </td>
                    </tr>
@@ -332,12 +318,13 @@
 
         <script>
 
-
             var board_images = JSON.parse('{{ image_dict|safe }}');
             var moves = JSON.parse('{{ availiable_moves|safe }}');
             var highlighted = JSON.parse('{{ highlight|safe }}');
 
             console.log("The html will be updated");
+            console.log(board_images);
+            
 
             //loop through dictionary and map each img url to its table entry
             for (let space in board_images) {

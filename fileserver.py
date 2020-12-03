@@ -8,16 +8,25 @@ import board
 import sys
 import logging
 import json
-#logging.basicConfig(level=logging.DEBUG)
 from classes.ChessGame import ChessGame
 import jsonpickle
 from json import JSONEncoder
 import time
 
 app = Flask(__name__)
-app.secret_key = 'some secret key' #can be changes later
+app.secret_key = 'some secret key' 
+TEMPLATES_AUTO_RELOAD=True
+app.jinja_env.auto_reload = True
+app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 
+"""
+https://pypi.org/project/jsonpickle/0.3.0/
+refrence for encoding/decoding JSON objects
+
+https://www.tutorialspoint.com/flask/flask_routing.htm
+Refrence for Flask routing 
+"""
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -26,7 +35,14 @@ def index():
     session['num_clicks'] = 0
     session['moves'] = []
     session["valid_selection"] = False
-
+   
+    """
+    https://pythonbasics.org/flask-sessions/
+    Refrence for using session data
+    
+    https://www.w3schools.com/html/html_scripts.asp
+    Refrences for html, javascript and css
+    """
 
     if request.method == 'POST':
         if request.form['submit_button'] == 'Single Player':
@@ -48,7 +64,7 @@ def multiplayer_setup():
         player_one = request.form['firstname']
         player_two = request.form['secondname']
         session['player_one'] = request.form['firstname']
-        session['player_one'] = request.form['secondname']
+        session['player_two'] = request.form['secondname']
         session['player_turn'] = player_one
         session["game_mode"] = "Multiplayer"
 
@@ -101,16 +117,16 @@ def chess():
     text = get_player() #get the text to display in html page
     session['highlighted'] = []
 
+
     if(request.method == 'GET'):
         print("Player's turn: "  + session['player_turn'])
         if(session['game_mode'] == "Single Player" and session['player_turn'] == "Computer"):
             ai_player_takes_turn()
-            #return render_template('chess.html', display_text = get_text(), image_dict = json.dumps(session['image_dict']))
-            #return redirect(url_for("chess"))
-
+            app.jinja_env.cache = {}
+    
     if request.method == 'POST':
         session['moves'] = []
-
+        
         print("The player has made a valid selection: " + str(session["valid_selection"]))
         if 'Restart' in request.form: #handle the requests to restart the game
             session['image_dict'] = board.board #get the board dictionary from board.py file
@@ -154,7 +170,8 @@ def chess():
     json_converted_moves= json.dumps(session['moves'])
     json_converted_dict = json.dumps(session['image_dict'])
     json_highlighted = json.dumps(session['highlighted'])
-    #print(json_highlighted)
+    
+
     return render_template('chess.html',
                            display_text = text,
                            image_dict = json_converted_dict,
@@ -224,7 +241,6 @@ def get_text():
     """Get either whose turn it it, or who won the game to display to the front end."""
     gameJSON = get_game_object()
     game_state = gameJSON.check_game_over()
-    print(game_state)
 
     if game_state == 'over':
         text = gameJSON.get_player_turn_name() + "'s king is captured!"
@@ -249,6 +265,7 @@ def get_player():
     return text
 
 def ai_player_takes_turn():
+    
     #time.sleep(1) #https://www.programiz.com/python-programming/time/sleep
     gameJSON = get_game_object()
     ai_move_made  = gameJSON.ai_player_turn()
@@ -262,5 +279,12 @@ def ai_player_takes_turn():
 
     return False
 
+@app.before_request
+def before_request():
+    app.jinja_env.cache = {}
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.before_request(before_request)
+    app.jinja_env.auto_reload = True
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.run(debug=True, host='0.0.0.0')

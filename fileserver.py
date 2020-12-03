@@ -35,6 +35,7 @@ def index():
     session['num_clicks'] = 0
     session['moves'] = []
     session["valid_selection"] = False
+    session['html'] = ''
    
     """
     https://pythonbasics.org/flask-sessions/
@@ -67,6 +68,7 @@ def multiplayer_setup():
         session['player_two'] = request.form['secondname']
         session['player_turn'] = player_one
         session["game_mode"] = "Multiplayer"
+        session['html'] = 'multi_chess.html'
 
         game = ChessGame(player_one, player_two, True) #create instance of chess game
         game.createHumanPlayers()
@@ -90,6 +92,7 @@ def singleplayer_setup():
         session['player_one'] = player_one
         session['player_two'] = "Computer"
         session["game_mode"] = "Single Player"
+        session['html'] = 'single_chess.html'
 
         game = ChessGame(player_one, "Computer", False) #create instance of chess game
         game.createHumanAndAIPlayer()
@@ -115,20 +118,25 @@ def chess():
     """
     session['moves'] = []
     text = get_player() #get the text to display in html page
+    print(text)
     session['highlighted'] = []
-
-
-    if(request.method == 'GET'):
-        print("Player's turn: "  + session['player_turn'])
-        if(session['game_mode'] == "Single Player" and session['player_turn'] == "Computer"):
-            ai_player_takes_turn()
-            app.jinja_env.cache = {}
     
+    gameJSON = get_game_object()
+    turn = gameJSON.get_player_turn_name()
+    print("Player's turn: "  +  turn)
+
+
     if request.method == 'POST':
         session['moves'] = []
+        print(request.form)
+        if ("Get_Computer_Move" in request.form and turn == "Computer"):
+            print("in AI if")
+            ai_player_takes_turn()
+            app.jinja_env.cache = {}
+        elif ("Get_Computer_Move" in request.form and turn != "Computer"):
+            pass
         
-        print("The player has made a valid selection: " + str(session["valid_selection"]))
-        if 'Restart' in request.form: #handle the requests to restart the game
+        elif 'Restart' in request.form: #handle the requests to restart the game
             session['image_dict'] = board.board #get the board dictionary from board.py file
             session['player_turn'] = session['player_one']
             gameJSON = get_game_object()
@@ -152,27 +160,27 @@ def chess():
 
             return render_template('results.html')
 
-        elif session["valid_selection"] == False: #get the space from first click - the space of the piece to move
-
+        elif (session["valid_selection"] == False): #get the space from first click - the space of the piece to move
+          
             session['start space'] = request.form['space'] #get the space selected
             session['highlighted'] = [session['start space']]
 
             pass_move() #pass move to back end
 
-        elif  session["valid_selection"] == True: #get the space from second click - the space to move to
+        elif  (session["valid_selection"] == True ): #get the space from second click - the space to move to
 
             session['end space'] = request.form['space'] #get the space to move the piece to
             session['highlighted'] = []
 
             check_move() #check the move is valid
-            text = get_text()
+    text = get_text()
 
     json_converted_moves= json.dumps(session['moves'])
     json_converted_dict = json.dumps(session['image_dict'])
     json_highlighted = json.dumps(session['highlighted'])
-    
+    print(text)
 
-    return render_template('chess.html',
+    return render_template(session['html'],
                            display_text = text,
                            image_dict = json_converted_dict,
                            availiable_moves = json_converted_moves,
@@ -204,6 +212,7 @@ def pass_move():
     session['moves'] = gameJSON.player_wants_move_list(session['start space']) #this is just for testing, should be a function call to get the availiable moves
     gameJSON.gameBoard.print_board()
     session['player_turn'] = gameJSON.get_player_turn_name()
+    print("The turn should change to ", session['player_turn'])
 
     if(gameJSON.valid_selection(session['start space']) and len(session["moves"]) > 0):
         session["valid_selection"] = True

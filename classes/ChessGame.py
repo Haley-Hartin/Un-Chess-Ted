@@ -78,6 +78,8 @@ class ChessGame(Subject):
         self.gameLog.create_results_page()
         self.attach(self.gameLog)
         self.gameBoard = self.prototypeBoard.clone() #prototype pattern
+        self.whitesTurn = True
+        self.blacksTurn = False
 
 
         # create players
@@ -242,6 +244,11 @@ class ChessGame(Subject):
         else:
             return self.blackPlayer.get_name()
 
+    def get_player_turn_color(self):
+        if self.whitesTurn:
+            return "white"
+        else:
+            return "black"
     def get_player_turn_color(self):
         if self.whitesTurn:
             return "white"

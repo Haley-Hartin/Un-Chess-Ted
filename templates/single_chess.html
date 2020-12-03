@@ -19,7 +19,8 @@
                           "A3","B3","C3","D3","E3","F3","G3","H3",
                           "A2","B2","C2","D2","E2","F2","G2","H2",
                           "A1","B1","C1","D1","E1","F1","G1","H1",
-                           "results", "quit", "restart","rules"];
+                           "Get_Computers_Move","results", "quit",
+                           "restart","rules"];
             selected = null
 
 
@@ -31,15 +32,12 @@
                 for(var i = 0; i < x.length; i++) {
                     var id = x[i].id;
                     if(id == selected){
-                         console.log("chnaging border for"+ id);
                          x[i].style.border = "3px solid black";
                     }
                     else{
-                        console.log("normal border for" + id);
                         x[i].style.border = '4px outset';
                     }
                     if(!(moves === null)){
-                        console.log(moves + id)
                         if( moves.includes(id) && !(id===selected) ){
                             document.getElementById(id).style.border = "4px solid rgb(250, 255, 55)"
                         }
@@ -49,7 +47,6 @@
             }
 
             function selectNext() {
-                console.log("next");
                 if (selected == null) {
                     selectItem(buttonOrder[0]);
                 } else {
@@ -93,6 +90,7 @@
 
             function clickSelectedItem() {
                 if (selected != null) {
+                    console.log("clicking" + selected);
                     $('#' + selected).click();
                 }
             }
@@ -111,6 +109,7 @@
                     selectPrevious()
                 }
                 else if (event.keyCode == 13) {
+                    console.log("clicking")
                     clickSelectedItem()
                 }
             })
@@ -293,6 +292,10 @@
                          <div id = 'buttons'>
                              <form action="" method = "POST" class = "btn">
                                     <div class="buttonRow">
+                                        <input type="submit" id="Get_Computers_Move" name="Get_Computer_Move" value="Get Computer's Move" class="buttonRow"  />
+                                    </div><br>
+                                 
+                                    <div class="buttonRow">
                                         <input type="submit" id="results" name="Results" value="Results" class="buttonRow" id = 'results' />
                                     </div><br>
                                     <div class="buttonRow">
@@ -323,8 +326,7 @@
             var highlighted = JSON.parse('{{ highlight|safe }}');
 
             console.log("The html will be updated");
-            console.log(board_images);
-            
+
 
             //loop through dictionary and map each img url to its table entry
             for (let space in board_images) {

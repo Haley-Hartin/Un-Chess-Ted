@@ -4,7 +4,7 @@ from classes.Observer import Observer
 from typing import List
 
 
-class Subject(ABC):
+class Subject(ABC): #https://refactoring.guru/design-patterns/observer/python/example
 
     @abstractmethod
     def attach(self, observer: Observer) -> None:

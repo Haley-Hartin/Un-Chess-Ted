@@ -10,6 +10,7 @@ import logging
 import json
 #logging.basicConfig(level=logging.DEBUG)
 from classes.ChessGame import ChessGame
+from classes.GameLog import GameLog
 import jsonpickle
 from json import JSONEncoder
 
@@ -26,7 +27,7 @@ def index():
     session['moves'] = []
     session["valid_selection"] = False
 
-
+    session['gameLog'] = jsonpickle.encode(GameLog(), unpicklable=True) #re encode it to JSONGameLog()
     if request.method == 'POST':
         if request.form['submit_button'] == 'Single Player':
                 return redirect(url_for('singleplayer_setup')) #if the clicked on singleplayer mode
@@ -50,10 +51,19 @@ def multiplayer_setup():
         session['player_one'] = request.form['secondname']
 
         session['player_turn'] = player_one
+        session['player_turn'] = player_one
+        
         game = ChessGame(player_one, player_two, True) #create instance of chess game
         game.createHumanPlayers()
+        
+        gameLog = jsonpickle.decode(session['gameLog'])
+        gameLog.create_results_page()
+        game.attach(gameLog)
+        
+        session['gameLog'] = jsonpickle.encode(gameLog, unpicklable=True) #re encode it to JSONGameLog()
+        
         store_game_object(game)
-        print(request.form)
+        
         if 'Back' in request.form: #handle the requests to restart the game
             return redirect(url_for('index')) #call homepage function
 
@@ -71,8 +81,14 @@ def singleplayer_setup():
         session['player_turn'] = player_one
         session['player_one'] = player_one
         session['player_two'] = "Computer"
+        
         game = ChessGame(player_one, "Computer", False) #create instance of chess game
         game.createHumanAndAIPlayer()
+        gameLog = jsonpickle.decode(session['gameLog'])
+        gameLog.create_results_page()
+        game.attach(gameLog)
+        
+        session['gameLog'] = jsonpickle.encode(gameLog, unpicklable=True) #re encode it to JSONGameLog()
         store_game_object(game)
 
         if 'Back' in request.form: #handle the requests to restart the game
@@ -105,18 +121,19 @@ def chess():
         if 'Restart' in request.form: #handle the requests to restart the game
             session['image_dict'] = board.board #get the board dictionary from board.py file
             session['player_turn'] = session['player_one']
-            gameJSON = get_game_object()
-            gameJSON.reset_results()
-            store_game_object(gameJSON)
+            
+            gameLog = jsonpickle.decode(session['gameLog'])
+            gameLog.reset_page()
+            gameLog.create_results_page()
+            session['gameLog'] = jsonpickle.encode(gameLog, unpicklable=True)
 
             session["valid_selection"] = False
 
         elif 'Quit' in request.form: #handle the requests to restart to quit
-            gameJSON = get_game_object()
-            gameJSON.reset_results()
+            gameLog = jsonpickle.decode(session['gameLog'])
+            gameLog.reset_page()
+            session['gameLog'] = jsonpickle.encode(gameLog, unpicklable=True)
             return redirect(url_for('index')) #call homepage function
-
-            store_game_object(gameJSON)
 
         elif 'Rules' in request.form:
             return redirect("https://en.wikipedia.org/wiki/Rules_of_chess")
@@ -143,7 +160,7 @@ def chess():
     json_converted_moves= json.dumps(session['moves'])
     json_converted_dict = json.dumps(session['image_dict'])
     json_highlighted = json.dumps(session['highlighted'])
-    print(json_highlighted)
+
     return render_template('chess.html',
                            display_text = text,
                            image_dict = json_converted_dict,

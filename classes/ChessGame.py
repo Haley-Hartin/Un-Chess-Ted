@@ -34,7 +34,7 @@ class ChessGame(Subject):
     def attach(self, observer: Observer) -> None:
         print("ChessGame: Attached an observer.")
         print("observer: ",observer )
-        if (len(self._observers) == 0):
+        if (observer not in self._observers):
             self._observers.append(observer)
         print("Observers list: ", self._observers)
 
@@ -53,8 +53,6 @@ class ChessGame(Subject):
 
         print("Player: Notifying observers...")
         print("observers: ", self._observers)
-        if (len(self._observers)==0):
-            self.attach(self.gameLog)
         for observer in self._observers:
             observer.update(self)
 
@@ -73,10 +71,6 @@ class ChessGame(Subject):
 
     def runGame(self):
         # create board
-        print("about to create game log")
-        self.gameLog = GameLog()
-        self.gameLog.create_results_page()
-        self.attach(self.gameLog)
         self.gameBoard = self.prototypeBoard.clone()
 
 
@@ -258,7 +252,3 @@ class ChessGame(Subject):
             return True
 
         return False
-
-    def reset_results(self):
-        self.gameLog.reset_page()
-        self.gameLog.create_results_page()

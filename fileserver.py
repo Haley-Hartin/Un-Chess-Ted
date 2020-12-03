@@ -31,7 +31,7 @@ def index():
     if request.method == 'POST':
         if request.form['submit_button'] == 'Single Player':
                 return redirect(url_for('singleplayer_setup')) #if the clicked on singleplayer mode
-        elif request.form['submit_button'] == 'MultiPlayer':
+        elif request.form['submit_button'] == 'Multiplayer':
                 return redirect(url_for('multiplayer_setup')) #if the clicked on multiplayer mode
 
     return render_template('homepage.html')
@@ -40,7 +40,7 @@ def index():
 def multiplayer_setup():
     """get and save the players names for multiplayer mode."""
     error = None
-
+    print(request.form)
     if request.method == 'POST':
         if 'Back' in request.form: #handle the requests to restart the game
             return redirect(url_for('index')) #call homepage function
@@ -55,7 +55,7 @@ def multiplayer_setup():
         game = ChessGame(player_one, player_two, True) #create instance of chess game
         game.createHumanPlayers()
         store_game_object(game)
-        print(request.form)
+        
         if 'Back' in request.form: #handle the requests to restart the game
             return redirect(url_for('index')) #call homepage function
 

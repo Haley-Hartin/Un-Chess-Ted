@@ -106,18 +106,17 @@ def chess():
         if(session['game_mode'] == "Single Player" and session['player_turn'] == "Computer"):
             ai_player_takes_turn()
 
-
-
     if request.method == 'POST':
         session['moves'] = []
         session['num_clicks'] += 1
 
-        #print("The player has made a valid selection: " + str(session["valid_selection"]))
+        print("The player has made a valid selection: " + str(session["valid_selection"]))
         if 'Restart' in request.form: #handle the requests to restart the game
             session['image_dict'] = board.board #get the board dictionary from board.py file
             session['player_turn'] = session['player_one']
             gameJSON = get_game_object()
             gameJSON.reset_results()
+            gameJSON.runGame()
             store_game_object(gameJSON)
 
             session["valid_selection"] = False
@@ -149,7 +148,6 @@ def chess():
             session['highlighted'] = []
 
             check_move() #check the move is valid
-
             text = get_text()
 
     json_converted_moves= json.dumps(session['moves'])
@@ -186,6 +184,7 @@ def pass_move():
 
     gameJSON = get_game_object()
     session['moves'] = gameJSON.player_wants_move_list(session['start space']) #this is just for testing, should be a function call to get the availiable moves
+    gameJSON.gameBoard.print_board()
 
     if(gameJSON.valid_selection(session['start space']) and len(session["moves"]) > 0):
         session["valid_selection"] = True
@@ -241,13 +240,15 @@ def get_player():
     return text
 
 def ai_player_takes_turn():
-    #time.sleep(1) #https://www.programiz.com/python-programming/time/sleep
+    time.sleep(1) #https://www.programiz.com/python-programming/time/sleep
     gameJSON = get_game_object()
     ai_move_made  = gameJSON.ai_player_turn()
     store_game_object(gameJSON)
 
-    session['image_dict'][ai_move_made[1]] = session['image_dict'][ai_move_made[0]]
-    session['image_dict'][ai_move_made[0]] = ""
+    print("move the ai made:" + str(ai_move_made))
+    if(ai_move_made != None):
+        session['image_dict'][ai_move_made[1]] = session['image_dict'][ai_move_made[0]]
+        session['image_dict'][ai_move_made[0]] = ""
 
 
 

@@ -106,13 +106,14 @@ class ChessBoard:
                     locations.append(self.board[location].getPosition())
 
         return locations
-    def getWhitePieceLocations(self):
-        locations = []
-        for location in self.board:
-            if(self.board[location] != None):
-                if(self.board[location].getColor() == "white"):
-                    locations.append(self.board[location].getPosition())
-        return locations
+        
+    # def getWhitePieceLocations(self):
+    #     locations = []
+    #     for location in self.board:
+    #         if(self.board[location] != None):
+    #             if(self.board[location].getColor() == "white"):
+    #                 locations.append(self.board[location].getPosition())
+    #     return locations
 
     def updateBoard(self, initialRow, initialColumn, finalRow, finalColumn):
         initialLocation = str((initialRow, initialColumn))

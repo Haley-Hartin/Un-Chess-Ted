@@ -112,6 +112,7 @@ class ChessBoard:
         self.board[initialLocation] = None
 
     def check_stalemate(self, player_color):
+        """Check if there are no more legal moves to make."""
         #loop through the board
         for x in range(0,8):
             for y in range(0,8):
@@ -129,7 +130,7 @@ class ChessBoard:
 
 
     def find_piece_location(self, piece_id):
-
+        "Return the location of a piece on the board."""
         #find the location of a piece on the board
         for x in range(0,8):
             for y in range(0,8):
@@ -141,6 +142,7 @@ class ChessBoard:
 
 
     def king_is_in_check(self, color, king_location):
+        """Return a boolean for if the king is in check."""
         #loop through the board
         for x in range(0,8):
             for y in range(0,8):
@@ -154,13 +156,11 @@ class ChessBoard:
                         #get the pieces moves
                         moves = self.getMoveListForPiece(x,y,piece_color)
                         piece = self.getPiece(x,y)
-#                         print(king_location, moves, piece.getPosition())
                         if king_location in moves: #if the piece can move to the king
-#                             print("The ", color, " king IS in check by ", piece.getPosition())
-#                             print(king_location, moves, piece.getID())
-                            return True #check if theres any possible moves
-#         print("The king is NOT in check.")
-        return False
 
+                            return True #check if theres any possible moves
+
+        return False
+    #Prototype patten - return a deep copy of the game board
     def clone(self): #https://docs.python.org/3/library/copy.html
         return deepcopy(self)

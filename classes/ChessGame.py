@@ -30,14 +30,13 @@ class ChessGame(Subject):
     """
     List of subscribers.
     """
-
+    #Observer patten - gameLog gets attached as an observer
     def attach(self, observer: Observer) -> None:
-        print("ChessGame: Attached an observer.")
         print("observer: ",observer )
         if (observer not in self._observers):
             self._observers.append(observer)
         print("Observers list: ", self._observers)
-
+    #Observer pattern
     def detach(self) -> None:
         
         for observer in self._observers:
@@ -47,7 +46,7 @@ class ChessGame(Subject):
     """
     The subscription management methods.
     """
-
+    #Observer pattern
     def notify(self) -> None:
         """
         Trigger an update in each subscriber.
@@ -194,6 +193,7 @@ class ChessGame(Subject):
 
 
     def check_game_over(self):
+        """Check if there is a stalemate, checkmate, or a captured king."""
         if self.whitesTurn:
             color = 'white'
             winner = self.blackPlayer.get_name()
@@ -209,7 +209,7 @@ class ChessGame(Subject):
 
             king_location = self.convert_piece_location_back(king_location)
             in_check =  self.gameBoard.king_is_in_check(color, king_location)
-        #king is captures
+        #king is captured
         else:
             return 'over'
             self.gameOver = True
@@ -239,6 +239,7 @@ class ChessGame(Subject):
             return self.blackPlayer.get_name()
 
     def get_player_turn_color(self):
+        
         if self.whitesTurn:
             return "white"
         else:

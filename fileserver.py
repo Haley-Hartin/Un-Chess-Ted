@@ -8,15 +8,21 @@ import board
 import sys
 import logging
 import json
-#logging.basicConfig(level=logging.DEBUG)
 from classes.ChessGame import ChessGame
 from classes.GameLog import GameLog
 import jsonpickle
 from json import JSONEncoder
 
+"""
+https://pypi.org/project/jsonpickle/0.3.0/
+refrence for encoding/decoding JSON objects
+
+https://www.tutorialspoint.com/flask/flask_routing.htm
+Refrence for Flask routing 
+"""
+
 app = Flask(__name__)
 app.secret_key = 'some secret key' #can be changes later
-
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -27,6 +33,11 @@ def index():
     session['moves'] = []
     session["valid_selection"] = False
     session["num players"] = 0
+    
+    """
+    https://pythonbasics.org/flask-sessions/
+    Refrence for using session data
+    """
 
     session['gameLog'] = jsonpickle.encode(GameLog(), unpicklable=True) #re encode it to JSONGameLog()
     if request.method == 'POST':
@@ -62,7 +73,7 @@ def multiplayer_setup():
 
 @app.route('/singleplayer', methods=['GET', 'POST'])
 def singleplayer_setup():
-    """get and save the players name and difficulty"""
+    """get and save the player name"""
     error = None
     session["num players"] = 1
 
@@ -88,10 +99,7 @@ def singleplayer_setup():
 
 @app.route('/playchess', methods=['GET', 'POST'])
 def chess():
-    """handle the page where game play occurs
-    Future implementation should pass the space selected to the back end to evaluate possible moves.
-    Future implememntation should also pass in the space the piece was moved to in order to evaluate a checkmate or tie.
-    """
+    """handle the page where game play occurs"""
     session['moves'] = []
     text = get_player() #get the text to display in html page
     session['highlighted'] = []
@@ -100,19 +108,23 @@ def chess():
         session['moves'] = []
         session['num_clicks'] += 1
 
-        #print("The player has made a valid selection: " + str(session["valid_selection"]))
         if 'Restart' in request.form: #handle the requests to restart the game
             if (session["num players"] == 1):
                 single_player()
             else:
                 multiplayer()
+            
+            #Observer pattern -detaches gameLog observer
             gameJSON = get_game_object()
             gameJSON.detach()
             store_game_object(gameJSON)    
+            
             session['image_dict'] = board.board #get the board dictionary from board.py fil
             session["valid_selection"] = False
 
         elif 'Quit' in request.form: #handle the requests to restart to quit
+            
+            #Observer pattern -detaches gameLog observer
             gameJSON = get_game_object()
             gameJSON.detach()
             store_game_object(gameJSON)
@@ -123,17 +135,16 @@ def chess():
             return redirect("https://en.wikipedia.org/wiki/Rules_of_chess")
 
         elif 'Results' in request.form: #handle the requests to restart to quit
-
             return render_template('results.html')
 
-        elif session["valid_selection"] == False: #get the space from first click - the space of the piece to move
+        elif session["valid_selection"] == False: 
 
             session['start space'] = request.form['space'] #get the space selected
             session['highlighted'] = [session['start space']]
 
             pass_move() #pass move to back end
 
-        elif  session["valid_selection"] == True: #get the space from second click - the space to move to
+        elif  session["valid_selection"] == True: 
 
             session['end space'] = request.form['space'] #get the space to move the piece to
             session['highlighted'] = []
@@ -186,6 +197,7 @@ def pass_move():
 
 def check_move():
     """Function to check if the spot moved to is valid. Move will get passed to the ChessGame class to be validated."""
+    
     gameJSON = get_game_object()
     allowed = gameJSON.player_wants_to_make_move(session['start space'], session['end space'])  # call class method
     store_game_object(gameJSON)
@@ -201,21 +213,23 @@ def check_move():
         session['moves'] = []
 
 
-
 def get_text():
     """Get either whose turn it it, or who won the game to display to the front end."""
     gameJSON = get_game_object()
     game_state = gameJSON.check_game_over()
-    print(game_state)
 
     if game_state == 'over':
         text = gameJSON.get_player_turn_name() + "'s king is captured!"
+    
     elif game_state == 'Stalemate':
         text = "There are no moves left. The game ends in a Stalemate."
+    
     elif game_state == 'check':
         text = gameJSON.get_player_turn_name() + "'s king is in check. " + gameJSON.get_player_turn_name() + "'s turn "
+    
     elif game_state != None:
         text = gameJSON.get_player_turn_name() + "'s king is in check, and has nowhere to move. " + game_state + " won!"
+    
     else:
          text = "It is " + gameJSON.get_player_turn_name() + "'s turn - " + gameJSON.get_player_turn_color()
     store_game_object(gameJSON)
@@ -223,6 +237,7 @@ def get_text():
 
 
 def get_player():
+    """Get a string returning whose turn it is."""
     gameJSON = get_game_object()
     game_state = gameJSON.check_game_over()
     text = "It is " + gameJSON.get_player_turn_name() + "'s turn - " + gameJSON.get_player_turn_color()
@@ -230,11 +245,14 @@ def get_player():
     return text
 
 def single_player():
+    """Function to set up game data for single player."""
     game = ChessGame(session['player_one'], "Computer", False) #create instance of chess game
     game.createHumanAndAIPlayer()
     gameLog = jsonpickle.decode(session['gameLog'])
     gameLog.reset_page()
     gameLog.create_results_page()
+    
+    #Observer pattern - attach gamelog as a chess game observer
     game.attach(gameLog)
         
     session['gameLog'] = jsonpickle.encode(gameLog, unpicklable=True) #re encode it to JSONGameLog()
@@ -242,6 +260,7 @@ def single_player():
     session['player_turn'] = session['player_one']
 
 def multiplayer():
+    """Function to set up game data for multi player."""
     session['player_turn'] = session['player_one']
     game = ChessGame(session['player_one'], session['player_two'], True) #create instance of chess game
     game.createHumanPlayers()
@@ -249,10 +268,11 @@ def multiplayer():
     gameLog = jsonpickle.decode(session['gameLog'])
     gameLog.reset_page()
     gameLog.create_results_page()
+    
+    #Observer pattern - attach gamelog as a chess game observer
     game.attach(gameLog)
         
-    session['gameLog'] = jsonpickle.encode(gameLog, unpicklable=True) #re encode it to JSONGameLog()
-        
+    session['gameLog'] = jsonpickle.encode(gameLog, unpicklable=True) #re encode it to JSONGameLog()      
     store_game_object(game) 
     
 

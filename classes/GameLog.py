@@ -1,13 +1,11 @@
-# from classes.Subject import Subject
+"""File to store the moves made throughout the game in results.html."""
 from classes.HumanPlayer import HumanPlayer
 from classes.AIPlayer import AIPlayer
-# from classes.ChessBoard import ChessBoard
 from classes.Observer import Observer
 from typing import List
 import os
-# from classes.Player import Player
-# from classes.ChessGame import ChessGame
 
+#Observer Pattern - observes chessGame
 class GameLog(Observer):
     def __init__(self):
         self.turn = []

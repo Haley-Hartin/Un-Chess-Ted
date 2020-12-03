@@ -18,6 +18,7 @@ class ChessGame(Subject):
         self.whitePlayer = None
         self.blackPlayer = None
         self.gameBoard = None
+        self.prototypeBoard = ChessBoard()
         self.runGame()
 
     '''
@@ -33,7 +34,7 @@ class ChessGame(Subject):
     def attach(self, observer: Observer) -> None:
         print("ChessGame: Attached an observer.")
         print("observer: ",observer )
-        if (observer not in self._observers):
+        if (len(self._observers) == 0):
             self._observers.append(observer)
         print("Observers list: ", self._observers)
 
@@ -52,7 +53,7 @@ class ChessGame(Subject):
 
         print("Player: Notifying observers...")
         print("observers: ", self._observers)
-        if (len(self._observers) ==0):
+        if (len(self._observers)==0):
             self.attach(self.gameLog)
         for observer in self._observers:
             observer.update(self)
@@ -72,11 +73,11 @@ class ChessGame(Subject):
 
     def runGame(self):
         # create board
-#         print("about to create game log")
-#         self.gameLog = GameLog()
-#         self.gameLog.create_results_page()
-#         self.attach(self.gameLog)
-        self.gameBoard = ChessBoard()
+        print("about to create game log")
+        self.gameLog = GameLog()
+        self.gameLog.create_results_page()
+        self.attach(self.gameLog)
+        self.gameBoard = self.prototypeBoard.clone()
 
 
         # create players
@@ -181,7 +182,7 @@ class ChessGame(Subject):
 
             elif(color == "black" and self.whitesTurn == False):
                 self.notify() # Observer method - notify the chess board that the player is moving a piece
-                
+
                 if (finalLocation in self.currentMoveList):
 #                     print("that move is allowed")
                     self.whitesTurn = True

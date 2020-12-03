@@ -10,6 +10,6 @@ class AIPlayer(Player):
     return np.random.choice(moves)
 
    def selectPiece(self, pieces):
-       print("Pieces AI can select: " + str(pieces))
+       #print("Pieces AI can select: " + str(pieces))
        piece_index = np.random.randint(len(pieces)) #https://het.as.utexas.edu/HET/Software/Numpy/reference/generated/numpy.random.randint.html
        return pieces[piece_index]

@@ -7,11 +7,11 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chess.css') }}" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
-        
+
         <script>  //This script just adds functionality to navigate and select spaces using only the keyboard
 
-            
-            buttonOrder = ["A8","B8","C8","D8","E8","F8","G8","H8", 
+
+            buttonOrder = ["A8","B8","C8","D8","E8","F8","G8","H8",
                           "A7","B7","C7","D7","E7","F7","G7","H7",
                           "A6","B6","C6","D6","E6","F6","G6","H6",
                           "A5","B5","C5","D5","E5","F5","G5","H5",
@@ -27,7 +27,7 @@
                 var moves = JSON.parse('{{ availiable_moves|safe }}');
                 selected = name;
                 var x = document.getElementsByTagName("input"); // plural
-                
+
                 for(var i = 0; i < x.length; i++) {
                     var id = x[i].id;
                     if(id == selected){
@@ -44,7 +44,7 @@
                             document.getElementById(id).style.border = "4px solid rgb(250, 255, 55)"
                         }
                     }
-                   
+
                }
             }
 
@@ -67,7 +67,7 @@
                     index = (index - 1);
                     if (index < 0) index = buttonOrder.length + index
                     selectItem(buttonOrder[index])
-                }	
+                }
             }
 
             function selectUp() {
@@ -98,12 +98,12 @@
             }
 
             $(document).keydown(function(event) {
- 
+
                 if (event.keyCode == 38) {
-                    selectUp()	
-                } 
+                    selectUp()
+                }
                 else if (event.keyCode == 40) {
-                    selectDown()	
+                    selectDown()
                 }else if (event.keyCode == 39) {
                     selectNext()
                 }
@@ -114,11 +114,11 @@
                     clickSelectedItem()
                 }
             })
-        </script> 
+        </script>
 
         <title>Un-Chess-Ted</title>
 
- 
+
     </head>
 
     <body>
@@ -293,17 +293,17 @@
                    <tr height="400px" id = display>
                        <td>
                             <div id="display">
-                         
+
                                           <h1>{{ display_text|safe }}</h1>
-                                          
-                            
+
+
 
                             </div>
                        </td>
                    </tr>
                    <tr>
                        <td>
-                      
+
                          <div id = 'buttons'>
                              <form action="" method = "POST" class = "btn">
                                     <div class="buttonRow">
@@ -337,6 +337,8 @@
             var moves = JSON.parse('{{ availiable_moves|safe }}');
             var highlighted = JSON.parse('{{ highlight|safe }}');
 
+            console.log("The html will be updated");
+
             //loop through dictionary and map each img url to its table entry
             for (let space in board_images) {
                  document.getElementById(space).style = "background:url(" + String(board_images[space]) + ");" +  " background-size:  80px 80px;";
@@ -352,8 +354,10 @@
                 }
             }
 
+            
+
         </script>
-        
+
     </body>
 
 

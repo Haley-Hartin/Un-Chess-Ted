@@ -105,10 +105,11 @@ def chess():
         print("Player's turn: "  + session['player_turn'])
         if(session['game_mode'] == "Single Player" and session['player_turn'] == "Computer"):
             ai_player_takes_turn()
+            #return render_template('chess.html', display_text = get_text(), image_dict = json.dumps(session['image_dict']))
+            #return redirect(url_for("chess"))
 
     if request.method == 'POST':
         session['moves'] = []
-        session['num_clicks'] += 1
 
         print("The player has made a valid selection: " + str(session["valid_selection"]))
         if 'Restart' in request.form: #handle the requests to restart the game
@@ -124,7 +125,7 @@ def chess():
         elif 'Quit' in request.form: #handle the requests to restart to quit
             gameJSON = get_game_object()
             gameJSON.reset_results()
-            return redirect(url_for('index')) #call homepage function
+            return redirect(url_for('index')) #call homepage function #https://flask.palletsprojects.com/en/1.1.x/quickstart/
 
             store_game_object(gameJSON)
 
@@ -185,6 +186,7 @@ def pass_move():
     gameJSON = get_game_object()
     session['moves'] = gameJSON.player_wants_move_list(session['start space']) #this is just for testing, should be a function call to get the availiable moves
     gameJSON.gameBoard.print_board()
+    session['player_turn'] = gameJSON.get_player_turn_name()
 
     if(gameJSON.valid_selection(session['start space']) and len(session["moves"]) > 0):
         session["valid_selection"] = True
@@ -198,6 +200,7 @@ def check_move():
     """Function to check if the spot moved to is valid. Move will get passed to the ChessGame class to be validated."""
     gameJSON = get_game_object()
     allowed = gameJSON.player_wants_to_make_move(session['start space'], session['end space'])  # call class method
+    gameJSON.gameBoard.print_board()
     store_game_object(gameJSON)
     if(allowed == True):
         #set the img url on the end space to the img url from the start space
@@ -205,10 +208,16 @@ def check_move():
         session['image_dict'][session['start space']] = "" #remove the img url from the start space
         session["valid_selection"] = False
         session['moves'] = []
+        gameJSON = get_game_object()
+        session['player_turn'] = gameJSON.get_player_turn_name()
+        store_game_object(gameJSON)
 
     elif(allowed == False):
         session["valid_selection"] = False
         session['moves'] = []
+        gameJSON = get_game_object()
+        session['player_turn'] = gameJSON.get_player_turn_name()
+        store_game_object(gameJSON)
 
 
 def get_text():
@@ -227,7 +236,7 @@ def get_text():
         text = gameJSON.get_player_turn_name() + "'s king is in check, and has nowhere to move. " + game_state + " won!"
     else:
          text = "It is " + gameJSON.get_player_turn_name() + "'s turn - " + gameJSON.get_player_turn_color()
-         session['player_turn'] = gameJSON.get_player_turn_name()
+
     store_game_object(gameJSON)
     return str(text)
 
@@ -240,7 +249,7 @@ def get_player():
     return text
 
 def ai_player_takes_turn():
-    time.sleep(1) #https://www.programiz.com/python-programming/time/sleep
+    #time.sleep(1) #https://www.programiz.com/python-programming/time/sleep
     gameJSON = get_game_object()
     ai_move_made  = gameJSON.ai_player_turn()
     store_game_object(gameJSON)
@@ -249,8 +258,9 @@ def ai_player_takes_turn():
     if(ai_move_made != None):
         session['image_dict'][ai_move_made[1]] = session['image_dict'][ai_move_made[0]]
         session['image_dict'][ai_move_made[0]] = ""
+        return True
 
-
+    return False
 
 if __name__ == '__main__':
     app.run(debug=True)

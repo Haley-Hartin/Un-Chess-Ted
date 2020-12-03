@@ -160,14 +160,14 @@ def chess():
 
             return render_template('results.html')
 
-        elif (session["valid_selection"] == False): #get the space from first click - the space of the piece to move
+        elif (session["valid_selection"] == False and turn != "Computer"): #get the space from first click - the space of the piece to move
           
             session['start space'] = request.form['space'] #get the space selected
             session['highlighted'] = [session['start space']]
 
             pass_move() #pass move to back end
 
-        elif  (session["valid_selection"] == True ): #get the space from second click - the space to move to
+        elif  (session["valid_selection"] == True and turn != "Computer"): #get the space from second click - the space to move to
 
             session['end space'] = request.form['space'] #get the space to move the piece to
             session['highlighted'] = []

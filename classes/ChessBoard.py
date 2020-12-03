@@ -15,7 +15,6 @@ class ChessBoard:
         print("Creating chess board")
         print()
         piece_factory = PieceFactory()
-        wp1 = piece_factory.createPiece("wp1", "Pawn", "white", ["a", 8])
 
         for x in range(0,8):
             for y in range(0,8):

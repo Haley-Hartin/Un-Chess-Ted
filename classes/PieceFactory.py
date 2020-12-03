@@ -9,7 +9,7 @@ from classes.Piece import Piece
 
 class PieceFactory(object):
     @classmethod
-    def createPiece(cls, id, piece_name, color, position) -> Piece:
+    def createPiece(cls, id, piece_name, color, position) -> Piece: #https://aaravtech.medium.com/design-patterns-in-python-factory-c728b88603eb
         new_piece = eval(piece_name)()
         new_piece.create(id, color, position)
         return new_piece

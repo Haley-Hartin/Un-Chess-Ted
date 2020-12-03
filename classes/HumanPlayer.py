@@ -1,5 +1,6 @@
 from classes.Player import Player
 
 class HumanPlayer(Player):
-    pass
-    
+
+    def decideMove(self, moves):
+        pass

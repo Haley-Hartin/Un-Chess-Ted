@@ -8,21 +8,15 @@ import board
 import sys
 import logging
 import json
+#logging.basicConfig(level=logging.DEBUG)
 from classes.ChessGame import ChessGame
-from classes.GameLog import GameLog
 import jsonpickle
 from json import JSONEncoder
-
-"""
-https://pypi.org/project/jsonpickle/0.3.0/
-refrence for encoding/decoding JSON objects
-
-https://www.tutorialspoint.com/flask/flask_routing.htm
-Refrence for Flask routing 
-"""
+import time
 
 app = Flask(__name__)
 app.secret_key = 'some secret key' #can be changes later
+
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -32,18 +26,12 @@ def index():
     session['num_clicks'] = 0
     session['moves'] = []
     session["valid_selection"] = False
-    session["num players"] = 0
-    
-    """
-    https://pythonbasics.org/flask-sessions/
-    Refrence for using session data
-    """
 
-    session['gameLog'] = jsonpickle.encode(GameLog(), unpicklable=True) #re encode it to JSONGameLog()
+
     if request.method == 'POST':
         if request.form['submit_button'] == 'Single Player':
                 return redirect(url_for('singleplayer_setup')) #if the clicked on singleplayer mode
-        elif request.form['submit_button'] == 'Multiplayer':
+        elif request.form['submit_button'] == 'MultiPlayer':
                 return redirect(url_for('multiplayer_setup')) #if the clicked on multiplayer mode
 
     return render_template('homepage.html')
@@ -52,7 +40,7 @@ def index():
 def multiplayer_setup():
     """get and save the players names for multiplayer mode."""
     error = None
-    session["num players"] = 2
+
     if request.method == 'POST':
         if 'Back' in request.form: #handle the requests to restart the game
             return redirect(url_for('index')) #call homepage function
@@ -60,10 +48,14 @@ def multiplayer_setup():
         player_one = request.form['firstname']
         player_two = request.form['secondname']
         session['player_one'] = request.form['firstname']
-        session['player_two'] = request.form['secondname']
+        session['player_one'] = request.form['secondname']
+        session['player_turn'] = player_one
+        session["game_mode"] = "Multiplayer"
 
-        multiplayer()
-
+        game = ChessGame(player_one, player_two, True) #create instance of chess game
+        game.createHumanPlayers()
+        store_game_object(game)
+        print(request.form)
         if 'Back' in request.form: #handle the requests to restart the game
             return redirect(url_for('index')) #call homepage function
 
@@ -73,17 +65,19 @@ def multiplayer_setup():
 
 @app.route('/singleplayer', methods=['GET', 'POST'])
 def singleplayer_setup():
-    """get and save the player name"""
+    """get and save the players name and difficulty"""
     error = None
-    session["num players"] = 1
 
     if request.method == 'POST':
         player_one = request.form['firstname'] #use request.form[] to get the data from html pages
+        session['player_turn'] = player_one
         session['player_one'] = player_one
-        session['player_turn'] = session['player_one']
         session['player_two'] = "Computer"
-        
-        single_player()
+        session["game_mode"] = "Single Player"
+
+        game = ChessGame(player_one, "Computer", False) #create instance of chess game
+        game.createHumanAndAIPlayer()
+        store_game_object(game)
 
         if 'Back' in request.form: #handle the requests to restart the game
             return redirect(url_for('index')) #call homepage function
@@ -99,63 +93,74 @@ def singleplayer_setup():
 
 @app.route('/playchess', methods=['GET', 'POST'])
 def chess():
-    """handle the page where game play occurs"""
+    """handle the page where game play occurs
+    Future implementation should pass the space selected to the back end to evaluate possible moves.
+    Future implememntation should also pass in the space the piece was moved to in order to evaluate a checkmate or tie.
+    """
     session['moves'] = []
     text = get_player() #get the text to display in html page
     session['highlighted'] = []
+
+    if(request.method == 'GET'):
+        print("Player's turn: "  + session['player_turn'])
+        if(session['game_mode'] == "Single Player" and session['player_turn'] == "Computer"):
+            ai_player_takes_turn()
+            json_converted_dict = json.dumps(session['image_dict'])
+            text = get_text()
+            return render_template('chess.html',
+                               display_text = text,
+                               image_dict = json_converted_dict
+                              )
+
 
     if request.method == 'POST':
         session['moves'] = []
         session['num_clicks'] += 1
 
+        #print("The player has made a valid selection: " + str(session["valid_selection"]))
         if 'Restart' in request.form: #handle the requests to restart the game
-            if (session["num players"] == 1):
-                single_player()
-            else:
-                multiplayer()
-            
-            #Observer pattern -detaches gameLog observer
+            session['image_dict'] = board.board #get the board dictionary from board.py file
+            session['player_turn'] = session['player_one']
             gameJSON = get_game_object()
-            gameJSON.detach()
-            store_game_object(gameJSON)    
-            
-            session['image_dict'] = board.board #get the board dictionary from board.py fil
+            gameJSON.reset_results()
+            store_game_object(gameJSON)
+
             session["valid_selection"] = False
 
         elif 'Quit' in request.form: #handle the requests to restart to quit
-            
-            #Observer pattern -detaches gameLog observer
             gameJSON = get_game_object()
-            gameJSON.detach()
-            store_game_object(gameJSON)
-            
+            gameJSON.reset_results()
             return redirect(url_for('index')) #call homepage function
+
+            store_game_object(gameJSON)
 
         elif 'Rules' in request.form:
             return redirect("https://en.wikipedia.org/wiki/Rules_of_chess")
 
         elif 'Results' in request.form: #handle the requests to restart to quit
+
             return render_template('results.html')
 
-        elif session["valid_selection"] == False: 
+        elif session["valid_selection"] == False: #get the space from first click - the space of the piece to move
 
             session['start space'] = request.form['space'] #get the space selected
             session['highlighted'] = [session['start space']]
 
             pass_move() #pass move to back end
 
-        elif  session["valid_selection"] == True: 
+        elif  session["valid_selection"] == True: #get the space from second click - the space to move to
 
             session['end space'] = request.form['space'] #get the space to move the piece to
             session['highlighted'] = []
 
             check_move() #check the move is valid
+
             text = get_text()
 
     json_converted_moves= json.dumps(session['moves'])
     json_converted_dict = json.dumps(session['image_dict'])
     json_highlighted = json.dumps(session['highlighted'])
-
+    #print(json_highlighted)
     return render_template('chess.html',
                            display_text = text,
                            image_dict = json_converted_dict,
@@ -197,7 +202,6 @@ def pass_move():
 
 def check_move():
     """Function to check if the spot moved to is valid. Move will get passed to the ChessGame class to be validated."""
-    
     gameJSON = get_game_object()
     allowed = gameJSON.player_wants_to_make_move(session['start space'], session['end space'])  # call class method
     store_game_object(gameJSON)
@@ -217,64 +221,40 @@ def get_text():
     """Get either whose turn it it, or who won the game to display to the front end."""
     gameJSON = get_game_object()
     game_state = gameJSON.check_game_over()
+    print(game_state)
 
     if game_state == 'over':
         text = gameJSON.get_player_turn_name() + "'s king is captured!"
-    
     elif game_state == 'Stalemate':
         text = "There are no moves left. The game ends in a Stalemate."
-    
     elif game_state == 'check':
         text = gameJSON.get_player_turn_name() + "'s king is in check. " + gameJSON.get_player_turn_name() + "'s turn "
-    
     elif game_state != None:
         text = gameJSON.get_player_turn_name() + "'s king is in check, and has nowhere to move. " + game_state + " won!"
-    
     else:
          text = "It is " + gameJSON.get_player_turn_name() + "'s turn - " + gameJSON.get_player_turn_color()
+         session['player_turn'] = gameJSON.get_player_turn_name()
     store_game_object(gameJSON)
     return str(text)
 
 
 def get_player():
-    """Get a string returning whose turn it is."""
     gameJSON = get_game_object()
     game_state = gameJSON.check_game_over()
     text = "It is " + gameJSON.get_player_turn_name() + "'s turn - " + gameJSON.get_player_turn_color()
     store_game_object(gameJSON)
     return text
 
-def single_player():
-    """Function to set up game data for single player."""
-    game = ChessGame(session['player_one'], "Computer", False) #create instance of chess game
-    game.createHumanAndAIPlayer()
-    gameLog = jsonpickle.decode(session['gameLog'])
-    gameLog.reset_page()
-    gameLog.create_results_page()
-    
-    #Observer pattern - attach gamelog as a chess game observer
-    game.attach(gameLog)
-        
-    session['gameLog'] = jsonpickle.encode(gameLog, unpicklable=True) #re encode it to JSONGameLog()
-    store_game_object(game)  
-    session['player_turn'] = session['player_one']
+def ai_player_takes_turn():
+    #time.sleep(1) #https://www.programiz.com/python-programming/time/sleep
+    gameJSON = get_game_object()
+    ai_move_made  = gameJSON.ai_player_turn()
+    store_game_object(gameJSON)
 
-def multiplayer():
-    """Function to set up game data for multi player."""
-    session['player_turn'] = session['player_one']
-    game = ChessGame(session['player_one'], session['player_two'], True) #create instance of chess game
-    game.createHumanPlayers()
-      
-    gameLog = jsonpickle.decode(session['gameLog'])
-    gameLog.reset_page()
-    gameLog.create_results_page()
-    
-    #Observer pattern - attach gamelog as a chess game observer
-    game.attach(gameLog)
-        
-    session['gameLog'] = jsonpickle.encode(gameLog, unpicklable=True) #re encode it to JSONGameLog()      
-    store_game_object(game) 
-    
+    session['image_dict'][ai_move_made[1]] = session['image_dict'][ai_move_made[0]]
+    session['image_dict'][ai_move_made[0]] = ""
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

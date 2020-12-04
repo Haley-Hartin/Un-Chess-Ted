@@ -157,7 +157,7 @@ def chess():
         elif 'Rules' in request.form:
             return redirect("https://en.wikipedia.org/wiki/Rules_of_chess")
 
-        elif 'Results' in request.form: #handle the requests to restart to quit
+        elif "View Moves" in request.form: #handle the requests to restart to quit
 
             return render_template('results.html')
 
@@ -253,7 +253,11 @@ def get_text():
     game_state = gameJSON.check_game_over()
 
     if game_state == 'over':
-        text = gameJSON.get_player_turn_name() + "'s king is captured!"
+        if gameJSON.get_player_turn_name() == session['player_one']:
+            winner = session['player_two']
+        else: 
+            winner = session['player_one']
+        text = gameJSON.get_player_turn_name() + "'s king is captured! " + winner  + " won!"
     elif game_state == 'Stalemate':
         text = "There are no moves left. The game ends in a Stalemate."
     elif game_state == 'check':

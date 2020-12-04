@@ -12,7 +12,7 @@
    * Then run the site locally with "python3 fileserver.py" within the project directory.
    * Goto: http://127.0.0.1:5000/ in a browser
 
-4. System Requirments
+4. Game Requirments
    * Require that this game will be accessed on a website.
    * Require that this game allows for the user of the website to choose 1 or 2 player mode on the home screen.
    * 1 player mode plays against an AI. 

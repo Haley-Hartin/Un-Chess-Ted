@@ -124,7 +124,7 @@ def chess():
     gameJSON = get_game_object()
     turn = gameJSON.get_player_turn_name()
     print("Player's turn: "  +  turn)
-
+    updatePromotedPawn()
 
     if request.method == 'POST':
         session['moves'] = []
@@ -200,7 +200,7 @@ def store_game_object(gameJSON):
 def pass_move():
     """function to pass the spot to move from to the chessGame class and get a list of legal moves in return."""
     #save the image url from that space
-    updatePromotedPawn()
+
     if session['start space'] in session['image_dict']:
         session['img url'] =  session['image_dict'][session['start space']]
 

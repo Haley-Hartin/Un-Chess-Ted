@@ -283,6 +283,7 @@ class ChessGame(Subject):
                 #retrieve the black pieces, AI select's a piece from that list, and get the moves for that piece
                 black_pieces = self.gameBoard.getBlackPieceLocations()
                 piece_initial_location = self.blackPlayer.selectPiece(black_pieces)
+                #print("AI initial piece location: " + str(piece_initial_location))
                 piece_initial_location = self.convert_piece_location_back(piece_initial_location)
                 possible_black_moves = self.player_wants_move_list(piece_initial_location)
             #get the AI to decide a move and pass decision on to get board updated

@@ -117,9 +117,7 @@ class ChessGame(Subject):
             new_location = str(file[y]) + str(x)
             return new_location
 
-
-
-
+    # This function will take the current location of a piece (ex. H2) and return a list of all the current spaces that piece can move to
     def player_wants_move_list(self, location):
         # check if the game is still running
         if(self.gameOver != True):
@@ -151,6 +149,9 @@ class ChessGame(Subject):
         else:
             print("The game is over I can't return a move list")
 
+    # This function will take an initial location (ex. H2) and a final location (ex. H3)
+    # It will then determine if that move was in the allowable list of moves that was previously sent to the player
+    # If it is allowable it will update the board with the new piece layout and return True - Otherwise returns False
     def player_wants_to_make_move(self, initalLocation, finalLocation):
         array_location = self.convert_piece_location(str(initalLocation))
 

@@ -19,6 +19,7 @@ class Queen(Piece):
         column = self.position[1]
         blocked = False
 
+        # Check all spaces that are in the same column and above the Queen until it is blocked by another piece
         while (row <= 7 and blocked == False):
             if (board.getPiece(row, column) == None):
                 moveList.append([row, column])
@@ -30,6 +31,7 @@ class Queen(Piece):
         column = self.position[1]
         blocked = False
 
+        # Check all spaces that are in the same column and below the Queen until it is blocked by another piece
         while (row >= 0 and blocked == False):
             if (board.getPiece(row, column) == None):
                 moveList.append([row, column])
@@ -41,6 +43,7 @@ class Queen(Piece):
         column = self.position[1] + 1
         blocked = False
 
+        # Check all spaces that are in the same row and to the right of the Queen until it is blocked by another piece
         while (column <= 7 and blocked == False):
             if (board.getPiece(row, column) == None):
                 moveList.append([row, column])
@@ -52,6 +55,7 @@ class Queen(Piece):
         column = self.position[1] - 1
         blocked = False
 
+        # Check all spaces that are in the same row and to the left of the Queen until it is blocked by another piece
         while (column >= 0 and blocked == False):
             if (board.getPiece(row, column) == None):
                 moveList.append([row, column])
@@ -120,6 +124,7 @@ class Queen(Piece):
         column = self.position[1]
         blocked = False
 
+        # Check all spaces that are in the same column and above the Queen until it is blocked by its own color piece or can capture an any piece
         while (row <= 7 and blocked == False):
             if (board.getPiece(row, column) != None and board.getPiece(row, column).getColor() != self.color):
                 captureList.append([row, column])
@@ -132,6 +137,7 @@ class Queen(Piece):
         column = self.position[1]
         blocked = False
 
+        # Check all spaces that are in the same column and below the Queen until it is blocked by its own color piece or can capture an any piece
         while (row >= 0 and blocked == False):
             if (board.getPiece(row, column) != None and board.getPiece(row, column).getColor() != self.color):
                 captureList.append([row, column])
@@ -144,6 +150,7 @@ class Queen(Piece):
         column = self.position[1] + 1
         blocked = False
 
+        # Check all spaces that are in the same crow and to the right of the Queen until it is blocked by its own color piece or can capture an enemy piece
         while (column <= 7 and blocked == False):
             if (board.getPiece(row, column) != None and board.getPiece(row, column).getColor() != self.color):
                 captureList.append([row, column])
@@ -156,6 +163,7 @@ class Queen(Piece):
         column = self.position[1] - 1
         blocked = False
 
+        # Check all spaces that are in the same crow and to the left of the Queen until it is blocked by its own color piece or can capture an enemy piece
         while (column >= 0 and blocked == False):
             if (board.getPiece(row, column) != None and board.getPiece(row, column).getColor() != self.color):
                 captureList.append([row, column])

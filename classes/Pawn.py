@@ -1,4 +1,5 @@
 from classes.Piece import Piece
+from classes.Queen import Queen
 
 class Pawn(Piece):
     def create(self, id,  color, position):
@@ -11,7 +12,7 @@ class Pawn(Piece):
 
     def getID(self):
         return self.id
-    
+
     def giveMoveList(self, board):
         moveList = []
 
@@ -22,7 +23,7 @@ class Pawn(Piece):
 
             # The white pawn has moved all the way to the last row and cannot move any more
             if(self.position[0] == 7):
-                print("Nowhere for the pawn to move")
+                print("Update white pawn to queen")
                 return moveList
 
             # The white pawn has moved before and can only move forward one position
@@ -46,7 +47,7 @@ class Pawn(Piece):
 
             # The black pawn has moved all the way to the first row and cannot move any more
             if (self.position[0] == 0):
-                print("Nowhere for the pawn to move")
+                print("Update black pawn to queen")
                 return moveList
 
             # The black pawn has moved before and can only move forward one position
@@ -136,4 +137,14 @@ class Pawn(Piece):
 
                     captureList.append([possible_row, possible_column_2])
                 return captureList
+    def able_to_promote(self):
+        if(self.getColor() == "white" and self.position[0] == 7):
+            return True
+        if(self.getColor() == "black" and self.position[0] == 0):
+            return True
+        return False
 
+    def promotion(self):
+        queen_to_return = Queen()
+        queen_to_return.create(self.getID() + "Q", self.getColor(), self.position)
+        return queen_to_return

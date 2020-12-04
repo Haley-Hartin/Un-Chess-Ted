@@ -81,6 +81,7 @@ class ChessBoard:
         return list
 
 
+    # Function to return the piece that is at the given location - If location empty returns None
     def getPiece(self, row, column):
         x = str((row, column))
         if (self.board[x] != None):
@@ -88,6 +89,7 @@ class ChessBoard:
         else:
             return None
 
+    # Function to return the piece color that is at the given location - If location is empty return None
     def getPieceColor(self,row,column):
         x = str((row, column))
         if(self.board[x] != None):
@@ -106,15 +108,6 @@ class ChessBoard:
                     locations.append(self.board[location].getPosition())
 
         return locations
-
-    #get's all of the locations of the white pieces on the boardinto a list
-    # def getWhitePieceLocations(self):
-    #     locations = []
-    #     for location in self.board:
-    #         if(self.board[location] != None):
-    #             if(self.board[location].getColor() == "white"):
-    #                 locations.append(self.board[location].getPosition())
-    #     return locations
 
     #moves a piece on the board at the initial lcoation and final loctation's specified
     def updateBoard(self, initialRow, initialColumn, finalRow, finalColumn):

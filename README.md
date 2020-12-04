@@ -1,6 +1,6 @@
 # Un-Chess-Ted
 ## A virtual chess game
-### Team Members: Haley Hartin, Blythe Waltman, Haley Drexel.
+### Team Members: Haley Hartin, Blythe Waltman, Haley Drexel
 
 1. To run the game locally
    * Within the project directory run: ". venv/bin/activate" in your terminal.

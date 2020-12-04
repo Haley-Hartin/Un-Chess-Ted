@@ -2,18 +2,22 @@ from abc import ABCMeta, abstractmethod
 
 class Piece(metaclass=ABCMeta):
 
+    # Creates a piece
     @abstractmethod
     def create(self):
         pass
 
+    # Returns a list of allowable moves
     @abstractmethod
     def giveMoveList(self, board):
         pass
 
+    # Returns a list of allowable captures
     @abstractmethod
     def giveCaptureList(self, board):
         pass
 
+    # Converts the list of moves and captures from array locations to board locations
     def convertList(self, finalList):
         stringList = []
         file = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
@@ -22,6 +26,7 @@ class Piece(metaclass=ABCMeta):
             stringList.append(position)
         return stringList
 
+    # Combines the moves and captures list
     def combineList(self, moves, captures):
         if (moves != None and captures != None):
             finalList = moves + captures

@@ -3,11 +3,11 @@
 ### Team Members: Haley Hartin, Blythe Waltman, Haley Drexel.
 
 1. To run the game locally
-  * Within the project directory run: ". venv/bin/activate" in your terminal.
-  * Then run the site locally with "python3 fileserver.py" within the project directory.
+   * Within the project directory run: ". venv/bin/activate" in your terminal.
+   * Then run the site locally with "python3 fileserver.py" within the project directory.
   
  2. Access the game online via heroku here:
-   * https://un-chess-ted.herokuapp.com/
+    * https://un-chess-ted.herokuapp.com/
 
 
 3. System Requirments

@@ -177,5 +177,7 @@ class ChessBoard:
 #         print("The king is NOT in check.")
         return False
 
+
+    #Pattern - Prototype Pattern
     def clone(self): #https://docs.python.org/3/library/copy.html
         return deepcopy(self) #prototype pattern

@@ -7,6 +7,7 @@ from classes.King import King
 from classes.Piece import Piece
 
 
+#Pattern - Simple Factory Pattern
 class PieceFactory(object):
     @classmethod
     def createPiece(cls, id, piece_name, color, position) -> Piece: #https://aaravtech.medium.com/design-patterns-in-python-factory-c728b88603eb

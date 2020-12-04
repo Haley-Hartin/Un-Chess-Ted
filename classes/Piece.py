@@ -33,7 +33,7 @@ class Piece(metaclass=ABCMeta):
             return None
         return finalList
 
-    # Template method -- Defines the skeleton for the operation to get a complete list of moves (both normal moves and captures)
+    #Pattern - Template method: Defines the skeleton for the operation to get a complete list of moves (both normal moves and captures)
     def getList(self, board):
         moveList = self.giveMoveList(board) # Get normal moves - hook method
         captureList = self.giveCaptureList(board) # Get capture moves - hook method

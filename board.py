@@ -14,9 +14,9 @@ white_king = "https://i.ibb.co/qp7ySHh/checkmate-chess-figure-game-king-icon-132
 black_king = "https://i.ibb.co/2qfPW5x/chess-king-icon-6.png"
 
 #associate a space on the board with an image url to represent the piece
-#this should probably be handled within a 'board' class in the future
 board = {'A7' : black_pawn, 'B7' : black_pawn, 'C7' : black_pawn, 'D7' : black_pawn, 'E7' : black_pawn, 'F7' : black_pawn, 'G7' : black_pawn, 'H7' : black_pawn, 'A2': white_pawn, 'B2': white_pawn, 'C2': white_pawn, 'D2': white_pawn, 'E2': white_pawn, 'F2': white_pawn, 'G2': white_pawn, 'H2': white_pawn, 'A8':black_rook, 'H8': black_rook, 'A1': white_rook, 'H1': white_rook, 'B8':black_night, 'G8': black_night, 'B1': white_knight, 'G1': white_knight, 'C8':black_bishop, 'F8':black_bishop, 'C1': white_bishop, 'F1': white_bishop, 'D8':black_queen, 'D1':white_queen, 'E1': white_king, 'E8': black_king }
 
+#fill in the blank spaces on the board
 for file in ["A", "B", "C", "D", "E", "F","G", "H"]:
     for rank in [1,2,3,4,5,6,7,8]:
         file_rank = file + str(rank)

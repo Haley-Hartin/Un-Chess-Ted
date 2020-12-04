@@ -11,7 +11,6 @@ import json
 from classes.ChessGame import ChessGame
 import jsonpickle
 from json import JSONEncoder
-import time
 
 app = Flask(__name__)
 app.secret_key = 'some secret key'
@@ -125,12 +124,12 @@ def chess():
     turn = gameJSON.get_player_turn_name()
     print("Player's turn: "  +  turn)
 
-    updatePromotedPawn()
-    
+    updatePromotedPawn() #make sure all promoted pawns have been updated to proper image
+
     if request.method == 'POST':
         session['moves'] = []
         print(request.form)
-        if ("Get_Computer_Move" in request.form and turn == "Computer"):
+        if ("Get_Computer_Move" in request.form and turn == "Computer"): #handles request to get the computer's turn
             print("in AI if")
             ai_player_takes_turn()
             app.jinja_env.cache = {}
@@ -147,18 +146,17 @@ def chess():
 
             session["valid_selection"] = False
 
-        elif 'Quit' in request.form: #handle the requests to restart to quit
+        elif 'Quit' in request.form: #handle the requests to quit
             gameJSON = get_game_object()
             gameJSON.reset_results()
             return redirect(url_for('index')) #call homepage function #https://flask.palletsprojects.com/en/1.1.x/quickstart/
 
             store_game_object(gameJSON)
 
-        elif 'Rules' in request.form:
+        elif 'Rules' in request.form: #handle request to go to the rules
             return redirect("https://en.wikipedia.org/wiki/Rules_of_chess")
 
-        elif "View Moves" in request.form: #handle the requests to restart to quit
-
+        elif 'Results' in request.form: #handle the requests to see results of the game
             return render_template('results.html')
 
         elif (session["valid_selection"] == False and turn != "Computer"): #get the space from first click - the space of the piece to move
@@ -210,11 +208,12 @@ def pass_move():
 
 
     gameJSON = get_game_object()
-    session['moves'] = gameJSON.player_wants_move_list(session['start space']) #this is just for testing, should be a function call to get the availiable moves
+    session['moves'] = gameJSON.player_wants_move_list(session['start space']) #get the available moves at the given initial location
     gameJSON.gameBoard.print_board()
     session['player_turn'] = gameJSON.get_player_turn_name()
     print("The turn should change to ", session['player_turn'])
 
+    #verify the selection the player made
     if(gameJSON.valid_selection(session['start space']) and len(session["moves"]) > 0):
         session["valid_selection"] = True
     else:
@@ -235,6 +234,7 @@ def check_move():
         session['image_dict'][session['start space']] = "" #remove the img url from the start space
         session["valid_selection"] = False
         session['moves'] = []
+        #update the player turn
         gameJSON = get_game_object()
         session['player_turn'] = gameJSON.get_player_turn_name()
         store_game_object(gameJSON)
@@ -242,6 +242,7 @@ def check_move():
     elif(allowed == False):
         session["valid_selection"] = False
         session['moves'] = []
+        #update the player turn
         gameJSON = get_game_object()
         session['player_turn'] = gameJSON.get_player_turn_name()
         store_game_object(gameJSON)
@@ -253,11 +254,7 @@ def get_text():
     game_state = gameJSON.check_game_over()
 
     if game_state == 'over':
-        if gameJSON.get_player_turn_name() == session['player_one']:
-            winner = session['player_two']
-        else: 
-            winner = session['player_one']
-        text = gameJSON.get_player_turn_name() + "'s king is captured! " + winner  + " won!"
+        text = gameJSON.get_player_turn_name() + "'s king is captured!"
     elif game_state == 'Stalemate':
         text = "There are no moves left. The game ends in a Stalemate."
     elif game_state == 'check':
@@ -278,27 +275,24 @@ def get_player():
     store_game_object(gameJSON)
     return text
 
+# run a single turn of the AI
 def ai_player_takes_turn():
-
-    #time.sleep(1) #https://www.programiz.com/python-programming/time/sleep
     gameJSON = get_game_object()
-    ai_move_made  = gameJSON.ai_player_turn()
+    ai_move_made  = gameJSON.ai_player_turn() #get the initial location and final location the AI made
     store_game_object(gameJSON)
 
     print("move the ai made:" + str(ai_move_made))
-    if(ai_move_made != None):
+    if(ai_move_made != None): #move the piece from the initial location to the final location
         session['image_dict'][ai_move_made[1]] = session['image_dict'][ai_move_made[0]]
         session['image_dict'][ai_move_made[0]] = ""
-        return True
 
-    return False
 
+#get the locations where a promoted pawn (queen) exists and update their images
 def updatePromotedPawn():
     gameJSON = get_game_object()
-    promotions = gameJSON.checkPawnpromotion()
+    promotions = gameJSON.checkPawnpromotion() #get the locations of promoted pawns
     store_game_object(gameJSON)
-    print("List of positions promoted" + str(promotions))
-    for p in promotions:
+    for p in promotions: # update the images with queen and the corresponding color
         if(session['image_dict'][p] == board.white_pawn):
             session['image_dict'][p] = board.white_queen
         elif(session['image_dict'][p] == board.black_pawn):

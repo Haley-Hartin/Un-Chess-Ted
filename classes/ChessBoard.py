@@ -105,7 +105,7 @@ class ChessBoard:
                     locations.append(self.board[location].getPosition())
 
         return locations
-        
+
     # def getWhitePieceLocations(self):
     #     locations = []
     #     for location in self.board:
@@ -125,6 +125,8 @@ class ChessBoard:
         self.board[initialLocation].setPosition(newPostion)
         self.board[finalLocation] = self.board[initialLocation]
         self.board[initialLocation] = None
+        if(self.board[finalLocation].getPieceType() == "Pawn" and self.board[finalLocation].able_to_promote() == True):
+            self.board[finalLocation] = self.board[finalLocation].promotion()
 
     def check_stalemate(self, player_color):
         #loop through the board

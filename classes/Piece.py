@@ -67,5 +67,3 @@ class Piece(metaclass=ABCMeta):
     def setIsCaptured(self, capture_bool):
         self.isCaptured = capture_bool
 
-    def getPieceType(self):
-        return self.type

@@ -1,16 +1,16 @@
 # Un-Chess-Ted
 ## A virtual chess game
 ### Team Members: Haley Hartin, Blythe Waltman, Haley Drexel
-
-1. To run the game locally
+1. Video demo link: https://drive.google.com/file/d/1i4HYCyIWsoz3kUQ0TqAWnEQao2PpxSii/view?usp=sharing
+2. To run the game locally
    * Within the project directory run: ". venv/bin/activate" in your terminal.
    * Then run the site locally with "python3 fileserver.py" within the project directory.
   
- 2. Access the game online via heroku here:
+ 3. Access the game online via heroku here:
     * https://un-chess-ted.herokuapp.com/
 
 
-3. System Requirments
+4. System Requirments
    * Require that this game will be accessed on a website.
    * Require that this game allows for the user of the website to choose 1 or 2 player mode on the home screen.
    * 1 player mode plays against an AI. 

@@ -275,7 +275,6 @@ class ChessGame(Subject):
             while(len(possible_black_moves) == 0 and possible_black_moves != None):
                 black_pieces = self.gameBoard.getBlackPieceLocations()
                 piece_initial_location = self.blackPlayer.selectPiece(black_pieces)
-                #print("AI initial piece location: " + str(piece_initial_location))
                 piece_initial_location = self.convert_piece_location_back(piece_initial_location)
                 #print("AI initial piece location: " + str(piece_initial_location))
                 possible_black_moves = self.player_wants_move_list(piece_initial_location)
@@ -284,3 +283,11 @@ class ChessGame(Subject):
             self.player_wants_to_make_move(piece_initial_location, piece_final_location)
             return (piece_initial_location, piece_final_location)
         print("it is not the ai's turn: " + str(self.whitesTurn))
+
+    def checkPawnpromotion(self):
+        promotions = []
+        for p in self.gameBoard.board:
+            if(self.gameBoard.board[p] != None):
+                if(self.gameBoard.board[p].getId()[len(self.gameBoard.board[p].getId())-1] == "Q"):
+                    promotions.append(self.convert_piece_location_back(self.gameBoard.board[p].getPosition()))
+        return promotions

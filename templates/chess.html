@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<meta http-equiv="content-type" content="text/php; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chess.css') }}" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+
+        <script>  //This script just adds functionality to navigate and select spaces using only the keyboard
+
+
+            buttonOrder = ["A8","B8","C8","D8","E8","F8","G8","H8",
+                          "A7","B7","C7","D7","E7","F7","G7","H7",
+                          "A6","B6","C6","D6","E6","F6","G6","H6",
+                          "A5","B5","C5","D5","E5","F5","G5","H5",
+                          "A4","B4","C4","D4","E4","F4","G4","H4",
+                          "A3","B3","C3","D3","E3","F3","G3","H3",
+                          "A2","B2","C2","D2","E2","F2","G2","H2",
+                          "A1","B1","C1","D1","E1","F1","G1","H1",
+                           "results", "quit", "restart","rules"];
+            selected = null
+
+
+            function selectItem(name) {
+                var moves = JSON.parse('{{ availiable_moves|safe }}');
+                selected = name;
+                var x = document.getElementsByTagName("input"); // plural
+
+                for(var i = 0; i < x.length; i++) {
+                    var id = x[i].id;
+                    if(id == selected){
+                         console.log("chnaging border for"+ id);
+                         x[i].style.border = "3px solid black";
+                    }
+                    else{
+                        console.log("normal border for" + id);
+                        x[i].style.border = '4px outset';
+                    }
+                    if(!(moves === null)){
+                        console.log(moves + id)
+                        if( moves.includes(id) && !(id===selected) ){
+                            document.getElementById(id).style.border = "4px solid rgb(250, 255, 55)"
+                        }
+                    }
+
+               }
+            }
+
+            function selectNext() {
+                console.log("next");
+                if (selected == null) {
+                    selectItem(buttonOrder[0]);
+                } else {
+                    index = buttonOrder.indexOf(selected);
+                    index = (index + 1) % buttonOrder.length;
+                    selectItem(buttonOrder[index])
+                }
+            }
+
+            function selectPrevious() {
+                if (selected == null) {
+                    selectItem(buttonOrder[0]);
+                } else {
+                    index = buttonOrder.indexOf(selected);
+                    index = (index - 1);
+                    if (index < 0) index = buttonOrder.length + index
+                    selectItem(buttonOrder[index])
+                }
+            }
+
+            function selectUp() {
+                if (selected == null) {
+                    selectItem(buttonOrder[0]);
+                } else {
+                    index = buttonOrder.indexOf(selected);
+                    index = (index - 8);
+                    if (index < 0) index = buttonOrder.length + index
+                    selectItem(buttonOrder[index])
+                }
+            }
+
+            function selectDown() {
+                if (selected == null) {
+                    selectItem(buttonOrder[0]);
+                } else {
+                    index = buttonOrder.indexOf(selected);
+                    index = (index + 8) % buttonOrder.length;
+                    selectItem(buttonOrder[index])
+                }
+            }
+
+            function clickSelectedItem() {
+                if (selected != null) {
+                    $('#' + selected).click();
+                }
+            }
+
+            $(document).keydown(function(event) {
+
+                if (event.keyCode == 38) {
+                    selectUp()
+                }
+                else if (event.keyCode == 40) {
+                    selectDown()
+                }else if (event.keyCode == 39) {
+                    selectNext()
+                }
+                else if (event.keyCode == 37) {
+                    selectPrevious()
+                }
+                else if (event.keyCode == 13) {
+                    clickSelectedItem()
+                }
+            })
+        </script>
+
+        <title>Un-Chess-Ted</title>
+
+
+    </head>
+
+    <body>
+<!--          <div id = 'buttons'>
+             <form action="" method = "POST" class = "btn">
+                    <div class="buttonRow">
+                        <input type="submit" id="quitButton" name="Quit" value="Quit" class="buttonRow" />
+                    </div>
+                    <div class="buttonRow">
+                        <input type="submit" id="restartButton" name="Restart" value="Restart" class="buttonRow" />
+                    </div>
+                    <div class="buttonRow">
+                      <input type="submit" id="rulesButton" name="Rules" value="Rules" class="buttonRow">
+                    </div>
+              </form>
+         </div> -->
+        <div class = "row">
+        <div class = "col">
+            <div class="contentPane">
+              <form action="" method = "POST">
+                    <table id="chess_board" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td > <input id = "A8" type="submit"  name = 'space' value ="A8" class="btTxt submit"/> <!-- https://www.onenaught.com/posts/382/firefox-4-change-input-type-image-only-submits-x-and-y-not-name#toc-workarounds-->
+                            </td>
+                            <td > <input id = "B8" type="submit"   name = 'space' value ="B8"/>
+                            </td>
+                            <td > <input id = "C8" type="submit"   name = 'space' value ="C8" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D8" type="submit"   name = 'space' value ="D8" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E8" type="submit"   name = 'space' value ="E8" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F8" type="submit"   name = 'space' value ="F8" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G8" type="submit"   name = 'space' value ="G8" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H8" type="submit"   name = 'space' value ="H8" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td > <input id = "A7" type="submit"   name = 'space' value ="A7" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "B7" type="submit"   name = 'space' value ="B7" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "C7" type="submit"   name = 'space' value ="C7" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D7" type="submit"   name = 'space' value ="D7" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E7" type="submit"   name = 'space' value ="E7" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F7" type="submit"   name = 'space' value ="F7" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G7" type="submit"   name = 'space' value ="G7" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H7" type="submit"   name = 'space' value ="H7" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td > <input id = "A6" type="submit"  name = 'space' value ="A6" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "B6" type="submit"   name = 'space' value ="B6" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "C6" type="submit"   name = 'space' value ="C6" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D6" type="submit"   name = 'space' value ="D6" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E6" type="submit"   name = 'space' value ="E6" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F6" type="submit"   name = 'space' value ="F6" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G6" type="submit"   name = 'space' value ="G6" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H6" type="submit"   name = 'space' value ="H6" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td > <input id = "A5" type="submit"   name = 'space' value ="A5" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "B5" type="submit"   name = 'space' value ="B5" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "C5" type="submit"   name = 'space' value ="C5" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D5" type="submit"   name = 'space' value ="D5" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E5" type="submit"   name = 'space' value ="E5" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F5" type="submit"   name = 'space' value ="F5" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G5" type="submit"   name = 'space' value ="G5" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H5" type="submit"   name = 'space' value ="H5" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td > <input id = "A4" type="submit"   name = 'space' value ="A4" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "B4" type="submit"   name = 'space' value ="B4" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "C4" type="submit"   name = 'space' value ="C4" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D4" type="submit"   name = 'space' value ="D4" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E4" type="submit"   name = 'space' value ="E4" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F4" type="submit"   name = 'space' value ="F4" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G4" type="submit"   name = 'space' value ="G4" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H4" type="submit"   name = 'space' value ="H4" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td > <input id = "A3" type="submit"   name = 'space' value ="A3" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "B3" type="submit"   name = 'space' value ="B3" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "C3" type="submit"   name = 'space' value ="C3" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D3" type="submit"   name = 'space' value ="D3" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E3" type="submit"   name = 'space' value ="E3" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F3" type="submit"   name = 'space' value ="F3" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G3" type="submit"   name = 'space' value ="G3" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H3" type="submit"   name = 'space' value ="H3" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td > <input id = "A2" type="submit"   name = 'space' value ="A2" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "B2" type="submit"   name = 'space' value ="B2" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "C2" type="submit"   name = 'space' value ="C2" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D2" type="submit"   name = 'space' value ="D2" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E2" type="submit"   name = 'space' value ="E2" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F2" type="submit"   name = 'space' value ="F2" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G2" type="submit"   name = 'space' value ="G2" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H2" type="submit"   name = 'space' value ="H2" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td > <input id = "A1" type="submit"   name = 'space' value ="A1" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "B1" type="submit"   name = 'space' value ="B1" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "C1" type="submit"   name = 'space' value ="C1" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "D1" type="submit"   name = 'space' value ="D1" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "E1" type="submit"   name = 'space' value ="E1" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "F1" type="submit"   name = 'space' value ="F1" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "G1" type="submit"   name = 'space' value ="G1" class="btTxt submit"/>
+                            </td>
+                            <td > <input id = "H1" type="submit"   name = 'space' value ="H1" class="btTxt submit"/>
+                            </td>
+                        </tr>
+                    </table>
+                    </form>
+                </div>
+            </div>
+            <div class = "col2">
+                <table id="game_info" cellpadding="0" cellspacing="0">
+                   <tr height="400px" id = display>
+                       <td>
+                            <div id="display">
+
+                                          <h1>{{ display_text|safe }}</h1>
+
+
+
+                            </div>
+                       </td>
+                   </tr>
+                   <tr>
+                       <td>
+
+                         <div id = 'buttons'>
+                             <form action="" method = "POST" class = "btn">
+                                    <div class="buttonRow">
+                                        <input type="submit" id="results" name="Results" value="Results" class="buttonRow" id = 'results' />
+                                    </div><br>
+                                    <div class="buttonRow">
+                                        <input type="submit" id="quit" name="Quit" value="Quit" class="buttonRow" />
+                                    </div><br>
+
+                                    <div class="buttonRow">
+                                        <input type="submit" id="restart" name="Restart" value="Restart" id= 'restart' class="buttonRow" />
+                                    </div><br>
+                                    <div class="buttonRow">
+                                      <input type="submit" id="rules" name="Rules" value="Rules" class="buttonRow" id ='rules' >
+                                    </div>
+                              </form>
+                        </div>
+                       </td>
+                    </tr>
+                </table>
+           </div>
+        </div>
+
+
+
+
+        <script>
+
+
+            var board_images = JSON.parse('{{ image_dict|safe }}');
+            var moves = JSON.parse('{{ availiable_moves|safe }}');
+            var highlighted = JSON.parse('{{ highlight|safe }}');
+
+            console.log("The html will be updated");
+
+            //loop through dictionary and map each img url to its table entry
+            for (let space in board_images) {
+                 document.getElementById(space).style = "background:url(" + String(board_images[space]) + ");" +  " background-size:  80px 80px;";
+
+            }
+
+            //loop through list of moves and highlight each box
+            var i;
+            for (i = 0; i < moves.length; i++) {
+              document.getElementById(moves[i]).style.border = "4px solid rgb(250, 255, 55)"
+              if(!(highlighted[0] === "none")){
+                  document.getElementById(highlighted[0]).style.border = "3px solid black"
+                }
+            }
+
+
+
+        </script>
+
+    </body>
+
+
+</html>

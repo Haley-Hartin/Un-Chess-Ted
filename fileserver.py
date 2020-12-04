@@ -14,7 +14,7 @@ from json import JSONEncoder
 import time
 
 app = Flask(__name__)
-app.secret_key = 'some secret key' 
+app.secret_key = 'some secret key'
 TEMPLATES_AUTO_RELOAD=True
 app.jinja_env.auto_reload = True
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -25,7 +25,7 @@ https://pypi.org/project/jsonpickle/0.3.0/
 refrence for encoding/decoding JSON objects
 
 https://www.tutorialspoint.com/flask/flask_routing.htm
-Refrence for Flask routing 
+Refrence for Flask routing
 """
 
 @app.route('/', methods=['GET', 'POST'])
@@ -36,11 +36,11 @@ def index():
     session['moves'] = []
     session["valid_selection"] = False
     session['html'] = ''
-   
+
     """
     https://pythonbasics.org/flask-sessions/
     Refrence for using session data
-    
+
     https://www.w3schools.com/html/html_scripts.asp
     Refrences for html, javascript and css
     """
@@ -73,7 +73,7 @@ def multiplayer_setup():
         game = ChessGame(player_one, player_two, True) #create instance of chess game
         game.createHumanPlayers()
         store_game_object(game)
-        
+
         if 'Back' in request.form: #handle the requests to restart the game
             return redirect(url_for('index')) #call homepage function
 
@@ -120,11 +120,11 @@ def chess():
     text = get_player() #get the text to display in html page
     print(text)
     session['highlighted'] = []
-    
+
     gameJSON = get_game_object()
     turn = gameJSON.get_player_turn_name()
     print("Player's turn: "  +  turn)
-
+    updatePromotedPawn()
 
     if request.method == 'POST':
         session['moves'] = []
@@ -135,7 +135,7 @@ def chess():
             app.jinja_env.cache = {}
         elif ("Get_Computer_Move" in request.form and turn != "Computer"):
             pass
-        
+
         elif 'Restart' in request.form: #handle the requests to restart the game
             session['image_dict'] = board.board #get the board dictionary from board.py file
             session['player_turn'] = session['player_one']
@@ -161,7 +161,7 @@ def chess():
             return render_template('results.html')
 
         elif (session["valid_selection"] == False and turn != "Computer"): #get the space from first click - the space of the piece to move
-          
+
             session['start space'] = request.form['space'] #get the space selected
             session['highlighted'] = [session['start space']]
 
@@ -200,6 +200,7 @@ def store_game_object(gameJSON):
 def pass_move():
     """function to pass the spot to move from to the chessGame class and get a list of legal moves in return."""
     #save the image url from that space
+
     if session['start space'] in session['image_dict']:
         session['img url'] =  session['image_dict'][session['start space']]
 
@@ -274,19 +275,30 @@ def get_player():
     return text
 
 def ai_player_takes_turn():
-    
+
     #time.sleep(1) #https://www.programiz.com/python-programming/time/sleep
     gameJSON = get_game_object()
     ai_move_made  = gameJSON.ai_player_turn()
+    session['player_turn'] = gameJSON.get_player_turn_name()
     store_game_object(gameJSON)
 
     print("move the ai made:" + str(ai_move_made))
     if(ai_move_made != None):
         session['image_dict'][ai_move_made[1]] = session['image_dict'][ai_move_made[0]]
         session['image_dict'][ai_move_made[0]] = ""
-        return True
 
-    return False
+def updatePromotedPawn():
+    gameJSON = get_game_object()
+    promotions = gameJSON.checkPawnpromotion()
+    store_game_object(gameJSON)
+    print("List of positions promoted" + str(promotions))
+    for p in promotions:
+        if(session['image_dict'][p] == board.white_pawn):
+            session['image_dict'][p] = board.white_queen
+        elif(session['image_dict'][p] == board.black_pawn):
+            session['image_dict'][p] = board.black_queen
+
+
 
 @app.before_request
 def before_request():

@@ -1,6 +1,4 @@
 from classes.Piece import Piece
-from classes.Queen import Queen
-
 
 class Pawn(Piece):
     def create(self, id,  color, position):
@@ -13,7 +11,7 @@ class Pawn(Piece):
 
     def getID(self):
         return self.id
-
+    
     def giveMoveList(self, board):
         moveList = []
 
@@ -23,9 +21,8 @@ class Pawn(Piece):
         if(self.getColor() == "white"):
 
             # The white pawn has moved all the way to the last row and cannot move any more
-            # Promote the pawn to A white queen
             if(self.position[0] == 7):
-                print("Promote white pawn to queen")
+                print("Nowhere for the pawn to move")
                 return moveList
 
             # The white pawn has moved before and can only move forward one position
@@ -48,9 +45,8 @@ class Pawn(Piece):
         elif(self.getColor() == "black"):
 
             # The black pawn has moved all the way to the first row and cannot move any more
-            # Promote the pawn to a black queen
             if (self.position[0] == 0):
-                print("Promote black pawn to queen")
+                print("Nowhere for the pawn to move")
                 return moveList
 
             # The black pawn has moved before and can only move forward one position
@@ -69,7 +65,6 @@ class Pawn(Piece):
                     if (board.getPiece(possible_row_2,possible_column) is None):  # If one space in front of the pawn is empty and the second one is empty as well it can move there
                         moveList.append([possible_row_2, possible_column])
                 return moveList
-
 
 
 
@@ -142,14 +137,3 @@ class Pawn(Piece):
                     captureList.append([possible_row, possible_column_2])
                 return captureList
 
-    def able_to_promote(self):
-        if(self.getColor() == "white" and self.position[0] == 7):
-            return True
-        if(self.getColor() == "black" and self.position[0] == 0):
-            return True
-        return False
-
-    def promotion(self):
-        queen_to_return = Queen()
-        queen_to_return.create(self.getID() + "Q", self.getColor(), self.position)
-        return queen_to_return

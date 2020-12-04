@@ -7,8 +7,10 @@ from classes.King import King
 from classes.Piece import Piece
 
 
+#simple factory pattern
 class PieceFactory(object):
     @classmethod
+    #create a new piece with the given information
     def createPiece(cls, id, piece_name, color, position) -> Piece: #https://aaravtech.medium.com/design-patterns-in-python-factory-c728b88603eb
         new_piece = eval(piece_name)()
         new_piece.create(id, color, position)

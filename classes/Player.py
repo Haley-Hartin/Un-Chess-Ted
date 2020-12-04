@@ -11,6 +11,7 @@ class Player(ABC): #https://docs.python.org/3/library/abc.html
     def get_color(self):
         return self.color
 
+    #used to decide moves for a given player
     @abstractmethod
     def decideMove(self, moves):
         pass

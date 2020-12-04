@@ -60,7 +60,7 @@ class ChessBoard:
         self.print_board()
 
     def print_board(self):
-        # This is just to print the current board set up to the console
+        # Print out the chess board to the console
         for x in range(7,-1,-1):
             for y in range(8):
                 key = "(" + str(x) + ", " + str(y) + ")"
@@ -97,6 +97,7 @@ class ChessBoard:
             #print("There is no piece at that location -- cannot return color")
             return None
 
+    #get's all of the locations of the black pieces on the board into a list
     def getBlackPieceLocations(self):
         locations = []
         for location in self.board:
@@ -106,6 +107,7 @@ class ChessBoard:
 
         return locations
 
+    #get's all of the locations of the white pieces on the boardinto a list
     # def getWhitePieceLocations(self):
     #     locations = []
     #     for location in self.board:
@@ -114,6 +116,7 @@ class ChessBoard:
     #                 locations.append(self.board[location].getPosition())
     #     return locations
 
+    #moves a piece on the board at the initial lcoation and final loctation's specified
     def updateBoard(self, initialRow, initialColumn, finalRow, finalColumn):
         initialLocation = str((initialRow, initialColumn))
         finalLocation = str((finalRow,finalColumn))
@@ -125,8 +128,9 @@ class ChessBoard:
         self.board[initialLocation].setPosition(newPostion)
         self.board[finalLocation] = self.board[initialLocation]
         self.board[initialLocation] = None
+        #see if the piece is a pawn that is able to be promoted
         if(self.board[finalLocation].getPieceType() == "Pawn" and self.board[finalLocation].able_to_promote() == True):
-            self.board[finalLocation] = self.board[finalLocation].promotion()
+            self.board[finalLocation] = self.board[finalLocation].promotion() #promote the pawn to a queen
 
     def check_stalemate(self, player_color):
         #loop through the board
@@ -180,4 +184,4 @@ class ChessBoard:
         return False
 
     def clone(self): #https://docs.python.org/3/library/copy.html
-        return deepcopy(self) #prototype pattern
+        return deepcopy(self) #prototype pattern - creates a new object identical to the state of the current object

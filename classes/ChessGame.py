@@ -93,6 +93,7 @@ class ChessGame(Subject):
             print("This is a human vs AI game")
             print("Player One's name is " + self.player1_name)
             print("player Two's name is " + self.player2_name)
+            self.createHumanAndAIPlayer()
             print()
 
     # This function takes the location of the piece from the board for example H2 and converts it to the corresponding location in the array
@@ -255,11 +256,14 @@ class ChessGame(Subject):
         else:
             return "black"
 
+    #determine if the a piece at a given location can be selected by a user
     def valid_selection(self, location):
         array_location = self.convert_piece_location(str(location))
         piece_color = self.gameBoard.getPieceColor(array_location[0], array_location[1])
+        #a white piece is selected at the given location on white's turn
         if(self.whitesTurn == True and piece_color == "white"):
             return True
+        #black piece is selected at the given location on black's turn
         elif(self.whitesTurn == False and piece_color == "black"):
             return True
 
@@ -269,21 +273,25 @@ class ChessGame(Subject):
         self.gameLog.reset_page()
         self.gameLog.create_results_page()
 
+    #run a single turn of the AI
     def ai_player_turn(self):
+        #make sure it is the AI's turn
         if(self.whitesTurn == False and self.human_vs_human == False):
             possible_black_moves = []
+            # AI select's a piece that is has at least one valid move it can make
             while(len(possible_black_moves) == 0 and possible_black_moves != None):
+                #retrieve the black pieces, AI select's a piece from that list, and get the moves for that piece
                 black_pieces = self.gameBoard.getBlackPieceLocations()
                 piece_initial_location = self.blackPlayer.selectPiece(black_pieces)
                 piece_initial_location = self.convert_piece_location_back(piece_initial_location)
-                #print("AI initial piece location: " + str(piece_initial_location))
                 possible_black_moves = self.player_wants_move_list(piece_initial_location)
-                #print("number of moves ai can make: " + str(len(possible_black_moves)))
+            #get the AI to decide a move and pass decision on to get board updated
             piece_final_location = self.blackPlayer.decideMove(possible_black_moves)
             self.player_wants_to_make_move(piece_initial_location, piece_final_location)
             return (piece_initial_location, piece_final_location)
         print("it is not the ai's turn: " + str(self.whitesTurn))
 
+    # check if there are pieces that have been promoted and give a list of their locations
     def checkPawnpromotion(self):
         promotions = []
         for p in self.gameBoard.board:

@@ -5,6 +5,7 @@
 2. To run the game locally
    * Within the project directory run: ". venv/bin/activate" in your terminal.
    * Then run the site locally with "python3 fileserver.py" within the project directory.
+   * Goto: http://127.0.0.1:5000/ in a browser
   
  3. Access the game online via heroku here:
     * https://un-chess-ted.herokuapp.com/

@@ -7,7 +7,7 @@ from classes.King import King
 from classes.Piece import Piece
 
 
-#simple factory pattern
+# Pattern - Simple Factory Pattern
 class PieceFactory(object):
     @classmethod
     #create a new piece with the given information

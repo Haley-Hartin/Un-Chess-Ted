@@ -123,7 +123,7 @@ class Knight(Piece):
             # Check space down one and right two - if enemy add to capture list
             if (board.getPiece(row - 1, column + 2) != None and board.getPiece(row - 1, column  + 2).getColor() != self.color):
                 captureList.append([row - 1, column + 2])
-                
+
         # Check space exists on the board
         if (row - 2 >= 0 and column + 1 <= 7):
             # Check space down two and right one - if enemy add to capture list

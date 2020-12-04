@@ -2,14 +2,15 @@
 ## A virtual chess game
 ### Team Members: Haley Hartin, Blythe Waltman, Haley Drexel
 1. Video demo link: https://drive.google.com/file/d/1i4HYCyIWsoz3kUQ0TqAWnEQao2PpxSii/view?usp=sharing
-2. To run the game locally
+
+2. Access the game online via heroku here (RECOMMENDED):
+    * https://un-chess-ted.herokuapp.com/
+    
+3. To run the game locally
+   * Make sure to have flask, numpy, jsonpickle, and Python3 installed. If any of the packages need to be installed, use "pip install _____"
    * Within the project directory run: ". venv/bin/activate" in your terminal.
    * Then run the site locally with "python3 fileserver.py" within the project directory.
    * Goto: http://127.0.0.1:5000/ in a browser
-  
- 3. Access the game online via heroku here:
-    * https://un-chess-ted.herokuapp.com/
-
 
 4. System Requirments
    * Require that this game will be accessed on a website.

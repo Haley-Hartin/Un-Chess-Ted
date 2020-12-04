@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from classes.Observer import Observer
 from typing import List
 
-#Pattern - Observer Pattern
+
 class Subject(ABC): #https://refactoring.guru/design-patterns/observer/python/example
 
     @abstractmethod

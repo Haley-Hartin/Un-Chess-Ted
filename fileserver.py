@@ -156,7 +156,7 @@ def chess():
         elif 'Rules' in request.form: #handle request to go to the rules
             return redirect("https://en.wikipedia.org/wiki/Rules_of_chess")
 
-        elif 'Results' in request.form: #handle the requests to see results of the game
+        elif 'View Moves' in request.form: #handle the requests to see results of the game
             return render_template('results.html')
 
         elif (session["valid_selection"] == False and turn != "Computer"): #get the space from first click - the space of the piece to move
